@@ -1,0 +1,1 @@
+{"project_id":"yuhmwljncejlqjrzkqpl","name":"harden_helper_functions","query":"revoke execute on function public.is_organization_member(uuid) from public, anon, authenticated; revoke execute on function public.is_organization_editor(uuid) from public, anon, authenticated;"}

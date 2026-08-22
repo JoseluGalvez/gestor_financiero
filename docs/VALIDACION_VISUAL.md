@@ -47,3 +47,8 @@ La nueva vista **Cartera** se renderiza correctamente en navegador con navegaci�
 La ficha de activo abre desde la tabla de cartera y presenta identificación, valor, resultado, evolución, métricas y escala de riesgo con una salida clara de vuelta a cartera. La nueva pantalla **Fiscalidad** comunica de forma prominente que es un borrador para revisión, diferencia las fuentes verificadas de las pendientes, organiza rendimientos/transmisiones y muestra el flujo hasta la revisión profesional. No ofrece envío ni presentación ante la AEAT.
 
 La acción **Generar borrador** actualiza el estado únicamente dentro de la demostración, muestra una advertencia explícita de no presentación ante la AEAT y deja la exportación bloqueada hasta disponer de persistencia e historial completo. La sección **Análisis** también se visualiza correctamente: combina filtros contextuales, indicadores, histogramas, distribución por activos y una advertencia de conciliación; no ofrece recomendaciones de inversión automáticas.
+
+
+## 22-08-2026 — Acceso al dashboard persistente
+
+La versión conectada a Supabase se abrió correctamente en entorno local. La vista inicial muestra el acceso mediante enlace seguro, sin exponer datos financieros, credenciales ni resultados estáticos. La jerarquía visual —mensaje de privacidad, campo de correo y acción de acceso— se mantiene legible en viewport de escritorio. Las pantallas de cartera, Realtime, alertas e informes se activan únicamente después de la autenticación y aprovisionamiento de organización.
