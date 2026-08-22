@@ -1,0 +1,19 @@
+1
+00:00:00,000 --> 00:00:10,000
+Cuando los datos de cartera viven en plataformas, hojas y correos distintos,
+cada consolidación consume tiempo y multiplica el trabajo manual.
+
+2
+00:00:10,000 --> 00:00:20,000
+Portafolio Intel reúne posiciones, evolución y alertas en una única vista segura,
+para revisar lo relevante con menos búsquedas.
+
+3
+00:00:20,000 --> 00:00:30,000
+Configure las fuentes autorizadas, previsualice antes de escribir
+y detecte errores antes del retrabajo.
+
+4
+00:00:30,000 --> 00:00:40,000
+Las alertas priorizan excepciones y el panel refleja cambios autorizados sin recargar.
+Portafolio Intel: eficiencia, trazabilidad y control para decidir con claridad.
