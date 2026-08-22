@@ -37,3 +37,13 @@ La ejecución final de `npm run lint` y `npm run build` finalizó correctamente.
 La aplicación fue recargada desde una sesión limpia tras reemplazar el lector XLSX. El dashboard volvió al estado esperado de cuatro plataformas y los filtros quedaron en `Todas las plataformas`. El selector de archivo se expuso temporalmente solo para automatizar la comprobación final del CSV.
 
 La comprobación final de `tests/sample-platform-import.csv` superó correctamente el importador posterior al cambio de dependencia. El modal reconoció y mostró las cinco columnas, conservó las fechas ISO y presentó las dos filas esperadas antes de cualquier aplicación. Con ello quedan validados el filtro de tipo, el límite de entrada, la lectura CSV, la previsualización y la separación entre revisión y aplicación en la demostración.
+
+## Ampliación visual — cartera
+
+La nueva vista **Cartera** se renderiza correctamente en navegador con navegación lateral persistente, control de vista por valor/cuenta, filtro por plataforma, gráfico de asignación por clase de activo, resumen de patrimonio y tabla interactiva de posiciones. La estructura traslada las referencias aportadas a un patrón propio: lectura de distribución en primer plano y listado detallado de instrumentos debajo, sin reproducir marcas ni activos visuales de terceros. Los botones de cada posición están disponibles para abrir su ficha de detalle.
+
+## Ampliación visual — detalle y fiscalidad
+
+La ficha de activo abre desde la tabla de cartera y presenta identificación, valor, resultado, evolución, métricas y escala de riesgo con una salida clara de vuelta a cartera. La nueva pantalla **Fiscalidad** comunica de forma prominente que es un borrador para revisión, diferencia las fuentes verificadas de las pendientes, organiza rendimientos/transmisiones y muestra el flujo hasta la revisión profesional. No ofrece envío ni presentación ante la AEAT.
+
+La acción **Generar borrador** actualiza el estado únicamente dentro de la demostración, muestra una advertencia explícita de no presentación ante la AEAT y deja la exportación bloqueada hasta disponer de persistencia e historial completo. La sección **Análisis** también se visualiza correctamente: combina filtros contextuales, indicadores, histogramas, distribución por activos y una advertencia de conciliación; no ofrece recomendaciones de inversión automáticas.
