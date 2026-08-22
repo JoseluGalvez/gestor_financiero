@@ -1928,3 +1928,15 @@ select:focus-visible {
 .field-help { color: #78879a; font-size: .73rem; line-height: 1.45; }
 .sheet-fieldset .field-help { margin: -2px 0 0; }
 @media (max-width: 560px) { .source-mapping-grid { grid-template-columns: 1fr; } }
+
+.sample-preview-actions { display: grid; gap: 9px; grid-template-columns: 1fr 1fr; }
+.sample-preview-actions .button { min-height: 38px; padding: 0 10px; font-size: .76rem; }
+.sheet-preview { display: grid; gap: 11px; border: 1px solid #bad9ce; border-radius: 12px; background: #f5fcf9; color: #36566a; padding: 13px; }
+.sheet-preview strong { color: #1f4f46; font-size: .86rem; }
+.preview-badge { display: inline-flex; width: fit-content; gap: 6px; align-items: center; border-radius: 999px; background: #e2f6ed; color: #177553; padding: 5px 8px; font-size: .7rem; font-weight: 700; }
+.preview-table-wrap { overflow-x: auto; }
+.preview-table-wrap table { width: 100%; border-collapse: collapse; font-size: .72rem; }
+.preview-table-wrap th { background: #eaf7f2; color: #527366; font-size: .64rem; letter-spacing: .04em; padding: 7px; text-align: left; text-transform: uppercase; white-space: nowrap; }
+.preview-table-wrap td { border-top: 1px solid #ddecE5; color: #3f5d65; padding: 7px; white-space: nowrap; }
+.preview-error { margin: 0; color: #ad3f49; font-size: .78rem; line-height: 1.45; }
+@media (max-width: 560px) { .sample-preview-actions { grid-template-columns: 1fr; } }

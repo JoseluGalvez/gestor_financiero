@@ -93,6 +93,7 @@ El motor implementado se encuentra en [`src/lib/financial-analysis.ts`](src/lib/
 | [`docs/ARQUITECTURA_DATOS_REACTIVOS.md`](docs/ARQUITECTURA_DATOS_REACTIVOS.md) | Arquitectura de datos, Realtime, controles de fuentes y plan de despliegue. |
 | [`docs/MODULO_ANALISIS_FINANCIERO.md`](docs/MODULO_ANALISIS_FINANCIERO.md) | Fórmulas, requisitos de cobertura, trazabilidad y límites del módulo analítico. |
 | [`docs/CONEXIONES_Y_FISCALIDAD.md`](docs/CONEXIONES_Y_FISCALIDAD.md) | Diseño de Google Sheets/SQL y salvaguardas del borrador fiscal. |
+| [`docs/DEMO_IMPORTACION_GOOGLE_SHEETS.md`](docs/DEMO_IMPORTACION_GOOGLE_SHEETS.md) | Hoja ficticia, configuración de prueba, previsualización de solo lectura y estado de Recharts/análisis. |
 | [`docs/VALIDACION_VISUAL.md`](docs/VALIDACION_VISUAL.md) | Evidencia de validación visual y de interacción. |
 
 ## Stack
