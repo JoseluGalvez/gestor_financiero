@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #172033;
+            color: #FFFFFF;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .bg-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(47, 93, 138, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(47, 93, 138, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+        }
+        .header {
+            position: relative;
+            z-index: 2;
+            padding: 50px 60px 20px 60px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(47, 93, 138, 0.3);
+        }
+        .header-accent {
+            width: 8px;
+            height: 40px;
+            background-color: #2F5D8A;
+            margin-right: 20px;
+        }
+        h1 {
+            font-size: 42px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+        .control-item {
+            background: rgba(23, 32, 51, 0.8);
+            border: 1px solid rgba(47, 93, 138, 0.5);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-top: 4px solid #2F5D8A;
+        }
+        .control-item:nth-child(2) {
+            border-top-color: #B54C4C;
+        }
+        .control-icon {
+            font-size: 48px;
+            color: #A0B2C6;
+            margin-bottom: 25px;
+        }
+        .control-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+        }
+        .control-desc {
+            font-size: 22px;
+            color: #E0E6ED;
+            line-height: 1.5;
+        }
+        .highlight {
+            color: #B54C4C;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="bg-pattern"></div>
+        <div class="header">
+            <div class="header-accent"></div>
+            <h1>Los controles bloquean precisión falsa bajo estrés</h1>
+        </div>
+        <div class="content">
+            <div class="control-grid">
+                <div class="control-item">
+                    <i class="fas fa-arrow-down control-icon"></i>
+                    <div class="control-title">Crash del 100 %</div>
+                    <div class="control-desc">Evita valores de mercado negativos. En un escenario de pérdida total, solo se conserva el <span style="color:#2F5D8A; font-weight:600;">efectivo</span>.</div>
+                </div>
+                <div class="control-item">
+                    <i class="fas fa-chart-line control-icon"></i>
+                    <div class="control-title">Rutas volátiles</div>
+                    <div class="control-desc">Conserva la <span style="color:#2F5D8A; font-weight:600;">capitalización compuesta</span>. Evita sumar retornos de forma incorrecta en escenarios extremos.</div>
+                </div>
+                <div class="control-item">
+                    <i class="fas fa-ban control-icon"></i>
+                    <div class="control-title">Entradas inválidas</div>
+                    <div class="control-desc">Bloquea choques menores a <span class="highlight">−100 %</span>, valores NaN y carteras vacías, impidiendo resultados engañosos.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

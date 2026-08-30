@@ -1,0 +1,99 @@
+{
+  "format": "portafolio-intel-local-canvas",
+  "version": 1,
+  "savedAt": "2026-08-26T07:30:00.000Z",
+  "headers": [
+    "Fecha",
+    "Instrumento",
+    "Tipo",
+    "Cantidad",
+    "Precio",
+    "Divisa",
+    "ISIN",
+    "Comisiones",
+    "Notas"
+  ],
+  "mapping": {
+    "date": "Fecha",
+    "value": "Precio",
+    "category": "Instrumento",
+    "platform": "",
+    "geography": "",
+    "status": ""
+  },
+  "filters": {
+    "from": "2026-01-01",
+    "to": "2026-12-31",
+    "category": "",
+    "platform": "",
+    "geography": ""
+  },
+  "rows": [
+    {
+      "Fecha": "2026-01-03",
+      "Instrumento": "Fondo Atlas Simulado",
+      "Tipo": "buy",
+      "Cantidad": "12.5",
+      "Precio": "204,20",
+      "Divisa": "EUR",
+      "ISIN": "DEMO00000001",
+      "Comisiones": "1,50",
+      "Notas": "DATO FICTICIO"
+    },
+    {
+      "Fecha": "2026-01-17",
+      "Instrumento": "Empresa Boreal Demo",
+      "Tipo": "buy",
+      "Cantidad": "8",
+      "Precio": "57,35",
+      "Divisa": "EUR",
+      "ISIN": "DEMO00000002",
+      "Comisiones": "0,80",
+      "Notas": "DATO FICTICIO"
+    },
+    {
+      "Fecha": "2026-02-01",
+      "Instrumento": "Fondo Atlas Simulado",
+      "Tipo": "dividend",
+      "Cantidad": "0",
+      "Precio": "1,24",
+      "Divisa": "EUR",
+      "ISIN": "DEMO00000001",
+      "Comisiones": "0",
+      "Notas": "DATO FICTICIO"
+    },
+    {
+      "Fecha": "2026-02-12",
+      "Instrumento": "Préstamo Cobalto Demo",
+      "Tipo": "interest",
+      "Cantidad": "0",
+      "Precio": "16,75",
+      "Divisa": "EUR",
+      "ISIN": "DEMO00000003",
+      "Comisiones": "0",
+      "Notas": "DATO FICTICIO"
+    },
+    {
+      "Fecha": "2026-03-02",
+      "Instrumento": "Empresa Boreal Demo",
+      "Tipo": "sell",
+      "Cantidad": "3",
+      "Precio": "61,10",
+      "Divisa": "EUR",
+      "ISIN": "DEMO00000002",
+      "Comisiones": "0,50",
+      "Notas": "DATO FICTICIO"
+    },
+    {
+      "Fecha": "2026-03-15",
+      "Instrumento": "Efectivo de prueba",
+      "Tipo": "deposit",
+      "Cantidad": "0",
+      "Precio": "500",
+      "Divisa": "EUR",
+      "ISIN": "DEMO00000004",
+      "Comisiones": "0",
+      "Notas": "DATO FICTICIO"
+    }
+  ]
+}

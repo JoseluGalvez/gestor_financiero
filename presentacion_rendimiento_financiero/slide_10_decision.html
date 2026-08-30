@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #0f172a; 
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 40px; /* reduced */
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px; /* reduced from 60px */
+        }
+        .eyebrow {
+            color: #3b82f6;
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 12px; /* reduced */
+        }
+        .title {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .action-box {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-top: 6px solid #3b82f6;
+            padding: 30px 40px; /* reduced from 50/60 */
+            width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* reduced from 35px */
+        }
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px; /* reduced from 25px */
+        }
+        .action-icon {
+            font-size: 36px;
+            color: #3b82f6;
+            margin-top: 5px;
+        }
+        .action-text {
+            font-size: 26px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+        .action-text strong {
+            color: #f8fafc;
+        }
+        .warning-text {
+            color: #fcd34d !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <div class="eyebrow">Próximos Pasos</div>
+            <h1 class="title">Decisión solicitada: aprobar iteración acotada</h1>
+        </div>
+        
+        <div class="action-box">
+            <div class="action-item">
+                <i class="fa-solid fa-handshake action-icon"></i>
+                <div class="action-text">
+                    <strong>Acordar políticas de cálculo:</strong> moneda base, tratamiento de flujos, costes, FX, cobertura y convención XIRR.
+                </div>
+            </div>
+            
+            <div class="action-item">
+                <i class="fa-solid fa-vial-circle-check action-icon"></i>
+                <div class="action-text">
+                    <strong>Implementar y validar</strong> con datos ficticios y pruebas deterministas antes de conectar fuentes reales.
+                </div>
+            </div>
+            
+            <div class="action-item">
+                <i class="fa-solid fa-ban action-icon" style="color: #f59e0b;"></i>
+                <div class="action-text">
+                    <strong class="warning-text">Límite estricto:</strong> No se activan operaciones, datos de mercado, automatizaciones ni IA en esta fase inicial.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

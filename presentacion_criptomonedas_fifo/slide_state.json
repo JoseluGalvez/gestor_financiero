@@ -1,0 +1,124 @@
+{
+  "project_info": {
+    "title": "Criptomonedas, FIFO y borrador fiscal revisable",
+    "created": 1787694868.582,
+    "last_updated": 1787695044.748,
+    "total_slides": 11
+  },
+  "slides": [
+    {
+      "id": "portada",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "transmisiones",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "flujo_local",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "fifo",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "permuta",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "interfaz",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "plataformas",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "modelo_721",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "validacion",
+      "state": "edited",
+      "pageNum": 9
+    },
+    {
+      "id": "limites",
+      "state": "edited",
+      "pageNum": 10
+    },
+    {
+      "id": "referencias",
+      "state": "edited",
+      "pageNum": 11
+    }
+  ],
+  "outline": [
+    {
+      "id": "portada",
+      "title": "Criptomonedas, FIFO y borrador fiscal revisable",
+      "summary": "Portada minimalista que presenta la implementación local, segura y preparada para revisión profesional."
+    },
+    {
+      "id": "transmisiones",
+      "title": "Toda transmisión debe dejar rastro",
+      "summary": "Fundamento del módulo: cálculo por transmisión, trazabilidad de valores y gastos, sin estimar cuota personal."
+    },
+    {
+      "id": "flujo_local",
+      "title": "Del CSV a un borrador revisable",
+      "summary": "Flujo local de carga, validación, cálculo y advertencias, con privacidad explícita.",
+      "image_plan": "/home/ubuntu/upload/search_images/TLtPjUtirczm.webp - Dashboard interface matches the CSV processing and draft generation topic"
+    },
+    {
+      "id": "fifo",
+      "title": "FIFO conserva la historia de cada activo",
+      "summary": "Explicación visual del consumo cronológico de lotes y la fórmula de resultado realizado."
+    },
+    {
+      "id": "permuta",
+      "title": "La permuta crea un nuevo lote trazable",
+      "summary": "Tratamiento de la permuta: transmisión del activo entregado y coste del activo recibido."
+    },
+    {
+      "id": "interfaz",
+      "title": "La incertidumbre se convierte en revisión explícita",
+      "summary": "KPIs, tabla de transmisiones, checklist y exportación de borrador revisable.",
+      "image_plan": "/home/ubuntu/upload/search_images/XH5XN6Ei1Nbq.png - Financial analysis dashboard fits the interface and KPI review slide"
+    },
+    {
+      "id": "plataformas",
+      "title": "Comparar fuentes sin inferencias engañosas",
+      "summary": "Comparación de resultado realizado entre plataformas con cobertura, exclusiones y advertencias."
+    },
+    {
+      "id": "modelo_721",
+      "title": "El modelo 721 exige una revisión separada",
+      "summary": "Distinción clara entre IRPF y el modelo informativo 721, sin automatizar obligaciones."
+    },
+    {
+      "id": "validacion",
+      "title": "Validado para fallar de forma segura",
+      "summary": "Pruebas de FIFO, permuta, lotes faltantes, calidad técnica y privacidad local."
+    },
+    {
+      "id": "limites",
+      "title": "Automatizar no equivale a presentar",
+      "summary": "Límites conscientes de producto, exclusiones y papel obligatorio de la revisión profesional."
+    },
+    {
+      "id": "referencias",
+      "title": "Uso seguro y referencias oficiales",
+      "summary": "Cierre con flujo recomendado de uso y fuentes oficiales de la AEAT."
+    }
+  ]
+}

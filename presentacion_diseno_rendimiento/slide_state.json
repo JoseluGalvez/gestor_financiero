@@ -1,0 +1,133 @@
+{
+  "project_info": {
+    "title": "Rendimiento explicable y seguro",
+    "created": 1787814575.039,
+    "last_updated": 1787814828.176,
+    "total_slides": 11
+  },
+  "slides": [
+    {
+      "id": "portada",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "problema_variacion",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "dos_metricas",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "puente_neto",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "libro_mayor",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "precision_falsa",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "pruebas_deterministas",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "comparativa_mercado",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "diferencial_producto",
+      "state": "edited",
+      "pageNum": 9
+    },
+    {
+      "id": "prioridades_cierre",
+      "state": "edited",
+      "pageNum": 10
+    },
+    {
+      "id": "decision_cierre",
+      "state": "edited",
+      "pageNum": 11
+    }
+  ],
+  "outline": [
+    {
+      "id": "portada",
+      "title": "Rendimiento explicable y seguro",
+      "summary": "Portada con título principal y propósito del diseño técnico de TWR, XIRR y atribución.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "problema_variacion",
+      "title": "La variación de valor no explica el resultado",
+      "summary": "Explicación de por qué una cifra agregada de variación patrimonial puede ser engañosa sin aislar flujos, FX, comisiones e impuestos.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "dos_metricas",
+      "title": "Dos métricas para dos preguntas distintas",
+      "summary": "Definición y contraste entre TWR (evolución de cartera neutralizando flujos) y XIRR/MWR (experiencia del titular).",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "puente_neto",
+      "title": "El puente neto hace verificable cada variación",
+      "summary": "Descomposición monetaria desde el valor inicial al final, mostrando componentes y el residual de conciliación.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "libro_mayor",
+      "title": "Un libro mayor normalizado protege la trazabilidad",
+      "summary": "Arquitectura de datos que ingiere transacciones crudas y produce eventos derivados, idempotentes y versionados.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "precision_falsa",
+      "title": "La arquitectura bloquea la precisión falsa",
+      "summary": "Reglas de bloqueo y estados de calidad cuando faltan valoraciones, FX o los flujos XIRR no tienen solución única.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "pruebas_deterministas",
+      "title": "Pruebas deterministas para flujos complejos",
+      "summary": "Resumen de los casos de prueba sintéticos que validan el comportamiento ante escenarios irregulares y límites matemáticos.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "comparativa_mercado",
+      "title": "El mercado confirma la necesidad, no un atajo",
+      "summary": "Lecciones extraídas de Portfolio Performance, Sharesight, getquin, Kubera, Ghostfolio y herramientas cripto.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "diferencial_producto",
+      "title": "El diferencial debe ser el control verificable",
+      "summary": "Posicionamiento estratégico: priorizar el modo local, la procedencia y la conciliación antes que añadir automatizaciones opacas.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "prioridades_cierre",
+      "title": "Cinco prioridades hacia un producto confiable",
+      "summary": "Hoja de ruta secuencial: RLS/Realtime, libro mayor, motores de cálculo, riesgo/informes y, por último, conectividad.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "decision_cierre",
+      "title": "La decisión: medir y conciliar antes de escalar",
+      "summary": "Cierre ejecutivo solicitando la aprobación de la política de rendimiento y el cierre de RLS/Realtime en staging.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}

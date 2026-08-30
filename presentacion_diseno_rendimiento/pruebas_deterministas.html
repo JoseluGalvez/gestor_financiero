@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pruebas deterministas para flujos complejos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+            position: relative;
+        }
+        .header {
+            margin-bottom: 50px;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 20px;
+        }
+        h1 {
+            font-size: 48px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .test-column {
+            background-color: #1e293b;
+            padding: 18px; /* reduced inner padding to save vertical space */
+            border-top: 4px solid #0ea5e9;
+        }
+        .test-column h3 {
+            font-size: 28px;
+            color: #38bdf8;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .test-column ul {
+            list-style-type: none;
+        }
+        .test-column li {
+            font-size: 20px;
+            color: #cbd5e1;
+            margin-bottom: 12px; /* reduced spacing */
+            line-height: 1.4;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .test-column li i {
+            color: #10b981;
+            font-size: 16px;
+            margin-top: 6px;
+        }
+        .summary-box {
+            margin-top: 8px; /* reduced to pull it up into visible area */
+            background-color: rgba(14, 165, 233, 0.1);
+            border-left: 4px solid #0ea5e9;
+            padding: 8px; /* reduced padding */
+            font-size: 22px; /* keep font size unchanged */
+            color: #e2e8f0;
+            line-height: 1.2; /* tightened line-height */
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Pruebas deterministas para flujos complejos</h1>
+        </div>
+        
+        <div class="grid-container">
+            <!-- TWR Column -->
+            <div class="test-column">
+                <h3><i class="fas fa-chart-line"></i> Casos TWR</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Aportaciones y retiros irregulares.</li>
+                    <li><i class="fas fa-check-circle"></i> Cortes simultáneos y reglas de pre/post flujo.</li>
+                    <li><i class="fas fa-check-circle"></i> Conversión de divisa y costes explícitos.</li>
+                    <li><i class="fas fa-check-circle"></i> Acciones corporativas (splits, spin-offs).</li>
+                    <li><i class="fas fa-check-circle"></i> Datos incompletos (fallback etiquetado).</li>
+                </ul>
+            </div>
+            
+            <!-- XIRR Column -->
+            <div class="test-column">
+                <h3><i class="fas fa-wallet"></i> Casos XIRR</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Flujos agrupados por fecha exacta.</li>
+                    <li><i class="fas fa-check-circle"></i> Detección de raíz única, múltiple o inexistente.</li>
+                    <li><i class="fas fa-check-circle"></i> Límites de dominio matemático.</li>
+                    <li><i class="fas fa-check-circle"></i> Reversos de operaciones e idempotencia.</li>
+                    <li><i class="fas fa-check-circle"></i> Prevención de falsos positivos en tasas extremas.</li>
+                </ul>
+            </div>
+            
+            <!-- Puente Column -->
+            <div class="test-column">
+                <h3><i class="fas fa-bridge"></i> Casos Puente Neto</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Descomposición de mercado, ingresos y FX.</li>
+                    <li><i class="fas fa-check-circle"></i> Interacción cruzada (mercado × FX).</li>
+                    <li><i class="fas fa-check-circle"></i> Comisiones e impuestos informados.</li>
+                    <li><i class="fas fa-check-circle"></i> Cálculo de residual de conciliación.</li>
+                    <li><i class="fas fa-check-circle"></i> Ausencia estricta de doble conteo.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="summary-box">
+            <strong>Objetivo:</strong> Validar el motor ante escenarios irregulares y garantizar avisos claros en huecos de datos.
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "title": "El dato hoy no explica la decisión",
+    "created": 1787738038.559,
+    "last_updated": 1787738374.241,
+    "total_slides": 10
+  },
+  "slides": [
+    {
+      "id": "slide_01_problema",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "slide_02_prioridad",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "slide_03_twr_mwr",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "slide_04_motor",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "slide_05_twr_metodo",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "slide_06_mwr_metodo",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "slide_07_calidad",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "slide_08_dashboard",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "slide_09_ruta",
+      "state": "edited",
+      "pageNum": 9
+    },
+    {
+      "id": "slide_10_decision",
+      "state": "edited",
+      "pageNum": 10
+    }
+  ],
+  "outline": [
+    {
+      "id": "slide_01_problema",
+      "title": "El dato hoy no explica la decisión",
+      "summary": "El dashboard actual muestra cifras pero no diferencia el rendimiento del mercado de los flujos externos ni indica la cobertura.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_02_prioridad",
+      "title": "La prioridad es confianza, no más gráficos",
+      "summary": "Cada métrica debe declarar periodo, método, divisa, cobertura y procedencia para ser útil en decisiones.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_03_twr_mwr",
+      "title": "Dos retornos responden a preguntas distintas",
+      "summary": "TWR aísla los flujos para medir la cartera; MWR/XIRR refleja la experiencia monetaria del inversor. Ambos son necesarios.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_04_motor",
+      "title": "El motor convierte datos en métricas reproducibles",
+      "summary": "El flujo va de entradas validadas a ejecuciones inmutables con calidad y puente de atribución.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_05_twr_metodo",
+      "title": "TWR: subperiodos antes y después de cada flujo",
+      "summary": "Calcula retornos entre valoraciones separadas por flujos externos, sin anualizar periodos cortos ni forzar divisiones.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_06_mwr_metodo",
+      "title": "MWR/XIRR: la solución es numérica y auditable",
+      "summary": "Usa un solucionador híbrido que detecta raíces múltiples y evita tasas inventadas si no hay convergencia.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_07_calidad",
+      "title": "La calidad es parte de cada KPI",
+      "summary": "Se expone la cobertura independiente de valoración, FX, costes y clasificación. Las métricas parciales se marcan claramente.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_08_dashboard",
+      "title": "El dashboard consume envolventes, no números aislados",
+      "summary": "React muestra tarjetas con valor, estado y método sin recalcular el rendimiento desde listas truncadas de transacciones.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_09_ruta",
+      "title": "La hoja de ruta reduce riesgo antes de automatizar",
+      "summary": "Primero calidad y rendimiento neto, luego riesgo, y solo al final alertas, informes reproducibles e IA.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_10_decision",
+      "title": "Decisión solicitada: aprobar iteración acotada",
+      "summary": "Acordar políticas de cálculo e implementar con datos ficticios antes de activar operaciones, datos de mercado o IA.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}

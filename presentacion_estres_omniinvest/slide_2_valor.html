@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #172033;
+            color: #FFFFFF;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .bg-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(47, 93, 138, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(47, 93, 138, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+        }
+        .header {
+            position: relative;
+            z-index: 2;
+            padding: 50px 60px 20px 60px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(47, 93, 138, 0.3);
+        }
+        .header-accent {
+            width: 8px;
+            height: 40px;
+            background-color: #2F5D8A;
+            margin-right: 20px;
+        }
+        h1 {
+            font-size: 42px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 50px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .text-section {
+            font-size: 26px;
+            color: #E0E6ED;
+            line-height: 1.5;
+            display: flex;
+            gap: 40px;
+        }
+        .text-col {
+            flex: 1;
+        }
+        .highlight { color: #B54C4C; font-weight: 600; }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(23, 32, 51, 0.8);
+            border: 1px solid rgba(47, 93, 138, 0.5);
+        }
+        .data-table th, .data-table td {
+            padding: 18px 25px;
+            text-align: right;
+            border-bottom: 1px solid rgba(47, 93, 138, 0.3);
+            font-size: 24px;
+        }
+        .data-table th {
+            background-color: rgba(47, 93, 138, 0.2);
+            color: #A0B2C6;
+            font-weight: 600;
+            text-align: center;
+        }
+        .data-table td:first-child, .data-table th:first-child {
+            text-align: left;
+        }
+        .data-table tr.total-row {
+            background-color: rgba(47, 93, 138, 0.1);
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .data-table tr.total-row td {
+            border-top: 2px solid #2F5D8A;
+        }
+        .negative { color: #B54C4C; }
+        .neutral { color: #A0B2C6; }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="bg-pattern"></div>
+        <div class="header">
+            <div class="header-accent"></div>
+            <h1>El valor bajo estrés pasa de 90.000 a 75.000 EUR</h1>
+        </div>
+        <div class="content">
+            <div class="text-section">
+                <div class="text-col">
+                    <p><i class="fas fa-caret-right" style="color:#2F5D8A; margin-right:10px;"></i> Renta variable y renta fija caen un <span class="highlight">20 %</span>.</p>
+                </div>
+                <div class="text-col">
+                    <p><i class="fas fa-caret-right" style="color:#2F5D8A; margin-right:10px;"></i> El efectivo se mantiene <span style="color:#2F5D8A; font-weight:600;">constante</span>.</p>
+                </div>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Bucket ficticio</th>
+                        <th>Base (EUR)</th>
+                        <th>Choque</th>
+                        <th>Cambio (EUR)</th>
+                        <th>Estrés (EUR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Renta variable global</td>
+                        <td>50.000,00</td>
+                        <td class="negative">−20,00 %</td>
+                        <td class="negative">−10.000,00</td>
+                        <td>40.000,00</td>
+                    </tr>
+                    <tr>
+                        <td>Renta fija diversificada</td>
+                        <td>25.000,00</td>
+                        <td class="negative">−20,00 %</td>
+                        <td class="negative">−5.000,00</td>
+                        <td>20.000,00</td>
+                    </tr>
+                    <tr>
+                        <td>Efectivo en EUR</td>
+                        <td>15.000,00</td>
+                        <td class="neutral">0,00 %</td>
+                        <td class="neutral">0,00</td>
+                        <td>15.000,00</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>Total</td>
+                        <td>90.000,00</td>
+                        <td class="negative">−16,67 %</td>
+                        <td class="negative">−15.000,00</td>
+                        <td>75.000,00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

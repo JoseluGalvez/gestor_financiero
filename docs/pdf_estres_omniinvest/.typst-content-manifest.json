@@ -1,0 +1,11 @@
+{
+  "task_kind": "new-document",
+  "output": "pdf",
+  "signals": ["professional-report", "financial-stress-test", "spanish"],
+  "hard_constraints": ["fictitious-data-only", "no-personalized-investment-advice", "include-risk-disclosure"],
+  "content_features": {
+    "code_blocks": 1,
+    "defined_terms": 5,
+    "portrait_images": 0
+  }
+}

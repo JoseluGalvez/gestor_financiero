@@ -1,0 +1,10 @@
+{
+  "entry": "main.typ",
+  "metadata": {
+    "author": "Manus AI",
+    "subtitle": "Caída uniforme del 20 %, métricas de riesgo y controles de diversificación",
+    "title": "Prueba de estrés OmniInvest"
+  },
+  "mode": "report",
+  "theme": "report-theme.typ"
+}

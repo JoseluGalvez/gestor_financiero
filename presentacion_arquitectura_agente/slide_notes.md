@@ -1,0 +1,31 @@
+# 1 - Adaptadores de Servidor
+
+Mantener las credenciales fuera del alcance del cliente es una prioridad técnica innegociable. Por eso las claves de proveedores externos se quedan siempre en el servidor. Y para no saturar los servicios externos, el sistema implementa una caché basada en Redis que acelera la respuesta y aplica una estricta coalescencia de consultas repetidas. Además, cada adaptador de datos vigila de cerca las cuotas impuestas por la SEC y otras fuentes para evitar bloqueos operativos. El almacenamiento utiliza snapshots con una fecha de corte clara, garantizando que nunca se exponen datos financieros privados en las respuestas. Esto asegura una integración fluida y sienta las bases para las siguientes reglas de auditoría y cumplimiento normativo.
+
+# 2 - Arquitectura del Agente
+
+El flujo operativo del agente se apoya en una secuencia perfectamente delimitada de tres etapas que blindan la infraestructura. El cliente autenticado inicia la petición con su token de sesión y el ámbito consentido. La Edge Function toma el control como orquestador central, aplicando validaciones de RLS, roles y cuotas, además de coordinar adaptadores específicos para SEC y mercados. Por último, el modelo IA recibe únicamente el contexto necesario, absteniéndose de ejecutar consultas SQL directas o llamadas externas por cuenta propia. Esta separación de responsabilidades asegura que la inteligencia artificial asista en la síntesis sin comprometer jamás la integridad del sistema. A continuación, analizaremos en detalle el catálogo de herramientas seguras que maneja este orquestador.
+
+# 3 - Herramientas de solo lectura
+
+La seguridad operativa del agente descansa en un catálogo cerrado de herramientas de solo lectura que evitan cualquier comportamiento impredecible del modelo. Herramientas como resolve company desambiguan tickers e ISINs, mientras que get fundamental snapshot y get technical snapshot recuperan métricas y series OHLCV de manera determinista. Asimismo, get portfolio summary procesa carteras privadas bajo estricta validación RLS y consentimiento previo. Es vital mantener una separación clara entre los datos reportados por fuentes oficiales, los cálculos deterministas y las hipótesis del usuario. El agente no improvisa respuestas financieras, sino que consulta funciones acotadas y estructuradas. Con este conjunto controlado de capacidades, revisemos cómo el sistema aplica el control de acceso a nivel de base de datos.
+
+# 4 - Agente IA Financiero: Arquitectura y Seguridad
+
+Comenzamos explorando la arquitectura y seguridad de nuestro agente IA financiero dentro de Portafolio Intel. Este sistema combina la potencia de los modelos de lenguaje con controles estrictos de acceso, herramientas de solo lectura y un diseño basado en RLS. Es fundamental entender que este agente funciona estrictamente como una herramienta de investigación asistida. Ofrece datos citados de fuentes oficiales, pero no emite recomendaciones personalizadas, no ejecuta operaciones financieras, no permite SQL libre y mantiene cero secretos en el lado del cliente. Vamos a ver cómo logramos este equilibrio entre inteligencia y blindaje de seguridad.
+
+# 5 - El problema: Datos vs. Privacidad
+
+Conectar un modelo de lenguaje de forma directa a una base de datos financiera abre brechas inaceptables de privacidad y exposición de secretos. Para evitar fugas de datos corporativos e inyecciones de prompt en Portafolio Intel, se implementa una arquitectura rigurosa en tres capas. El cliente autenticado envía la intención sin exponer credenciales. Una Edge Function actúa como guardián validando permisos estrictos de solo lectura. Y finalmente, el modelo de IA aislado procesa un contexto mínimo para devolver respuestas estructuradas. Este diseño garantiza que el navegador nunca maneje claves ni realice consultas desprotegidas a la base de datos. Pasemos a ver cómo se articulan estos componentes en el flujo de ejecución.
+
+# 6 - Reglas de Respuesta y Auditoría
+
+Mantener la trazabilidad técnica exige que cada respuesta siga un contrato JSON estricto y transparente. Toda cifra incluye de forma obligatoria su respectiva fuente, una fecha de corte clara, métricas de cobertura y las advertencias necesarias. El registro interno audita las herramientas utilizadas y el estado de la ejecución, protegiendo siempre las claves y evitando almacenar payloads masivos en los logs. Si la cobertura es insuficiente, el sistema no inventa datos ni completa vacíos, sino que declara la abstención de manera explícita. Esto garantiza la integridad técnica y prepara el terreno para la siguiente hoja de ruta.
+
+# 7 - Políticas RLS y Permisos
+
+El acceso a los datos en Portafolio Intel se rige por políticas de seguridad a nivel de fila y el uso estricto del token de sesión original del usuario. La clave de servicio de la base de datos queda completamente blindada para tareas de sistema y auditoría, prohibiendo su uso en consultas de carteras privadas. Además, el backend verifica que exista un consentimiento explícito antes de inyectar cualquier contexto financiero en las peticiones del agente. Las políticas de PostgreSQL aseguran que las consultas de ejecución pertenezcan exclusivamente al actor autenticado o al propietario de la organización, rechazando de plano cualquier intento de inserción directa desde el cliente. Este nivel de rigor técnico garantiza que la privacidad de la información financiera permanezca intacta en todo momento.
+
+# 8 - Siguientes pasos
+
+Para ejecutar esta hoja de ruta seguiremos una secuencia estricta. Primero desplegamos las migraciones de seguridad a nivel de fila y las tablas de auditoría. Después habilitamos la función en el borde para validar los contratos de agentes. Continuamos integrando el adaptador para consultar los informes públicos de la SEC. Y finalmente evaluamos los proveedores comerciales de datos de mercado. Todo esto arranca con un piloto mixto que combina nuestra cartera autorizada con los datos públicos disponibles. Queremos validar la arquitectura antes de comprometer presupuesto en licencias externas. Y recuerda que este piloto no activa recomendaciones de inversión, operaciones automáticas, ejecución de SQL libre ni secretos de cliente. Definimos así el alcance exacto de la prueba controlada.

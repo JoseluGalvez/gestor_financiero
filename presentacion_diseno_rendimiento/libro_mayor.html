@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Un libro mayor normalizado protege la trazabilidad</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+            position: relative;
+        }
+        .header {
+            margin-bottom: 60px;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 20px;
+        }
+        h1 {
+            font-size: 48px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+        .flow-container {
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+        .flow-step {
+            flex: 1;
+            background-color: #1e293b;
+            padding: 30px 25px;
+            border-top: 4px solid #38bdf8;
+            display: flex;
+            flex-direction: column;
+        }
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0ea5e9;
+            font-size: 36px;
+            width: 40px;
+        }
+        .step-icon {
+            font-size: 40px;
+            color: #38bdf8;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .step-title {
+            font-size: 26px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 15px;
+        }
+        .step-content {
+            font-size: 20px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+        .step-content ul {
+            margin-left: 20px;
+        }
+        .step-content li {
+            margin-bottom: 15px;
+        }
+        .highlight-text {
+            color: #38bdf8;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Un libro mayor normalizado protege la trazabilidad</h1>
+        </div>
+        
+        <div class="flow-container">
+            <!-- Step 1 -->
+            <div class="flow-step">
+                <div class="step-icon"><i class="fas fa-database"></i></div>
+                <div class="step-title">1. Entradas Crudas</div>
+                <div class="step-content">
+                    <ul>
+                        <li>Transacciones originales.</li>
+                        <li>Valoraciones de mercado.</li>
+                        <li>Tipos de cambio (FX).</li>
+                        <li>Metadatos de calidad.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+            
+            <!-- Step 2 -->
+            <div class="flow-step" style="border-top-color: #f59e0b;">
+                <div class="step-icon" style="color: #f59e0b;"><i class="fas fa-book"></i></div>
+                <div class="step-title">2. Libro Mayor Derivado</div>
+                <div class="step-content">
+                    <ul>
+                        <li>Ingesta <span class="highlight-text" style="color: #f59e0b;">idempotente</span>.</li>
+                        <li>Conserva frontera, signo y procedencia.</li>
+                        <li>Mantiene versión, conciliación y vínculos de reversión.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="flow-arrow"><i class="fas fa-chevron-right"></i></div>
+            
+            <!-- Step 3 -->
+            <div class="flow-step" style="border-top-color: #10b981;">
+                <div class="step-icon" style="color: #10b981;"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="step-title">3. Resultados Auditables</div>
+                <div class="step-content">
+                    <ul>
+                        <li>Generación de TWR, XIRR y puente neto.</li>
+                        <li>Resultados <span class="highlight-text" style="color: #10b981;">versionados</span> con detalle auditable.</li>
+                        <li>Sin guardar secretos ni archivos completos.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

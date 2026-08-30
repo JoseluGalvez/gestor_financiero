@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Validado para fallar de forma segura</title>
+<style>
+* { box-sizing: border-box; margin: 0; }
+.slide-container { width: 1280px; min-height: 720px; background: #e2e8f0; color: #1e1b4b; display: flex; font-family: Arial, Helvetica, sans-serif; }
+.rail { width: 92px; border-right: 2px solid #312e81; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; font-weight: 800; letter-spacing: .18em; color: #312e81; text-transform: uppercase; }
+.page { display: grid; grid-template-columns: 1.2fr 0.8fr; flex: 1; }
+.col-main { padding: 54px 50px 42px 70px; display: flex; flex-direction: column; }
+.col-side { padding: 54px 70px 42px 50px; background: #d6dee9; border-left: 2px solid #1e1b4b; display: flex; flex-direction: column; }
+.eyebrow { color: #16a34a; font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 16px; }
+h1 { font-size: 46px; letter-spacing: -.055em; line-height: 1.05; color: #1e1b4b; margin-bottom: 36px; }
+.test-group { margin-bottom: 32px; }
+.test-group h2 { font-size: 22px; color: #1e1b4b; margin-bottom: 16px; letter-spacing: -.02em; border-bottom: 2px solid #1e1b4b; padding-bottom: 8px; }
+.test-item { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
+.status-block { width: 16px; height: 16px; background: #16a34a; flex-shrink: 0; margin-top: 6px; }
+.status-block.alert { background: #1e1b4b; }
+.test-text h3 { font-size: 18px; color: #1e1b4b; margin-bottom: 4px; }
+.test-text p { color: #312e81; font-family: Georgia, serif; font-size: 17px; line-height: 1.5; }
+.metric-box { background: #1e1b4b; color: #fff; padding: 24px; margin-bottom: 24px; }
+.metric-box h3 { color: #16a34a; font-size: 13px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
+.metric-box p { font-family: Georgia, serif; font-size: 18px; line-height: 1.5; }
+.metric-box strong { font-size: 24px; display: block; margin-top: 8px; color: #fff; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+  <div class="rail">Portafolio Intel · Garantía de ejecución</div>
+  <div class="page">
+    <div class="col-main">
+      <p class="eyebrow">08 · Pruebas deterministas</p>
+      <h1>Validado para fallar<br>de forma segura</h1>
+      
+      <div class="test-group">
+        <h2>Lógica fiscal y trazabilidad</h2>
+        <div class="test-item">
+          <div class="status-block"></div>
+          <div class="test-text">
+            <h3>Consumo FIFO correcto</h3>
+            <p>Las ventas parciales descuentan exactamente el coste de los lotes más antiguos disponibles.</p>
+          </div>
+        </div>
+        <div class="test-item">
+          <div class="status-block"></div>
+          <div class="test-text">
+            <h3>Tratamiento de permutas</h3>
+            <p>Se registra la transmisión del activo entregado y se crea el nuevo lote con el valor de mercado verificado.</p>
+          </div>
+        </div>
+        <div class="test-item">
+          <div class="status-block alert"></div>
+          <div class="test-text">
+            <h3>Bloqueo intencionado</h3>
+            <p>Una venta sin lotes previos suficientes detiene el cálculo y marca la operación para revisión manual obligatoria.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-side">
+      <div class="test-group">
+        <h2>Calidad técnica</h2>
+        <div class="metric-box">
+          <h3>Auditoría de dependencias</h3>
+          <p>Análisis estático y compilación de producción superados sin incidencias.</p>
+          <strong>0 vulnerabilidades</strong>
+        </div>
+      </div>
+      
+      <div class="test-group">
+        <h2>Privacidad local</h2>
+        <div class="metric-box" style="background: #312e81;">
+          <h3>Aislamiento de datos</h3>
+          <p>El procesamiento del CSV ocurre 100% en la memoria del navegador del usuario.</p>
+          <strong style="color: #16a34a;">Sin envíos a Supabase</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

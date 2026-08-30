@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 80px 0 80px;
+        }
+        .header {
+            margin-bottom: 30px; /* reduced to save vertical space */
+        }
+        .eyebrow {
+            color: #3b82f6;
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        .title {
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .content-wrapper {
+            display: flex;
+            gap: 20px; /* horizontal gap between columns */
+        }
+        .left-col, .right-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px; /* reduced vertical gap inside columns */
+        }
+        .info-block {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 20px; /* reduced inner padding */
+        }
+        .block-title {
+            font-size: 28px;
+            color: #3b82f6;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .block-text {
+            font-size: 24px;
+            line-height: 1.5;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+        }
+        .block-text strong {
+            color: #f8fafc;
+        }
+        .flow-list {
+            list-style: none;
+            margin-top: 10px; /* reduced */
+        }
+        .flow-list li {
+            font-size: 24px;
+            margin-bottom: 10px; /* reduced */
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #f8fafc;
+        }
+        .flow-sign {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            font-weight: 700;
+            font-family: monospace;
+            font-size: 28px;
+        }
+        .sign-negative { color: #ef4444; }
+        .sign-positive { color: #22c55e; }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <div class="eyebrow">Metodología de Cálculo</div>
+            <h1 class="title">MWR/XIRR: la solución es numérica y auditable</h1>
+        </div>
+        <div class="content-wrapper">
+            <div class="left-col">
+                <div class="info-block" style="flex-grow: 1;">
+                    <h2 class="block-title"><i class="fa-solid fa-arrow-right-arrow-left"></i> Convención Explícita</h2>
+                    <p class="block-text">El cálculo requiere una dirección estricta de los flujos de caja para representar la experiencia del inversor:</p>
+                    <ul class="flow-list">
+                        <li><span class="flow-sign sign-negative">-</span> <strong>Aportaciones</strong> (salida de capital)</li>
+                        <li><span class="flow-sign sign-positive">+</span> <strong>Retiros y dividendos</strong> (entrada)</li>
+                        <li><span class="flow-sign sign-positive">+</span> <strong>Valor final</strong> (capital retenido)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="right-col">
+                <div class="info-block">
+                    <h2 class="block-title"><i class="fa-solid fa-microchip"></i> Solucionador Híbrido</h2>
+                    <p class="block-text">Utiliza un algoritmo determinista que detecta <strong>raíces múltiples</strong>. El intervalo de búsqueda y el residuo quedan documentados en cada ejecución.</p>
+                </div>
+                <div class="info-block">
+                    <h2 class="block-title"><i class="fa-solid fa-shield-check"></i> Estados Seguros</h2>
+                    <p class="block-text">El resultado siempre es <strong>listo, parcial o no disponible</strong>. Nunca se devuelve una tasa inventada si no hay convergencia.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

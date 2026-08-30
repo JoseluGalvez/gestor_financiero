@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #0f172a; 
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 80px 40px;
+        }
+        .header {
+            margin-bottom: 40px;
+        }
+        .eyebrow {
+            color: #3b82f6;
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        .title {
+            font-size: 52px;
+            font-weight: 700;
+        }
+        .quality-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex: 1;
+        }
+        .quality-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 30px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .quality-icon {
+            font-size: 36px;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .quality-content h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #f8fafc;
+        }
+        .quality-content p {
+            font-size: 20px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+        .bottom-banner {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 20px;
+            text-align: center;
+            font-size: 22px;
+            color: #fcd34d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <div class="eyebrow">Contrato de Procedencia</div>
+            <h1 class="title">La calidad es parte de cada KPI</h1>
+        </div>
+        
+        <div class="quality-grid">
+            <div class="quality-card">
+                <div class="quality-icon"><i class="fa-solid fa-tags"></i></div>
+                <div class="quality-content">
+                    <h3>Valoración</h3>
+                    <p>Porcentaje del patrimonio con precio reciente y estado de mercado verificado.</p>
+                </div>
+            </div>
+            <div class="quality-card">
+                <div class="quality-icon"><i class="fa-solid fa-coins"></i></div>
+                <div class="quality-content">
+                    <h3>Divisas (FX)</h3>
+                    <p>Cobertura de conversión con tipos de cambio trazables a la moneda base.</p>
+                </div>
+            </div>
+            <div class="quality-card">
+                <div class="quality-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                <div class="quality-content">
+                    <h3>Costes</h3>
+                    <p>Identificación de comisiones e impuestos para validar la etiqueta de rendimiento neto.</p>
+                </div>
+            </div>
+            <div class="quality-card">
+                <div class="quality-icon"><i class="fa-solid fa-sitemap"></i></div>
+                <div class="quality-content">
+                    <h3>Clasificación</h3>
+                    <p>Asignación taxonómica (activo, sector, país) para medir exposición y riesgo.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bottom-banner">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Las métricas parciales se marcan claramente y no se utilizan para rankings o informes definitivos.</span>
+        </div>
+    </div>
+</body>
+</html>

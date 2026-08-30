@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Rendimiento explicable y seguro</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .bg-shape-1 {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0) 70%);
+        }
+        .bg-shape-2 {
+            position: absolute;
+            bottom: -150px;
+            left: -50px;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.1) 0%, rgba(14, 165, 233, 0) 70%);
+        }
+        .content-wrapper {
+            text-align: center;
+            z-index: 10;
+            max-width: 900px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: #38bdf8;
+        }
+        h1 {
+            font-size: 72px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+        h2 {
+            font-size: 32px;
+            font-weight: 300;
+            color: #cbd5e1;
+            line-height: 1.4;
+            margin-bottom: 60px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 50px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 80px;
+            font-size: 16px;
+            color: #94a3b8;
+            z-index: 10;
+        }
+        .accent-line {
+            width: 80px;
+            height: 4px;
+            background: #0ea5e9;
+            margin: 0 auto 40px auto;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="bg-shape-1"></div>
+        <div class="bg-shape-2"></div>
+        
+        <div class="content-wrapper">
+            <div class="badge">Propuesta de Arquitectura</div>
+            <h1>Rendimiento explicable<br>y seguro</h1>
+            <div class="accent-line"></div>
+            <h2>TWR, XIRR y puente de atribución neto<br>para Gestor financiero</h2>
+        </div>
+        
+        <div class="footer">
+            <div>Portafolio Intel</div>
+            <div>Diseño ejecutivo · 27 de agosto de 2026</div>
+        </div>
+    </div>
+</body>
+</html>

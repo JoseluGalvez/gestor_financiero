@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #132644;
+            --blue: #2d6cdf;
+            --teal: #148765;
+            --light-bg: #f6f8fc;
+            --text-dark: #1b2d47;
+            --text-muted: #708099;
+            --danger: #b9485c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px; /* keep as required */
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background-color: var(--navy);
+            color: white;
+            padding-top: 40px; /* must not shrink */
+            padding-left: 60px;
+            padding-right: 60px;
+            height: 130px;
+        }
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-top: 0;
+        }
+        /* reduced top padding to save vertical space */
+        .content-area {
+            display: flex;
+            padding-top: 30px;
+            padding-left: 60px;
+            padding-right: 60px;
+            height: 590px;
+        }
+        .text-column {
+            width: 55%;
+            padding-right: 30px;
+        }
+        .visual-column {
+            width: 45%;
+            background-color: var(--light-bg);
+            border-left: 8px solid var(--teal);
+            padding-top: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        .policy-item {
+            display: flex;
+            margin-top: 18px;
+        }
+        .policy-item:first-child {
+            margin-top: 0;
+        }
+        .policy-icon {
+            width: 60px;
+            font-size: 32px;
+            color: var(--blue);
+            padding-top: 2px;
+        }
+        .policy-content h2 {
+            font-size: 28px;
+            color: var(--text-dark);
+            margin-top: 0;
+        }
+        .policy-content p {
+            font-size: 22px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+        .code-block {
+            background-color: var(--navy);
+            color: #eaf1ff;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            padding-top: 12px;
+            padding-left: 12px;
+            padding-right: 12px;
+            margin-top: 20px;
+            line-height: 1.5;
+            border-left: 4px solid var(--blue);
+            /* keep existing height but content reduced instead of forcing new sizes */
+            height: 350px;
+        }
+        .code-keyword { color: #8feace; }
+        .code-string { color: #b8c9e6; }
+        .code-comment { color: #708099; }
+        .visual-title {
+            font-size: 24px;
+            color: var(--navy);
+            font-weight: 700;
+            border-bottom: 2px solid var(--blue);
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Políticas RLS y Permisos</h1>
+        </div>
+        <div class="content-area">
+            <div class="text-column">
+                <div class="policy-item">
+                    <div class="policy-icon"><i class="fas fa-id-badge"></i></div>
+                    <div class="policy-content">
+                        <h2>JWT Original del Usuario</h2>
+                        <p>Se utiliza exclusivamente el token de sesión del usuario para consultar Supabase. Las políticas RLS bloquean el acceso a organizaciones o carteras ajenas.</p>
+                    </div>
+                </div>
+                <div class="policy-item">
+                    <div class="policy-icon"><i class="fas fa-key"></i></div>
+                    <div class="policy-content">
+                        <h2>Restricción de Clave de Servicio</h2>
+                        <p>La clave de servicio (Service Role) se reserva para adaptadores y auditoría. <strong>Nunca</strong> se emplea para leer carteras privadas.</p>
+                    </div>
+                </div>
+                <div class="policy-item">
+                    <div class="policy-icon"><i class="fas fa-user-check"></i></div>
+                    <div class="policy-content">
+                        <h2>Consentimiento Explícito</h2>
+                        <p>El agente verifica en backend que el usuario haya aprobado el uso de su cartera antes de adjuntar cualquier contexto privado.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visual-column">
+                <div class="visual-title">Ejemplo de Política RLS (PostgreSQL)</div>
+                <div class="code-block">
+<span class="code-comment">-- Lectura: consulta propia u owner</span><br>
+<span class="code-keyword">CREATE POLICY</span> agent_query_runs_read ON public.agent_query_runs<br>
+<span class="code-keyword">FOR SELECT TO</span> authenticated<br>
+<span class="code-keyword">USING</span> (actor_id = auth.uid() OR public.is_organization_owner(organization_id));<br>
+<br>
+<span class="code-comment">-- Evitar inserciones directas desde cliente</span><br>
+<span class="code-keyword">CREATE POLICY</span> client_insert_reject ON public.agent_query_runs FOR INSERT TO authenticated WITH CHECK (false);
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

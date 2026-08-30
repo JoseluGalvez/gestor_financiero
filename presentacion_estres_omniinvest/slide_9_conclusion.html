@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px; /* keep as required */
+            background-color: #172033;
+            color: #FFFFFF;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .bg-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(47, 93, 138, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(47, 93, 138, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+        }
+        .header {
+            position: relative;
+            z-index: 2;
+            padding: 50px 60px 10px 60px; /* keep top padding (50px) unchanged */
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(47, 93, 138, 0.3);
+        }
+        .header-accent {
+            width: 8px;
+            height: 40px;
+            background-color: #2F5D8A;
+            margin-right: 20px;
+        }
+        h1 {
+            font-size: 42px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 30px; /* reduced from 60px to shrink height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 20px; /* reduced gap */
+        }
+        .summary-box {
+            background: rgba(23, 32, 51, 0.8);
+            border: 2px solid #2F5D8A;
+            padding: 20px; /* reduced from 50px */
+            text-align: center;
+            width: 80%;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 20px; /* reduced from 30px */
+        }
+        .summary-row:last-child {
+            margin-bottom: 0;
+        }
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .summary-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .summary-label {
+            font-size: 24px;
+            color: #A0B2C6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .highlight {
+            color: #B54C4C;
+        }
+        .disclaimer-box {
+            background: rgba(181, 76, 76, 0.1);
+            border-left: 6px solid #B54C4C;
+            padding: 20px 30px; /* reduced from 30px 40px */
+            width: 80%;
+            display: flex;
+            align-items: center;
+            gap: 20px; /* slightly reduced gap */
+        }
+        .disclaimer-icon {
+            font-size: 48px;
+            color: #B54C4C;
+        }
+        .disclaimer-text {
+            font-size: 26px;
+            color: #E0E6ED;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="bg-pattern"></div>
+        <div class="header">
+            <div class="header-accent"></div>
+            <h1>Conclusión: estrés explicable antes que automatización opaca</h1>
+        </div>
+        <div class="content">
+            <div class="summary-box">
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <div class="summary-value">90.000 <i class="fas fa-arrow-right" style="font-size: 32px; color: #7A8B9E; margin: 0 15px;"></i> 75.000 <span style="font-size: 32px;">EUR</span></div>
+                        <div class="summary-label">Valor de Cartera</div>
+                    </div>
+                </div>
+                <div class="summary-row">
+                    <div class="summary-item">
+                        <div class="summary-value highlight">−16,67 %</div>
+                        <div class="summary-label">Impacto Total</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value">65,6 <i class="fas fa-arrow-right" style="font-size: 32px; color: #7A8B9E; margin: 0 15px;"></i> 59,6</div>
+                        <div class="summary-label">Indicador OmniInvest</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="disclaimer-box">
+                <i class="fas fa-info-circle disclaimer-icon"></i>
+                <div class="disclaimer-text">
+                    El escenario es <strong>educativo y determinista</strong>. No representa una previsión, una cartera real ni constituye asesoramiento financiero personalizado.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

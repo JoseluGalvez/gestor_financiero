@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --navy: #132644;
+            --blue: #2d6cdf;
+            --teal: #148765;
+            --light-blue: #eaf1ff;
+            --text-light: #f6f8fc;
+            --text-dark: #1b2d47;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            display: flex;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+        .left-panel {
+            width: 55%;
+            background-color: var(--navy);
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -50px;
+            width: 100px;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1));
+            transform: skewX(-10deg);
+        }
+        .right-panel {
+            width: 45%;
+            background-color: var(--light-blue);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tag {
+            display: inline-block;
+            background-color: var(--blue);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            align-self: flex-start;
+        }
+        .title {
+            color: white;
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            text-wrap: balance;
+        }
+        .subtitle {
+            color: #b8c9e6;
+            font-size: 28px;
+            font-weight: 400;
+            line-height: 1.4;
+            max-width: 90%;
+        }
+        /* CSS Art for right panel */
+        .network-node {
+            position: absolute;
+            border-radius: 50%;
+            background-color: var(--blue);
+            opacity: 0.2;
+        }
+        .node-1 { width: 300px; height: 300px; top: -50px; right: -50px; background-color: var(--teal); }
+        .node-2 { width: 200px; height: 200px; bottom: 100px; left: 50px; }
+        .node-3 { width: 150px; height: 150px; top: 200px; right: 100px; border: 4px solid var(--navy); background: transparent; opacity: 0.1; }
+        
+        .line {
+            position: absolute;
+            background-color: var(--blue);
+            opacity: 0.15;
+            height: 2px;
+        }
+        .line-1 { width: 400px; top: 100px; left: -50px; transform: rotate(35deg); }
+        .line-2 { width: 500px; bottom: 200px; right: -100px; transform: rotate(-25deg); }
+        .line-3 { width: 300px; top: 300px; left: 100px; transform: rotate(75deg); }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="left-panel">
+            <div class="tag">Portafolio Intel</div>
+            <h1 class="title">Agente IA Financiero:<br>Arquitectura y Seguridad</h1>
+            <p class="subtitle">Controles de acceso, herramientas de solo lectura y diseño RLS</p>
+        </div>
+        <div class="right-panel">
+            <div class="network-node node-1"></div>
+            <div class="network-node node-2"></div>
+            <div class="network-node node-3"></div>
+            <div class="line line-1"></div>
+            <div class="line line-2"></div>
+            <div class="line line-3"></div>
+        </div>
+    </div>
+</body>
+</html>

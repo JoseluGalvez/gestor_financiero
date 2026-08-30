@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Uso seguro y referencias oficiales</title>
+<style>
+* { box-sizing: border-box; margin: 0; }
+.slide-container { width: 1280px; min-height: 720px; background: #e2e8f0; color: #1e1b4b; display: flex; font-family: Arial, Helvetica, sans-serif; }
+.rail { width: 92px; border-right: 2px solid #312e81; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12px; font-weight: 800; letter-spacing: .18em; color: #312e81; text-transform: uppercase; }
+.page { flex: 1; padding: 54px 72px 30px 70px; display: flex; flex-direction: column; }
+.eyebrow { color: #16a34a; font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+.head { margin-top: 12px; border-bottom: 2px solid #1e1b4b; padding: 0 0 22px; }
+.head h1 { font-size: 46px; letter-spacing: -.055em; line-height: 1; }
+.content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 40px; flex: 1; }
+.flow-box { background: #1e1b4b; color: #e2e8f0; padding: 35px; border-left: 8px solid #16a34a; }
+.flow-box h2 { font-size: 24px; color: #16a34a; margin-bottom: 24px; letter-spacing: -.02em; }
+.flow-steps { display: flex; flex-direction: column; gap: 14px; }
+.step { display: flex; align-items: center; gap: 15px; font-family: Georgia, serif; font-size: 18px; font-weight: 500; }
+.step-box { width: 12px; height: 12px; background: #16a34a; flex-shrink: 0; }
+.flow-msg { margin-top: 35px; font-family: Georgia, serif; font-size: 18px; line-height: 1.6; border-top: 1px solid #312e81; padding-top: 20px; }
+.refs-box { padding-top: 10px; }
+.refs-box h2 { font-size: 24px; color: #1e1b4b; margin-bottom: 24px; letter-spacing: -.02em; }
+.ref-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+.ref-list li { display: flex; gap: 12px; color: #312e81; font-family: Georgia, serif; font-size: 17px; line-height: 1.5; }
+.ref-num { font-family: Arial, Helvetica, sans-serif; font-weight: 800; color: #16a34a; flex-shrink: 0; }
+.docs { margin-top: 45px; padding: 25px; background: #d6dee9; border: 1px solid #94a3b8; }
+.docs h3 { font-size: 14px; color: #1e1b4b; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px; }
+.docs p { font-family: Georgia, serif; font-size: 16px; color: #312e81; line-height: 1.6; }
+.docs code { font-family: monospace; font-size: 14px; background: #e2e8f0; padding: 2px 6px; color: #1e1b4b; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+  <div class="rail">Portafolio Intel · Cierre</div>
+  <section class="page">
+    <p class="eyebrow">10 · Conclusión</p>
+    <div class="head">
+      <h1>Uso seguro y referencias oficiales</h1>
+    </div>
+    <div class="content-grid">
+      <div class="flow-box">
+        <h2>Flujo recomendado de uso</h2>
+        <div class="flow-steps">
+          <div class="step"><div class="step-box"></div> Adjuntar CSV local</div>
+          <div class="step"><div class="step-box"></div> Validar datos materiales</div>
+          <div class="step"><div class="step-box"></div> Revisar advertencias</div>
+          <div class="step"><div class="step-box"></div> Descargar borrador</div>
+          <div class="step"><div class="step-box"></div> Contrastar con documentación</div>
+          <div class="step"><div class="step-box"></div> Revisar con asesor fiscal</div>
+        </div>
+        <p class="flow-msg">La automatización reduce el trabajo manual sin sustituir la responsabilidad ni la revisión fiscal.</p>
+      </div>
+      <div class="refs-box">
+        <h2>Fuentes de la AEAT</h2>
+        <ul class="ref-list">
+          <li><span class="ref-num">[1]</span> Compra y venta de monedas virtuales: tributación en el IRPF del inversor.</li>
+          <li><span class="ref-num">[2]</span> Ganancias y pérdidas patrimoniales derivadas de transmisión o permuta de monedas virtuales.</li>
+          <li><span class="ref-num">[3]</span> Modelo 721: preguntas frecuentes y personas obligadas.</li>
+          <li><span class="ref-num">[4]</span> Modelo 721: información requerida.</li>
+          <li><span class="ref-num">[5]</span> Modelo 721: supuestos no incluidos y plazo de presentación.</li>
+        </ul>
+        <div class="docs">
+          <h3>Documentación de implementación</h3>
+          <p><code>docs/ALCANCE_FISCAL_CRIPTOMONEDAS.md</code><br><code>docs/VALIDACION_CRIPTOMONEDAS_Y_PLATAFORMAS.md</code></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+{
+  "project_info": {
+    "title": "Agente IA Financiero: Arquitectura y Seguridad",
+    "created": 1787711960.095,
+    "last_updated": 1787712208.005,
+    "total_slides": 8
+  },
+  "slides": [
+    {
+      "id": "portada",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "problema_solucion",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "arquitectura",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "herramientas",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "rls_permisos",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "adaptadores",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "respuesta_auditoria",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "siguientes_pasos",
+      "state": "edited",
+      "pageNum": 8
+    }
+  ],
+  "outline": [
+    {
+      "id": "portada",
+      "title": "Agente IA Financiero: Arquitectura y Seguridad",
+      "summary": "Controles de acceso, herramientas y diseño RLS para Portafolio Intel"
+    },
+    {
+      "id": "problema_solucion",
+      "title": "El problema: Datos vs. Privacidad",
+      "summary": "Un agente útil necesita datos privados y actualidad de mercado, pero un LLM libre expone secretos, mezcla carteras y es susceptible a inyecciones. La solución es una arquitectura en tres capas."
+    },
+    {
+      "id": "arquitectura",
+      "title": "Arquitectura del Agente",
+      "summary": "Diagrama de flujo desde el usuario autenticado hasta el modelo IA, pasando por la Edge Function y los adaptadores de servidor.",
+      "image_plan": "/home/ubuntu/upload/search_images/TLtPjUtirczm.webp - Dashboard interface matches the CSV processing and draft generation topic"
+    },
+    {
+      "id": "herramientas",
+      "title": "Herramientas de solo lectura",
+      "summary": "Catálogo cerrado de herramientas: resolución de empresas, snapshots fundamentales y técnicos, y resúmenes de cartera. Separación entre dato reportado y cálculo."
+    },
+    {
+      "id": "rls_permisos",
+      "title": "Políticas RLS y Permisos",
+      "summary": "Uso del JWT original para consultar Supabase, restricción de la clave de servicio y validación del consentimiento explícito del usuario."
+    },
+    {
+      "id": "adaptadores",
+      "title": "Adaptadores de Servidor",
+      "summary": "Aislamiento de secretos, control de límites (Rate Limiting) para cumplir con políticas como las de la SEC, y uso de caché para normalización.",
+      "image_plan": "/home/ubuntu/upload/search_images/XH5XN6Ei1Nbq.png - Financial analysis dashboard fits the interface and KPI review slide"
+    },
+    {
+      "id": "respuesta_auditoria",
+      "title": "Reglas de Respuesta y Auditoría",
+      "summary": "Esquema JSON obligatorio con citas y fecha de corte. Registro de auditoría sin guardar secretos ni payloads masivos."
+    },
+    {
+      "id": "siguientes_pasos",
+      "title": "Siguientes pasos",
+      "summary": "Despliegue de migraciones RLS, activación de la Edge Function, conexión del adaptador SEC EDGAR y selección del proveedor de mercado."
+    }
+  ]
+}

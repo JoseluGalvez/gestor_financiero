@@ -177,7 +177,9 @@ export function calculateDcf(input: DcfInput): DcfResult {
   const warnings: string[] = [];
   const terminalGrowthRate = input.terminalGrowthRate ?? 0.02;
   if (input.freeCashFlows.length !== 10 || input.freeCashFlows.some((value) => !finite(value))) warnings.push("El DCF requiere diez proyecciones anuales de flujo de caja libre válidas.");
+  if (!finite(terminalGrowthRate) || terminalGrowthRate <= -1) warnings.push("El crecimiento terminal debe ser un número finito y mayor que −100 %.");
   if (!finite(input.discountRate) || input.discountRate <= terminalGrowthRate || input.discountRate <= -1) warnings.push("El WACC debe ser superior al crecimiento terminal y mayor que −100 %.");
+  if (input.netDebt !== undefined && !finite(input.netDebt)) warnings.push("La deuda neta debe ser un número finito cuando se informa.");
   if (warnings.length > 0) return { enterpriseValue: null, equityValue: null, valuePerShare: null, terminalValue: null, warnings };
   const discountedFlows = input.freeCashFlows.map((cashFlow, index) => cashFlow / (1 + input.discountRate) ** (index + 1));
   const finalCashFlow = input.freeCashFlows[9];

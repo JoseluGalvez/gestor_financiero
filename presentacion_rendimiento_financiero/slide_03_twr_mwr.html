@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #0f172a; 
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            /* keep top padding to preserve title spacing */
+            padding: 80px 80px 40px; /* reduced bottom padding to cut overall height */
+        }
+        .header {
+            margin-bottom: 30px; /* reduced from 50px */
+            text-align: center;
+        }
+        .eyebrow {
+            color: #3b82f6;
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        .title {
+            font-size: 52px;
+            font-weight: 700;
+        }
+        .comparison-grid {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 20px; /* reduced from 40px */
+        }
+        .method-card {
+            flex: 1;
+            background: #1e293b;
+            padding: 30px 24px; /* reduced vertical padding from 50px to 30px */
+            border: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .method-icon {
+            font-size: 48px;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+        .method-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #f8fafc;
+        }
+        .method-desc {
+            font-size: 24px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+        .bottom-banner {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 12px 20px; /* slightly reduced */
+            text-align: center;
+            font-size: 22px;
+            color: #93c5fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <div class="eyebrow">Motor de Rendimiento</div>
+            <h1 class="title">Dos retornos responden a preguntas distintas</h1>
+        </div>
+        
+        <div class="comparison-grid">
+            <div class="method-card">
+                <i class="fa-solid fa-chart-line method-icon"></i>
+                <h2 class="method-title">TWR</h2>
+                <p class="method-desc"><strong>Aísla el efecto de aportaciones y retiradas</strong> para observar el comportamiento puro de la cartera y la gestión.</p>
+            </div>
+            
+            <div class="method-card">
+                <i class="fa-solid fa-money-bill-transfer method-icon"></i>
+                <h2 class="method-title">MWR / XIRR</h2>
+                <p class="method-desc">Incorpora fechas e importes de los flujos para reflejar la <strong>experiencia monetaria real</strong> del inversor.</p>
+            </div>
+        </div>
+        
+        <div class="bottom-banner">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Ambos se muestran juntos, con el mismo periodo y advertencias de cobertura.</span>
+        </div>
+    </div>
+</body>
+</html>

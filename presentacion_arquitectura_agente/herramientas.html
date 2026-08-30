@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #132644;
+            --blue: #2d6cdf;
+            --teal: #148765;
+            --light-bg: #f6f8fc;
+            --text-dark: #1b2d47;
+            --text-muted: #708099;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background-color: var(--navy);
+            color: white;
+            padding: 40px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+        }
+        .badge {
+            background-color: var(--teal);
+            color: white;
+            padding: 8px 16px;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .content-area {
+            flex: 1;
+            /* keep top padding to preserve title spacing, reduce bottom padding to save height */
+            padding: 40px 60px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px; /* reduced from 30px */
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px; /* slightly reduced */
+            flex: 1;
+        }
+        .tool-card {
+            background-color: var(--light-bg);
+            border-left: 8px solid var(--blue);
+            padding: 24px; /* reduced from 30px */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .tool-card.private {
+            border-left-color: var(--navy);
+        }
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px; /* reduced */
+        }
+        .tool-header i {
+            font-size: 32px;
+            color: var(--blue);
+        }
+        .tool-card.private .tool-header i {
+            color: var(--navy);
+        }
+        .tool-header h3 {
+            font-size: 26px;
+            color: var(--text-dark);
+            font-family: monospace;
+        }
+        .tool-desc {
+            font-size: 20px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .banner {
+            background-color: var(--navy);
+            color: white;
+            padding: 20px 40px; /* slightly reduced */
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .banner i {
+            font-size: 36px;
+            color: var(--teal);
+        }
+        .banner-text h4 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .banner-text p {
+            font-size: 18px;
+            color: #b8c9e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Herramientas de solo lectura</h1>
+            <div class="badge">Catálogo Cerrado</div>
+        </div>
+        <div class="content-area">
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <i class="fas fa-search"></i>
+                        <h3>resolve_company</h3>
+                    </div>
+                    <div class="tool-desc">
+                        Desambigua ticker, mercado e ISIN. Evita que el agente adivine o asuma una empresa incorrecta.
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <h3>get_fundamental_snapshot</h3>
+                    </div>
+                    <div class="tool-desc">
+                        Recupera filings SEC o datos de proveedor comercial. Devuelve métricas reportadas con unidad y moneda.
+                    </div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>get_technical_snapshot</h3>
+                    </div>
+                    <div class="tool-desc">
+                        Proporciona OHLCV ajustado y cálculos técnicos deterministas (SMA, MACD, RSI) basados en series válidas.
+                    </div>
+                </div>
+                <div class="tool-card private">
+                    <div class="tool-header">
+                        <i class="fas fa-wallet"></i>
+                        <h3>get_portfolio_summary</h3>
+                    </div>
+                    <div class="tool-desc">
+                        Agregado privado de la cartera del usuario. Requiere consentimiento explícito y validación RLS.
+                    </div>
+                </div>
+            </div>
+            <div class="banner">
+                <i class="fas fa-balance-scale"></i>
+                <div class="banner-text">
+                    <h4>Separación estricta de conceptos</h4>
+                    <p>El agente debe distinguir siempre entre <strong>Dato Reportado</strong> (filings), <strong>Cálculo Determinista</strong> (fórmulas) e <strong>Hipótesis</strong> (supuestos del usuario).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

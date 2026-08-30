@@ -1,0 +1,9 @@
+flowchart LR
+  A[Elegir CSV, Excel o JSON local] --> B[Comprobar tamaño y estructura]
+  B -->|Archivo válido| C[Asignar columnas y validar celdas]
+  B -->|Error| X[Mostrar explicación y conservar el estado anterior]
+  C --> D[Procesar en memoria con Worker]
+  D --> E[Consultar KPIs, filtros, gráficos y tabla]
+  E --> F[Descargar CSV o JSON solo si la persona lo solicita]
+  C -. no se envía .-> N[(Sin Supabase, IA ni almacenamiento automático)]
+  D -. no se envía .-> N

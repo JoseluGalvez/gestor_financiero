@@ -12,12 +12,42 @@ Esta versión introduce una base Supabase activa con seguridad por organización
 |---|---|
 | Identidad y aislamiento | Acceso por enlace seguro, organización inicial autenticada y RLS en todas las tablas financieras. |
 | Datos persistentes | PostgreSQL con carteras, instrumentos, transacciones, posiciones, fuentes, ejecuciones de sincronización, cotizaciones, snapshots, alertas, informes y auditoría. |
-| Dashboard | KPIs y gráficas Recharts sobre `portfolio_snapshots` reales. El frontend se suscribe a cambios mediante Supabase Realtime. |
+| Dashboard persistente | KPIs y gráficas Recharts sobre `portfolio_snapshots` reales. El frontend se suscribe a cambios mediante Supabase Realtime. |
+| Canvas local privado | Apertura de CSV/XLSX sin cuenta, en memoria del navegador; KPIs, filtros, gráficos, mapa relativo, tabla, conclusiones deterministas y exportación CSV/manifiesto para Power BI. |
+| Navegación | Barra lateral persistente para Resumen, Cartera, Plataformas, Criptomonedas, Alertas, Informes, Fuentes, Análisis y Canvas local; se adapta a una cuadrícula navegable en móvil. |
+| Plataformas | Comparación por fuente del resultado realizado con compras/ventas identificables en la divisa base y método FIFO. Las filas incompletas se excluyen o se señalan para revisión. |
+| Criptomonedas | Importación local de CSV, detalle FIFO de ventas y permutas, avisos de datos incompletos, inventario de lotes y descarga de borrador CSV revisable. |
 | Cartera | Tabla de posiciones persistidas, identificadores de instrumento y marca temporal de actualización. |
 | Fuentes | Registro de Google Sheets, CSV, XLSX o SQL como fuente pendiente; los secretos no entran en el navegador. |
 | Alertas | Reglas de umbral editables para mora P2P, dividendos, rebalanceo, FX y calidad de fuentes; las notificaciones se guardan y deduplican en el backend cuando exista un sincronizador. |
 | Informes | PDF de resumen de cartera, generado desde la última instantánea disponible. Los calendarios y borradores fiscales se bloquean hasta que los datos sean conciliados. |
 | Análisis | Score ponderado, DCF, SMA, MACD, RSI, Bandas de Bollinger, ATR, volatilidad, drawdown, Sharpe y Kelly conservador, con cobertura, fuentes y advertencias. |
+
+## Canvas local privado
+
+El acceso **«Abrir Canvas local sin cuenta»** permite explorar un archivo CSV o XLSX temporalmente, sin persistirlo en la base de datos. El lector y los agregados se ejecutan en el navegador, mediante un `Web Worker` cuando está disponible. No usa `localStorage`, no invoca Supabase, no llama a servicios de IA ni envía filas a un conector de Power BI. La sesión se pierde al recargar, cerrar la pestaña o pulsar **«Eliminar de memoria»**.
+
+| Elemento | Comportamiento |
+|---|---|
+| Esquema | Detecta y permite corregir las columnas de fecha, valor, categoría, plataforma, geografía y estado. |
+| Interacción | Los selectores y los clics en el donut, las barras y las burbujas geográficas aplican filtros cruzados locales. |
+| Interpretación | Las conclusiones se generan con reglas auditables sobre las filas filtradas; no constituyen asesoramiento de inversión. |
+| Power BI | Descarga un CSV filtrado y un manifiesto local. Un embed real requiere backend, token efímero y RLS/OLS; no se implementa `Publish to web`. |
+
+> El Canvas no importa ni sincroniza datos reales. Para persistirlos en Supabase debe usarse el flujo autenticado de fuentes, con autorización explícita, previsualización y conciliación.
+
+## Criptomonedas y borrador fiscal revisable
+
+El módulo **Criptomonedas** está disponible en la navegación autenticada y procesa el CSV elegido únicamente en la memoria del navegador. Acepta operaciones de **Compra**, **Venta** y **Permuta**. Para cada transmisión intenta reconstruir el coste de adquisición con FIFO por activo, calcula la diferencia entre transmisión y adquisición y muestra las operaciones que requieren revisión porque faltan lotes, valores EUR, cantidades o fechas.
+
+| Resultado | Alcance |
+|---|---|
+| Borrador CSV | Incluye el detalle de transmisiones, coste FIFO, valor de transmisión, comisiones, resultado y advertencias. |
+| Cálculo de permutas | Registra la baja del activo entregado y crea el lote del activo recibido al valor de transmisión usado por el cálculo. |
+| Modelo 721 | Solo muestra una advertencia de revisión. Ventas y permutas no bastan para decidir la obligación ni para completar una declaración informativa. |
+| Límites | No determina la cuota final de IRPF ni cubre staking, airdrops, minería, NFT, derivados, actividad económica, insolvencias o compensaciones con otras rentas. |
+
+> **Revisión fiscal obligatoria:** el archivo descargable es un borrador de trabajo y no se presenta ante la AEAT. Revisa las fuentes y el resultado con un profesional tributario antes de incorporarlo a Renta. El detalle normativo y las referencias oficiales se encuentran en [`docs/ALCANCE_FISCAL_CRIPTOMONEDAS.md`](docs/ALCANCE_FISCAL_CRIPTOMONEDAS.md).
 
 ## Ejecución local
 
@@ -94,8 +124,11 @@ El motor implementado se encuentra en [`src/lib/financial-analysis.ts`](src/lib/
 | [`docs/MODULO_ANALISIS_FINANCIERO.md`](docs/MODULO_ANALISIS_FINANCIERO.md) | Fórmulas, requisitos de cobertura, trazabilidad y límites del módulo analítico. |
 | [`docs/CONEXIONES_Y_FISCALIDAD.md`](docs/CONEXIONES_Y_FISCALIDAD.md) | Diseño de Google Sheets/SQL y salvaguardas del borrador fiscal. |
 | [`docs/DEMO_IMPORTACION_GOOGLE_SHEETS.md`](docs/DEMO_IMPORTACION_GOOGLE_SHEETS.md) | Hoja ficticia, configuración de prueba, previsualización de solo lectura y estado de Recharts/análisis. |
-| [`docs/PRUEBAS_Y_SEGURIDAD_PRODUCCION.md`](docs/PRUEBAS_Y_SEGURIDAD_PRODUCCION.md) | Comandos de prueba, configuración de producción, RLS y hallazgos de seguridad. |
 | [`docs/VALIDACION_VISUAL.md`](docs/VALIDACION_VISUAL.md) | Evidencia de validación visual y de interacción. |
+| [`docs/ANALISIS_VIDEOS_CANVAS_PRIVACIDAD.md`](docs/ANALISIS_VIDEOS_CANVAS_PRIVACIDAD.md) | Funciones detectadas en los vídeos, arquitectura local, comparación de privacidad y opciones seguras de Power BI. |
+| [`docs/VALIDACION_CANVAS_LOCAL.md`](docs/VALIDACION_CANVAS_LOCAL.md) | Bitácora de pruebas de carga, mapeo, filtros y privacidad del Canvas local. |
+| [`docs/ALCANCE_FISCAL_CRIPTOMONEDAS.md`](docs/ALCANCE_FISCAL_CRIPTOMONEDAS.md) | Alcance del cálculo de transmisiones y permutas, límites del borrador y referencias oficiales de la AEAT. |
+| [`docs/VALIDACION_CRIPTOMONEDAS_Y_PLATAFORMAS.md`](docs/VALIDACION_CRIPTOMONEDAS_Y_PLATAFORMAS.md) | Verificación del FIFO, permutas, cobertura por fuente, calidad de compilación y privacidad local. |
 
 ## Stack
 

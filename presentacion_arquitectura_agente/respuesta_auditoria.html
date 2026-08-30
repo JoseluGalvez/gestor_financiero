@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #132644;
+            --blue: #2d6cdf;
+            --teal: #148765;
+            --light-bg: #f6f8fc;
+            --text-dark: #1b2d47;
+            --text-muted: #708099;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background-color: var(--navy);
+            color: white;
+            padding: 40px 60px; /* Do not change upper padding */
+            display: flex;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+        }
+        /* Reduced content padding to save vertical space */
+        .content-area {
+            flex: 1;
+            padding: 20px 40px;
+            display: flex;
+            gap: 40px;
+        }
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid var(--blue);
+        }
+        .section-title i {
+            font-size: 28px;
+            color: var(--blue);
+        }
+        .section-title h2 {
+            font-size: 32px;
+            color: var(--text-dark);
+        }
+        .audit-title { border-color: var(--teal); }
+        .audit-title i { color: var(--teal); }
+        
+        .description {
+            font-size: 22px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            line-height: 1.6;
+            border-left: 5px solid var(--blue);
+            overflow: auto;
+        }
+        .code-key { color: #9cdcfe; }
+        .code-string { color: #ce9178; }
+        
+        .audit-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .audit-item {
+            background-color: var(--light-bg);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-left: 5px solid var(--teal);
+        }
+        .audit-item i {
+            font-size: 24px;
+            color: var(--navy);
+            width: 35px;
+            text-align: center;
+        }
+        .audit-text h3 {
+            font-size: 22px;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+        .audit-text p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        
+        .warning-box {
+            margin-top: auto;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .warning-box i {
+            color: #856404;
+            font-size: 24px;
+        }
+        .warning-box p {
+            color: #856404;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Reglas de Respuesta y Auditoría</h1>
+        </div>
+        <div class="content-area">
+            
+            <div class="column">
+                <div class="section-title">
+                    <i class="fas fa-file-code"></i>
+                    <h2>Esquema de Respuesta</h2>
+                </div>
+                <p class="description">El modelo debe devolver un JSON estructurado. Toda cifra requiere fuente y fecha de corte.</p>
+                <div class="code-block">
+                    {<br>
+                    &nbsp;&nbsp;<span class="code-key">"answer"</span>: <span class="code-string">"..."</span>,<br>
+                    &nbsp;&nbsp;<span class="code-key">"citations"</span>: [<span class="code-string">"SEC 10-K"</span>],<br>
+                    &nbsp;&nbsp;<span class="code-key">"as_of"</span>: <span class="code-string">"2026-08-26"</span>,<br>
+                    &nbsp;&nbsp;<span class="code-key">"coverage"</span>: <span class="code-string">"120/200 velas"</span>,<br>
+                    &nbsp;&nbsp;<span class="code-key">"caveats"</span>: [<span class="code-string">"Serie insuficiente"</span>],<br>
+                    &nbsp;&nbsp;<span class="code-key">"used_tools"</span>: [<span class="code-string">"get_technical"</span>]<br>
+                    }
+                </div>
+            </div>
+            
+            <div class="column">
+                <div class="section-title audit-title">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h2>Registro de Auditoría</h2>
+                </div>
+                <p class="description">Trazabilidad completa de cada consulta sin comprometer la seguridad de los datos.</p>
+                <ul class="audit-list">
+                    <li class="audit-item">
+                        <i class="fas fa-bullseye"></i>
+                        <div class="audit-text">
+                            <h3>Intención y Herramientas</h3>
+                            <p>Se registra qué herramientas se usaron y el ámbito consentido.</p>
+                        </div>
+                    </li>
+                    <li class="audit-item">
+                        <i class="fas fa-stopwatch"></i>
+                        <div class="audit-text">
+                            <h3>Métricas de Ejecución</h3>
+                            <p>Latencia, estado de la consulta y cobertura de las fuentes.</p>
+                        </div>
+                    </li>
+                    <li class="audit-item">
+                        <i class="fas fa-user-shield"></i>
+                        <div class="audit-text">
+                            <h3>Aislamiento de Secretos</h3>
+                            <p>No se guardan API keys, JWTs ni payloads masivos en los logs.</p>
+                        </div>
+                    </li>
+                </ul>
+                
+                <div class="warning-box">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Si la serie es insuficiente, el agente no inventa el dato; declara la limitación en el JSON.</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>

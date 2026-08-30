@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dos métricas para dos preguntas distintas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+            position: relative;
+        }
+        .header {
+            margin-bottom: 50px;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 20px;
+        }
+        h1 {
+            font-size: 48px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+        .metrics-container {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .metric-col {
+            flex: 1;
+            background-color: #1e293b;
+            padding: 30px;
+            border-top: 4px solid;
+        }
+        .metric-twr {
+            border-color: #38bdf8;
+        }
+        .metric-xirr {
+            border-color: #f59e0b;
+        }
+        .metric-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .metric-twr .metric-title { color: #38bdf8; }
+        .metric-xirr .metric-title { color: #f59e0b; }
+        
+        .metric-question {
+            font-size: 20px;
+            font-style: italic;
+            color: #94a3b8;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+        }
+        .metric-desc {
+            font-size: 22px;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+        .metric-desc ul {
+            margin-top: 15px;
+            margin-left: 25px;
+        }
+        .metric-desc li {
+            margin-bottom: 12px;
+        }
+        .footer-bar {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .footer-icon {
+            font-size: 32px;
+            color: #10b981;
+        }
+        .footer-text {
+            font-size: 22px;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+        .footer-text strong {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>Dos métricas para dos preguntas distintas</h1>
+        </div>
+        
+        <div class="metrics-container">
+            <!-- TWR Column -->
+            <div class="metric-col metric-twr">
+                <div class="metric-title">
+                    <i class="fas fa-chart-line"></i> TWR
+                </div>
+                <div class="metric-question">
+                    "¿Cómo evolucionaron los activos, al margen de mis aportaciones o retiros?"
+                </div>
+                <div class="metric-desc">
+                    <p><strong>Retorno Ponderado por Tiempo</strong></p>
+                    <ul>
+                        <li>Mide la evolución pura de la cartera.</li>
+                        <li>Neutraliza el impacto de los flujos externos (aportaciones y retiradas).</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- XIRR Column -->
+            <div class="metric-col metric-xirr">
+                <div class="metric-title">
+                    <i class="fas fa-wallet"></i> XIRR / MWR
+                </div>
+                <div class="metric-question">
+                    "¿Qué rendimiento experimenté con mi calendario real de flujos?"
+                </div>
+                <div class="metric-desc">
+                    <p><strong>Retorno Ponderado por Dinero</strong></p>
+                    <ul>
+                        <li>Mide la experiencia económica real del titular.</li>
+                        <li>Sensible a las fechas e importes de las decisiones de aportación/retiro.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bar">
+            <div class="footer-icon">
+                <i class="fas fa-balance-scale"></i>
+            </div>
+            <div class="footer-text">
+                Ambas métricas deben convivir indicando <strong>período, moneda, política de costes y estado de cobertura</strong>. Ninguna sustituye a la otra.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

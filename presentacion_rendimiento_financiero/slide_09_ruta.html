@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #0f172a; 
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding-top: 80px;
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        .header {
+            margin-bottom: 12px; /* reduced from 40 to save vertical space */
+        }
+        .eyebrow {
+            color: #3b82f6;
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        .title {
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        /* layout refreshed: two-column grid to reduce vertical length */
+        .roadmap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px; /* row-gap 20, column-gap 40 */
+            position: relative;
+            margin-left: 20px;
+        }
+        .roadmap::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #334155;
+            opacity: 0.95;
+        }
+        .roadmap-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 28px;
+            position: relative;
+            z-index: 1;
+        }
+        .roadmap-marker {
+            width: 44px;
+            height: 44px;
+            background: #0f172a;
+            border: 4px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3b82f6;
+            font-size: 24px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .roadmap-content {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 14px 18px; /* reduced from 25/30 */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px; /* reduced gap */
+        }
+        .roadmap-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+        .roadmap-desc {
+            font-size: 20px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+        .highlight {
+            color: #93c5fd;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <div class="eyebrow">Plan de Implementación</div>
+            <h1 class="title">La hoja de ruta reduce riesgo antes de automatizar</h1>
+        </div>
+        
+        <div class="roadmap">
+            <div class="roadmap-item">
+                <div class="roadmap-marker">1</div>
+                <div class="roadmap-content">
+                    <h2 class="roadmap-title">Calidad y Rendimiento Neto (Olas 0 y 1)</h2>
+                    <p class="roadmap-desc">Establecer el contrato de procedencia de datos y el motor de cálculo <span class="highlight">TWR y MWR/XIRR</span> con puente de atribución.</p>
+                </div>
+            </div>
+            
+            <div class="roadmap-item">
+                <div class="roadmap-marker">2</div>
+                <div class="roadmap-content">
+                    <h2 class="roadmap-title">Exposición y Riesgo (Ola 2)</h2>
+                    <p class="roadmap-desc">Identificar concentraciones y medir el riesgo histórico antes de evaluar la rentabilidad agregada.</p>
+                </div>
+            </div>
+            
+            <div class="roadmap-item">
+                <div class="roadmap-marker">3</div>
+                <div class="roadmap-content">
+                    <h2 class="roadmap-title">Alertas e Informes Reproducibles (Olas 3 y 4)</h2>
+                    <p class="roadmap-desc">Implementar actualizaciones coalescidas, alertas con estado verificable y <span class="highlight">decisiones documentadas</span>.</p>
+                </div>
+            </div>
+            
+            <div class="roadmap-item">
+                <div class="roadmap-marker">4</div>
+                <div class="roadmap-content">
+                    <h2 class="roadmap-title">Piloto IA de Solo Lectura (Ola 5)</h2>
+                    <p class="roadmap-desc">Activar la IA <span class="highlight">solo al final</span>, con RLS, citas y trazabilidad, sin capacidad de ejecutar operaciones.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

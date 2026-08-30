@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Comparar fuentes sin inferencias engañosas</title>
+<style>
+* { box-sizing: border-box; margin: 0; }
+.slide-container { width: 1280px; min-height: 720px; background: #e2e8f0; color: #1e1b4b; display: flex; font-family: Arial, Helvetica, sans-serif; }
+.rail { width: 92px; border-right: 2px solid #312e81; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; transform: rotate(180deg); font-size: 14px; font-weight: 800; letter-spacing: .18em; color: #312e81; text-transform: uppercase; }
+.page { display: grid; grid-template-columns: 1.1fr 0.9fr; flex: 1; }
+.content-col { padding: 64px 60px 42px 70px; display: flex; flex-direction: column; justify-content: center; }
+.side-col { padding: 64px 70px 42px 50px; display: flex; flex-direction: column; justify-content: center; border-left: 2px solid #1e1b4b; background: #cbd5e1; }
+.eyebrow { color: #16a34a; font-size: 13px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 24px; }
+h1 { font-size: 48px; font-weight: 800; letter-spacing: -.05em; line-height: 1.05; margin-bottom: 48px; color: #1e1b4b; }
+.list { list-style: none; display: grid; gap: 28px; }
+.list li { position: relative; padding-left: 28px; color: #312e81; font-family: Georgia, serif; font-size: 21px; line-height: 1.8; font-weight: 500; }
+.list li::before { content: ""; position: absolute; left: 0; top: 14px; width: 10px; height: 10px; background: #16a34a; }
+.key-message { background: #1e1b4b; color: #e2e8f0; padding: 40px; margin-bottom: 50px; }
+.key-message strong { display: block; color: #16a34a; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+.key-message p { font-family: Georgia, serif; font-size: 22px; line-height: 1.6; font-weight: 500; }
+.geometry { display: flex; gap: 35px; align-items: flex-end; height: 220px; padding: 25px 35px; border: 2px solid #1e1b4b; position: relative; background: #e2e8f0; }
+.geo-label { position: absolute; top: -10px; left: 25px; background: #cbd5e1; padding: 0 12px; font-size: 12px; font-weight: 800; color: #1e1b4b; text-transform: uppercase; letter-spacing: .1em; }
+.bar-group { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.bar-group span { font-size: 12px; font-weight: 800; color: #312e81; text-transform: uppercase; letter-spacing: .05em; }
+.flow-pos { width: 55px; height: 130px; background: #16a34a; }
+.flow-neg { width: 55px; height: 85px; background: #312e81; }
+.flow-neutral { width: 55px; height: 45px; background: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="slide-container">
+  <div class="rail">Portafolio Intel · Plataformas</div>
+  <div class="page">
+    <div class="content-col">
+      <p class="eyebrow">06 · Análisis de fuentes</p>
+      <h1>Comparar fuentes sin<br>inferencias engañosas</h1>
+      <ul class="list">
+        <li>Resume compras y ventas trazables por fuente usando FIFO e importes en divisa base.</li>
+        <li>Mide ingresos netos, coste transmitido, resultado realizado y rentabilidad realizada.</li>
+        <li>Excluye o avisa sobre divisas distintas, transferencias, posiciones abiertas y ventas sin lotes previos.</li>
+      </ul>
+    </div>
+    <div class="side-col">
+      <div class="key-message">
+        <strong>Mensaje clave</strong>
+        <p>«Más rentable» solo significa mejor resultado realizado comparable, no recomendación de inversión.</p>
+      </div>
+      <div class="geometry">
+        <div class="geo-label">Flujos comparables</div>
+        <div class="bar-group">
+          <div class="flow-pos"></div>
+          <span>Ingresos</span>
+        </div>
+        <div class="bar-group">
+          <div class="flow-neg"></div>
+          <span>Coste</span>
+        </div>
+        <div class="bar-group">
+          <div class="flow-neutral"></div>
+          <span>Excluido</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

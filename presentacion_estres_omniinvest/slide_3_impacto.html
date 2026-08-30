@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #172033;
+            color: #FFFFFF;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .bg-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(47, 93, 138, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(47, 93, 138, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+        }
+        .header {
+            position: relative;
+            z-index: 2;
+            padding: 50px 60px 20px 60px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(47, 93, 138, 0.3);
+        }
+        .header-accent {
+            width: 8px;
+            height: 40px;
+            background-color: #2F5D8A;
+            margin-right: 20px;
+        }
+        h1 {
+            font-size: 42px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 60px;
+            display: flex;
+            gap: 50px;
+            height: 550px;
+        }
+        .left-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+            justify-content: center;
+        }
+        .right-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .point-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .point-icon {
+            color: #2F5D8A;
+            font-size: 24px;
+            margin-top: 5px;
+        }
+        .point-text {
+            font-size: 26px;
+            line-height: 1.4;
+            color: #E0E6ED;
+        }
+        .highlight {
+            color: #B54C4C;
+            font-weight: 600;
+        }
+        .math-box {
+            background: rgba(23, 32, 51, 0.8);
+            border: 1px solid #2F5D8A;
+            padding: 40px;
+            width: 100%;
+            text-align: center;
+        }
+        .math-title {
+            font-size: 22px;
+            color: #A0B2C6;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .math-equation {
+            font-size: 48px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .math-sub {
+            font-size: 20px;
+            color: #7A8B9E;
+        }
+        .math-result {
+            font-size: 64px;
+            color: #B54C4C;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="bg-pattern"></div>
+        <div class="header">
+            <div class="header-accent"></div>
+            <h1>El efectivo amortigua el impacto total a −16,67 %</h1>
+        </div>
+        <div class="content">
+            <div class="left-col">
+                <div class="point-item">
+                    <i class="fas fa-arrow-down point-icon" style="color: #B54C4C;"></i>
+                    <div class="point-text">Pérdida simulada: <span class="highlight">−15.000,00 EUR</span>.</div>
+                </div>
+                <div class="point-item">
+                    <i class="fas fa-shield-alt point-icon"></i>
+                    <div class="point-text">El <span style="color: #2F5D8A; font-weight: 600;">16,67 % inicial</span> (efectivo) no recibe choque bajo esta hipótesis.</div>
+                </div>
+                <div class="point-item">
+                    <i class="fas fa-calculator point-icon"></i>
+                    <div class="point-text">La sensibilidad se calcula por <span style="color: #2F5D8A; font-weight: 600;">exposición</span>, no sumando retornos.</div>
+                </div>
+                <div class="point-item">
+                    <i class="fas fa-sliders-h point-icon"></i>
+                    <div class="point-text">El resultado cambia si cambian los supuestos de liquidez o exposición.</div>
+                </div>
+            </div>
+            <div class="right-col">
+                <div class="math-box">
+                    <div class="math-title">Cálculo de Impacto Agregado</div>
+                    <div class="math-equation">
+                        <span>−15.000</span>
+                        <span style="color: #7A8B9E; font-weight: 300;">/</span>
+                        <span>90.000</span>
+                    </div>
+                    <div class="math-sub">Pérdida / Valor Inicial Total</div>
+                    <div class="math-result">−16,67 %</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

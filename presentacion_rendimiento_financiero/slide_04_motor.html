@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #0f172a; 
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 80px 0 80px;
+        }
+        .header {
+            margin-bottom: 60px;
+        }
+        .eyebrow {
+            color: #3b82f6;
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        .title {
+            font-size: 52px;
+            font-weight: 700;
+        }
+        .process-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .step-box {
+            flex: 1;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-top: 4px solid #3b82f6;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            min-height: 380px;
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 20px;
+        }
+        .step-icon {
+            font-size: 32px;
+            color: #3b82f6;
+        }
+        .step-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+        .step-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .step-list li {
+            font-size: 22px;
+            color: #cbd5e1;
+            line-height: 1.4;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .step-list li i {
+            color: #3b82f6;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        .arrow {
+            font-size: 40px;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <div class="eyebrow">Arquitectura Determinista</div>
+            <h1 class="title">El motor convierte datos en métricas reproducibles</h1>
+        </div>
+        
+        <div class="process-container">
+            <div class="step-box">
+                <div class="step-header">
+                    <i class="fa-solid fa-database step-icon"></i>
+                    <h2 class="step-title">Entradas</h2>
+                </div>
+                <ul class="step-list">
+                    <li><i class="fa-solid fa-check"></i> Transacciones clasificadas</li>
+                    <li><i class="fa-solid fa-check"></i> Valoraciones y tipos de cambio (FX)</li>
+                    <li><i class="fa-solid fa-check"></i> Costes y lotes de fuente validados</li>
+                </ul>
+            </div>
+            
+            <i class="fa-solid fa-arrow-right arrow"></i>
+            
+            <div class="step-box">
+                <div class="step-header">
+                    <i class="fa-solid fa-gears step-icon"></i>
+                    <h2 class="step-title">Proceso</h2>
+                </div>
+                <ul class="step-list">
+                    <li><i class="fa-solid fa-check"></i> Validación estricta de calidad</li>
+                    <li><i class="fa-solid fa-check"></i> Cálculo de TWR y MWR/XIRR</li>
+                    <li><i class="fa-solid fa-check"></i> Puente de atribución determinista</li>
+                </ul>
+            </div>
+            
+            <i class="fa-solid fa-arrow-right arrow"></i>
+            
+            <div class="step-box">
+                <div class="step-header">
+                    <i class="fa-solid fa-file-contract step-icon"></i>
+                    <h2 class="step-title">Salidas</h2>
+                </div>
+                <ul class="step-list">
+                    <li><i class="fa-solid fa-check"></i> Ejecuciones inmutables</li>
+                    <li><i class="fa-solid fa-check"></i> Componentes de rendimiento</li>
+                    <li><i class="fa-solid fa-check"></i> Huella de entradas y procedencia</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

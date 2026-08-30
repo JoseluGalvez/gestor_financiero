@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "title": "Prueba de estrés OmniInvest",
+    "created": 1787880437.602,
+    "last_updated": 1787880570.247,
+    "total_slides": 10
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "slide_1_escenario",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "slide_2_valor",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "slide_3_impacto",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "slide_4_hhi",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "slide_5_indicador",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "slide_6_controles",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "slide_7_diversificacion",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "slide_8_arquitectura",
+      "state": "edited",
+      "pageNum": 9
+    },
+    {
+      "id": "slide_9_conclusion",
+      "state": "edited",
+      "pageNum": 10
+    }
+  ],
+  "outline": [
+    {
+      "id": "cover",
+      "title": "Prueba de estrés OmniInvest",
+      "summary": "Escenario ficticio: caída uniforme del 20 %, controles de riesgo y diversificación general",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_1_escenario",
+      "title": "Un escenario reproducible, no una previsión",
+      "summary": "Cartera ficticia de 90.000 EUR con choque uniforme de -20 % limitado a exposición de mercado. No usa datos reales ni predicciones.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_2_valor",
+      "title": "El valor bajo estrés pasa de 90.000 a 75.000 EUR",
+      "summary": "Renta variable y renta fija caen un 20 %. El efectivo se mantiene constante.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_3_impacto",
+      "title": "El efectivo amortigua el impacto total a −16,67 %",
+      "summary": "La sensibilidad se calcula por exposición, no sumando retornos. El impacto agregado refleja el peso del efectivo.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_4_hhi",
+      "title": "La composición cambia, pero el HHI no predice pérdidas",
+      "summary": "El peso del efectivo aumenta y el HHI baja. Este cambio describe la nueva distribución relativa, no acredita un menor riesgo total.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_5_indicador",
+      "title": "OmniInvest baja 6 puntos con factores explícitos",
+      "summary": "El indicador ponderado pasa de 65,6 a 59,6 bajo la hipótesis de menor valoración y momentum, manteniendo 100 % de cobertura.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_6_controles",
+      "title": "Los controles bloquean precisión falsa bajo estrés",
+      "summary": "El motor evita valores negativos en crash del 100 %, conserva capitalización en rutas volátiles y bloquea entradas inválidas.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_7_diversificacion",
+      "title": "Diversificar requiere evidencia, no una cifra única",
+      "summary": "Separar concentración, volatilidad, crédito y sensibilidad. Declarar valor sin precio, sin FX y sin taxonomía.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_8_arquitectura",
+      "title": "El siguiente salto exige ledger, cobertura y RLS",
+      "summary": "Proyectar riesgo desde el libro mayor normalizado, cerrar RLS en staging y versionar políticas, manteniendo el modo local.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_9_conclusion",
+      "title": "Conclusión: estrés explicable antes que automatización opaca",
+      "summary": "90.000 → 75.000 EUR; −16,67 %; 65,6 → 59,6 / 100. El escenario es educativo y determinista, no asesoramiento financiero.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}

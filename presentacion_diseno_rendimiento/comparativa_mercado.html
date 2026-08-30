@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>El mercado confirma la necesidad, no un atajo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+            position: relative;
+        }
+        .header {
+            margin-bottom: 50px;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 20px;
+        }
+        h1 {
+            font-size: 48px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+        .comparison-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* reduced from 30px to remove overflow */
+        }
+        .comparison-item {
+            display: flex;
+            background-color: #1e293b;
+            border-left: 6px solid;
+            padding: 22px; /* reduced inner padding to tighten layout */
+            align-items: center;
+        }
+        .item-1 { border-color: #38bdf8; }
+        .item-2 { border-color: #f59e0b; }
+        .item-3 { border-color: #10b981; }
+        
+        .item-icon {
+            font-size: 40px;
+            width: 80px;
+            text-align: center;
+            margin-right: 30px;
+        }
+        .item-1 .item-icon { color: #38bdf8; }
+        .item-2 .item-icon { color: #f59e0b; }
+        .item-3 .item-icon { color: #10b981; }
+        
+        .item-content {
+            flex: 1;
+        }
+        .item-tools {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .item-lesson {
+            font-size: 22px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>El mercado confirma la necesidad, no un atajo</h1>
+        </div>
+        
+        <div class="comparison-list">
+            <!-- Item 1 -->
+            <div class="comparison-item item-1">
+                <div class="item-icon">
+                    <i class="fas fa-file-import"></i>
+                </div>
+                <div class="item-content">
+                    <div class="item-tools">Portfolio Performance</div>
+                    <div class="item-lesson">Aporta un estándar de <strong>rigor en la clasificación de flujos</strong>, procesos de importación guiados y medición segmentada por alcance.</div>
+                </div>
+            </div>
+            
+            <!-- Item 2 -->
+            <div class="comparison-item item-2">
+                <div class="item-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="item-content">
+                    <div class="item-tools">Sharesight, getquin y Kubera</div>
+                    <div class="item-lesson">Sharesight comunica de forma clara el <strong>retorno monetario y su diferencia frente a TWR</strong>; getquin y Kubera destacan por la agregación multiactivo.</div>
+                </div>
+            </div>
+            
+            <!-- Item 3 -->
+            <div class="comparison-item item-3">
+                <div class="item-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="item-content">
+                    <div class="item-tools">Ghostfolio, CoinTracking y Koinly</div>
+                    <div class="item-lesson">Ghostfolio refuerza la expectativa de <strong>privacidad y control de datos</strong>; las herramientas cripto muestran la profundidad operativa que exige ese dominio.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+flowchart TD
+  A[Adjuntar CSV de compras, ventas y permutas] --> B[Leer encabezados y cada operación]
+  B --> C{¿Fecha AAAA-MM-DD y día real?}
+  C -->|No| D[Marcar fila para revisión\nNo crear lote]
+  C -->|Sí| E{¿Tipo, activo, cantidad y valor completos?}
+  E -->|No| D
+  E -->|Sí| F{¿Compra, venta o permuta?}
+  F -->|Compra| G[Crear lote FIFO]
+  F -->|Venta / permuta| H[Consumir lotes por orden cronológico]
+  H --> I{¿Inventario suficiente?}
+  I -->|No| J[Crear incidencia revisable\nNo confirmar resultado]
+  I -->|Sí| K[Calcular coste, transmisión y resultado]
+  K --> L[Generar borrador local para revisión]
+  D --> L
+  J --> L

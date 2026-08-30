@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            background-color: #172033;
+            color: #FFFFFF;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .bg-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(47, 93, 138, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(47, 93, 138, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+        }
+        .header {
+            position: relative;
+            z-index: 2;
+            padding: 50px 60px 20px 60px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(47, 93, 138, 0.3);
+        }
+        .header-accent {
+            width: 8px;
+            height: 40px;
+            background-color: #2F5D8A;
+            margin-right: 20px;
+        }
+        h1 {
+            font-size: 42px;
+            font-weight: 600;
+            color: #FFFFFF;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            height: 550px;
+        }
+        .step-item {
+            display: flex;
+            align-items: center;
+            background: rgba(23, 32, 51, 0.8);
+            border: 1px solid rgba(47, 93, 138, 0.5);
+            padding: 30px;
+            position: relative;
+        }
+        .step-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #2F5D8A;
+            width: 80px;
+            text-align: center;
+            margin-right: 30px;
+            border-right: 2px solid rgba(47, 93, 138, 0.3);
+            padding-right: 30px;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+        .step-desc {
+            font-size: 22px;
+            color: #E0E6ED;
+            line-height: 1.4;
+        }
+        .highlight {
+            color: #B54C4C;
+            font-weight: 600;
+        }
+        .connector {
+            width: 4px;
+            height: 30px;
+            background-color: #2F5D8A;
+            margin-left: 70px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="bg-pattern"></div>
+        <div class="header">
+            <div class="header-accent"></div>
+            <h1>El siguiente salto exige ledger, cobertura y RLS</h1>
+        </div>
+        <div class="content">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">Cerrar RLS en staging</div>
+                    <div class="step-desc">Asegurar políticas de seguridad a nivel de fila antes de conectar cualquier cartera real.</div>
+                </div>
+            </div>
+            <div class="connector"></div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">Proyectar riesgo desde el libro mayor</div>
+                    <div class="step-desc">Utilizar el <span style="color:#2F5D8A; font-weight:600;">libro mayor normalizado</span>, valoraciones, FX y taxonomía versionada.</div>
+                </div>
+            </div>
+            <div class="connector"></div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">Versionar políticas y mantener modo local</div>
+                    <div class="step-desc">Registrar huella de entrada, algoritmo y cobertura por cálculo, conservando el <span class="highlight">modo local manual/ficticio</span> como alternativa privada.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

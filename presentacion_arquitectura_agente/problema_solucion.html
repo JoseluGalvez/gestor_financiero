@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #132644;
+            --blue: #2d6cdf;
+            --teal: #148765;
+            --light-bg: #f6f8fc;
+            --text-dark: #1b2d47;
+            --text-muted: #708099;
+            --danger: #b9485c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px; /* keep as required */
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background-color: var(--navy);
+            color: white;
+            padding: 40px 36px; /* keep top padding (40px) as required, reduce horizontal */
+            display: flex;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+        }
+        .content-area {
+            flex: 1;
+            padding: 24px; /* reduced from 60px to save vertical space */
+            display: flex;
+            gap: 32px; /* reduced gap between columns */
+            align-items: flex-start;
+        }
+        .column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .col-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px; /* reduced */
+            padding-bottom: 8px; /* reduced */
+            border-bottom: 3px solid;
+        }
+        .col-header h2 {
+            font-size: 32px;
+            color: var(--text-dark);
+        }
+        .problem-col .col-header { border-color: var(--danger); }
+        .problem-col .col-header i { color: var(--danger); font-size: 36px; }
+        .solution-col .col-header { border-color: var(--teal); }
+        .solution-col .col-header i { color: var(--teal); font-size: 36px; }
+        
+        .point-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 18px; /* reduced vertical gap between points */
+        }
+        .point-item {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .point-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--navy);
+            flex-shrink: 0;
+        }
+        .point-text h3 {
+            font-size: 24px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        .point-text p {
+            font-size: 20px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 0;
+        }
+        .highlight-box {
+            margin-top: 20px; /* reduced */
+            padding: 16px; /* reduced */
+            background-color: var(--light-bg);
+            border-left: 6px solid var(--blue);
+        }
+        .highlight-box p {
+            font-size: 22px;
+            color: var(--navy);
+            font-weight: 600;
+            line-height: 1.4;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>El problema: Datos vs. Privacidad</h1>
+        </div>
+        <div class="content-area">
+            <div class="column problem-col">
+                <div class="col-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2>Riesgos del enfoque tradicional</h2>
+                </div>
+                <ul class="point-list">
+                    <li class="point-item">
+                        <div class="point-icon"><i class="fas fa-key"></i></div>
+                        <div class="point-text">
+                            <h3>Exposición de secretos</h3>
+                            <p>Un LLM conectado directamente puede exponer claves al cliente.</p>
+                        </div>
+                    </li>
+                    <li class="point-item">
+                        <div class="point-icon"><i class="fas fa-users-slash"></i></div>
+                        <div class="point-text">
+                            <h3>Fuga de datos</h3>
+                            <p>Riesgo de mezclar contextos entre organizaciones.</p>
+                        </div>
+                    </li>
+                    <li class="point-item">
+                        <div class="point-icon"><i class="fas fa-shield-virus"></i></div>
+                        <div class="point-text">
+                            <h3>Inyecciones de prompt</h3>
+                            <p>Documentos externos podrían introducir instrucciones maliciosas.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="column solution-col">
+                <div class="col-header">
+                    <i class="fas fa-check-circle"></i>
+                    <h2>Arquitectura en 3 capas</h2>
+                </div>
+                <ul class="point-list">
+                    <li class="point-item">
+                        <div class="point-icon"><i class="fas fa-user-check"></i></div>
+                        <div class="point-text">
+                            <h3>1. Cliente autenticado</h3>
+                            <p>Envía intención y contexto sin exponer secretos.</p>
+                        </div>
+                    </li>
+                    <li class="point-item">
+                        <div class="point-icon"><i class="fas fa-server"></i></div>
+                        <div class="point-text">
+                            <h3>2. Edge Function Guardián</h3>
+                            <p>Valida permisos y limita accesos a solo lectura.</p>
+                        </div>
+                    </li>
+                    <li class="point-item">
+                        <div class="point-icon"><i class="fas fa-brain"></i></div>
+                        <div class="point-text">
+                            <h3>3. Modelo IA Aislado</h3>
+                            <p>Recibe contexto mínimo y devuelve respuestas estructuradas.</p>
+                        </div>
+                    </li>
+                </ul>
+                <div class="highlight-box">
+                    <p>No queremos que el cliente consulte la BD completa ni que la API key llegue al navegador.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

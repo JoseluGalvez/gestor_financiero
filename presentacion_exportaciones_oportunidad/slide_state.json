@@ -1,0 +1,111 @@
+{
+  "project_info": {
+    "title": "El análisis no termina en la pantalla",
+    "created": 1787758509.233,
+    "last_updated": 1787758509.233,
+    "total_slides": 9
+  },
+  "slides": [
+    {
+      "id": "slide_01_alcance",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "slide_02_csv",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "slide_03_pdf",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "slide_04_oportunidad",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "slide_05_reglas",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "slide_06_bloqueo",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "slide_07_inversores",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "slide_08_calidad",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "slide_09_decision",
+      "state": "edited",
+      "pageNum": 9
+    }
+  ],
+  "outline": [
+    {
+      "id": "slide_01_alcance",
+      "title": "El análisis no termina en la pantalla",
+      "summary": "La misma instancia alimenta la interfaz, CSV y PDF conservando fecha, fuente y cobertura sin sincronización externa.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_02_csv",
+      "title": "CSV: trazabilidad y seguridad",
+      "summary": "Exporta métricas, fórmulas, evidencia y neutraliza celdas de inyección en hojas de cálculo.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_03_pdf",
+      "title": "PDF: contexto antes que conclusiones",
+      "summary": "Organiza ratios, fórmulas, señales y advertencias en un informe local explicable.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_04_oportunidad",
+      "title": "OPORTUNIDAD: investigar, no predecir",
+      "summary": "Clasifica como candidata a investigación sin emitir recomendaciones ni estimar probabilidad de beneficio.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_05_reglas",
+      "title": "Las reglas favorables son acumulativas",
+      "summary": "Exige cobertura de 80%, ROIC-WACC positivo, deuda controlada y conversión de caja sólida.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_06_bloqueo",
+      "title": "Una alerta crítica bloquea el estado",
+      "summary": "Apalancamiento alto, baja cobertura de intereses o destrucción de valor impiden una clasificación favorable.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_07_inversores",
+      "title": "Los perfiles son fuentes, no señales",
+      "summary": "Enlaza cartas, fichas y 13F advirtiendo que las divulgaciones históricas no equivalen a una estrategia.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_08_calidad",
+      "title": "Control de calidad y automatización",
+      "summary": "Pruebas deterministas de fórmulas y protección CSV, con adopción pendiente de runner TypeScript.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "slide_09_decision",
+      "title": "Usar la función como investigación trazable",
+      "summary": "Los datos y la evidencia conducen a revisión humana, no a instrucciones operativas automáticas.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}

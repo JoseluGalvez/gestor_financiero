@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #0f172a; 
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            padding: 80px;
+        }
+        .header {
+            margin-bottom: 40px; /* reduced from 50 to save vertical space */
+        }
+        .eyebrow {
+            color: #3b82f6;
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        .title {
+            font-size: 52px;
+            font-weight: 700;
+        }
+        .timeline-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1e293b;
+            padding: 40px;
+            border: 1px solid #334155;
+            margin-bottom: 50px;
+        }
+        .timeline-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 200px;
+        }
+        .node-icon {
+            width: 64px;
+            height: 64px;
+            background: #0f172a;
+            border: 2px solid #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #3b82f6;
+            margin-bottom: 15px;
+            z-index: 2;
+        }
+        .node-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 8px;
+        }
+        .node-desc {
+            font-size: 16px;
+            color: #94a3b8;
+        }
+        .timeline-arrow {
+            flex: 1;
+            height: 4px;
+            background: #334155;
+            position: relative;
+            margin: 0 -20px;
+            margin-top: -60px;
+        }
+        .timeline-arrow::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -6px;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 12px solid #334155;
+        }
+        .subperiod-label {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #3b82f6;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        .points-grid {
+            display: flex;
+            gap: 30px;
+        }
+        .point-card {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .point-icon {
+            color: #3b82f6;
+            font-size: 28px;
+            margin-top: 5px;
+        }
+        .point-text {
+            font-size: 22px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+        .point-text strong {
+            color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <div class="eyebrow">Metodología de Cálculo</div>
+            <h1 class="title">TWR: subperiodos antes y después de cada flujo</h1>
+        </div>
+        
+        <div class="timeline-container">
+            <div class="timeline-node">
+                <div class="node-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="node-title">Valoración Inicial</div>
+                <div class="node-desc">Inicio del periodo</div>
+            </div>
+            <div class="timeline-arrow">
+                <div class="subperiod-label">Subperiodo 1</div>
+            </div>
+            <div class="timeline-node">
+                <div class="node-icon" style="background: #3b82f6; color: #0f172a;"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                <div class="node-title">Flujo Externo</div>
+                <div class="node-desc">Aportación / Retiro</div>
+            </div>
+            <div class="timeline-arrow">
+                <div class="subperiod-label">Subperiodo 2</div>
+            </div>
+            <div class="timeline-node">
+                <div class="node-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="node-title">Valoración Final</div>
+                <div class="node-desc">Fin del periodo</div>
+            </div>
+        </div>
+        
+        <div class="points-grid">
+            <div class="point-card">
+                <i class="fa-solid fa-calculator point-icon"></i>
+                <div class="point-text">
+                    Calcula el retorno entre puntos de valoración consecutivos <strong>separados por flujos externos</strong>.
+                </div>
+            </div>
+            <div class="point-card">
+                <i class="fa-solid fa-link point-icon"></i>
+                <div class="point-text">
+                    <strong>Compone los subperiodos</strong> geométricamente; no anualiza periodos inferiores a un año.
+                </div>
+            </div>
+            <div class="point-card">
+                <i class="fa-solid fa-shield-halved point-icon"></i>
+                <div class="point-text">
+                    Si falta una valoración de corte o un flujo es desconocido, <strong>no publica un valor definitivo</strong>.
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
