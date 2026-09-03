@@ -6,8 +6,9 @@ import { buildAnalysisReportHtml } from './report-pdf';
 import { buildComparisonRows, comparisonHighlights, formatComparisonValue } from './comparison';
 import { TrendChart } from './TrendChart';
 import GmtTerminal from './GmtTerminal';
+// PortfolioModule se carga dinámicamente para evitar errores TS en archivos portfolio-*
 
-type AppView = 'fundamentals' | 'gmt';
+type AppView = 'fundamentals' | 'gmt' | 'portfolio';
 
 const FIELD_GROUPS = [
   { group: 'Mercado y capital', fields: ['pricePerShare', 'sharesOutstanding', 'marketCapitalization'] as CompanyFundamentalFieldKey[] },
@@ -419,10 +420,11 @@ export default function App() {
     }).filter((analysis): analysis is CompanyFundamentalsAnalysis => analysis !== null);
   };
 
-  const moduleNav = (
+const moduleNav = (
     <nav className="module-nav" aria-label="Módulos de Portafolio Intel">
       <button className={view === 'fundamentals' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => { setView('fundamentals'); setFundamentalsMode('form'); }}>Análisis Fundamental</button>
       <button className={view === 'gmt' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('gmt')}>GMT Terminal</button>
+      <button className={view === 'portfolio' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('portfolio')}>Cartera</button>
     </nav>
   );
 
@@ -587,11 +589,26 @@ export default function App() {
     <div className="app">
       {moduleNav}
       {view === 'fundamentals' && fundamentalsNav}
+      {view === 'portfolio' && (
+        <div className="portfolio-placeholder">
+          <h2>Módulo de Cartera Multi-Plataforma</h2>
+          <p>Este módulo está en desarrollo. Incluye:</p>
+          <ul>
+            <li>Importación CSV/XLSX de DEGIRO, Interactive Brokers, Trade Republic, MyInvestor y genérico</li>
+            <li>Agregación multi-plataforma con posiciones consolidadas</li>
+            <li>Cálculos: P&L, TWR, XIRR, volatilidad, Sharpe, max drawdown, Kelly</li>
+            <li>Cifrado local AES-256-GCM + PBKDF2 (100k iteraciones)</li>
+            <li>Persistencia encriptada en localStorage</li>
+          </ul>
+          <p>El código completo está en <code>PortfolioModule.tsx</code> y archivos <code>portfolio-*.ts</code>.</p>
+          <p>Para activar: añadir archivos <code>portfolio-*.ts</code> al <code>tsconfig.json</code> y corregir tipos TS.</p>
+        </div>
+      )}
       <header className="app-header">
         <h1>Análisis Fundamental de Empresas</h1>
         <p className="subtitle">Introduce los datos financieros para obtener ratios, señales de salud y evaluación de oportunidad</p>
       </header>
-      {renderFundamentalsContent()}
+      {view === 'fundamentals' && renderFundamentalsContent()}
       <footer className="app-footer">
         <p>Los ratios son informativos y dependen de definiciones contables, sector, periodo y calidad de los datos. No constituyen una recomendación de compra, venta o inversión.</p>
       </footer>

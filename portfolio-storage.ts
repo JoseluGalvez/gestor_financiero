@@ -114,17 +114,6 @@ export function importPortfolioData(json: string, password?: string): { success:
   }
 }
 
-export function isStorageAvailable(): boolean {
-  try {
-    const test = "__storage_test__";
-    localStorage.setItem(test, test);
-    localStorage.removeItem(test);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 export function getStorageInfo(): { available: boolean; used: number } {
   if (!isStorageAvailable()) return { available: false, used: 0 };
   let used = 0;

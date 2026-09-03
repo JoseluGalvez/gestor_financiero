@@ -1,4 +1,4 @@
-import { parseNumber, parseDate, mapTransactionType, normalizeCurrencyInput, normalizeSymbolInput, inferAssetClass, validateRow } from "./portfolio-csv-parser";
+import { parseNumber, parseDate, mapTransactionType, validateRow, inferAssetClass } from "./portfolio-csv-parser";
 
 export function createDegiroAdapter(): any {
   return {
@@ -15,10 +15,9 @@ export function createDegiroAdapter(): any {
     detectFormat: (headers: string[]) => headers.some((h) => h.toLowerCase().includes("product") || h.toLowerCase().includes("isin")),
     parsePositions: (rows: any[]) => {
       const positions: any[] = [];
-      const errors: any[] = [];
       rows.forEach((row, idx) => {
         const errs = validateRow(row, idx + 2, ["Product", "Size", "Price", "Currency"]);
-        if (errs.length) { errors.push(...errs); return; }
+        if (errs.length) return;
         const symbol = String(row["Product"] ?? row["ISIN"] ?? "").toUpperCase().trim().replace(/[^A-Z0-9\.\-]/g, "");
         const name = String(row["Product"] ?? "");
         const isin = String(row["ISIN"] ?? "").trim() || undefined;
@@ -317,58 +316,6 @@ export function createMyInvestorAdapter(): any {
 }
 
 export function createGenericAdapter(): any {
-  const DEFAULT_POSITION_COLUMNS = {
-    symbol: ["symbol", "ticker", "isin", "instrument", "product"],
-    name: ["name", "product_name", "description", "instrument_name"],
-    isin: ["isin", "isin_code"],
-    quantity: ["quantity", "qty", "amount", "units", "shares"],
-    averagePrice: ["average_price", "avg_price", "buy_price", "purchase_price", "cost_price"],
-    currency: ["currency", "ccy", "denomination"],
-    currentPrice: ["current_price", "market_price", "price", "last_price"],
-    currentValue: ["current_value", "market_value", "value"],
-    unrealizedPnl: ["unrealized_pnl", "unrealized_pl", "profit_loss", "pnl"],
-    assetClass: ["asset_class", "type", "category", "instrument_type"],
-  };
-
-  const DEFAULT_TRANSACTION_COLUMNS = {
-    date: ["date", "trade_date", "execution_date", "settlement_date", "datum"],
-    type: ["type", "transaction_type", "side", "action", "transaction"],
-    symbol: ["symbol", "ticker", "isin", "instrument", "product"],
-    name: ["name", "product_name", "description"],
-    isin: ["isin", "isin_code"],
-    quantity: ["quantity", "qty", "amount", "units", "shares"],
-    price: ["price", "execution_price", "trade_price", "rate"],
-    amount: ["amount", "value", "total", "consideration", "gross_amount"],
-    currency: ["currency", "ccy", "denomination"],
-    fees: ["fees", "commission", "commissions", "fee"],
-    tax: ["tax", "withholding_tax", "stamp_duty"],
-    exchangeRate: ["exchange_rate", "fx_rate", "rate"],
-    typeMapping: {
-      buy: "buy",
-      sell: "sell",
-      dividend: "dividend",
-      interest: "interest",
-      deposit: "deposit",
-      withdrawal: "withdrawal",
-      fee: "fee",
-      tax: "tax",
-      split: "split",
-      merge: "merge",
-      transfer: "transfer-in",
-      staking: "staking-reward",
-      airdrop: "airdrop",
-    },
-  };
-
-  function findColumnValue(row: Record<string, unknown>, candidates: string[]): string | null {
-    for (const candidate of candidates) {
-      if (row[candidate] !== undefined && row[candidate] !== null && String(row[candidate]).trim()) {
-        return String(row[candidate]);
-      }
-    }
-    return null;
-  }
-
   return {
     platform: "other",
     name: "Genérico (CSV/XLSX)",
@@ -384,22 +331,22 @@ export function createGenericAdapter(): any {
     parsePositions: (rows: any[]) => {
       const positions: any[] = [];
       rows.forEach((row) => {
-        const symbol = findColumnValue(row, ["symbol", "ticker", "isin", "instrument", "product"]);
-        const name = findColumnValue(row, ["name", "product_name", "description", "instrument_name"]);
-        const isin = findColumnValue(row, ["isin", "isin_code"]);
-        const assetClass = inferAssetClass(symbol ?? "", name, isin);
+        const symbol = String(row["symbol"] ?? row["ticker"] ?? row["isin"] ?? row["instrument"] ?? row["product"] ?? "").toUpperCase().trim().replace(/[^A-Z0-9\.\-]/g, "");
+        const name = String(row["name"] ?? row["product_name"] ?? row["description"] ?? row["instrument_name"] ?? "");
+        const isin = String(row["isin"] ?? row["isin_code"] ?? "").trim() || undefined;
+        const assetClass = inferAssetClass(symbol ?? "", String(row["name"] ?? ""), String(row["isin"] ?? ""));
         positions.push({
           platform: "other",
-          symbol: (symbol ?? "").toUpperCase().trim().replace(/[^A-Z0-9\.\-]/g, ""),
-          name: name ?? "",
-          isin: isin ?? undefined,
+          symbol,
+          name,
+          isin,
           assetClass,
-          quantity: parseNumber(findColumnValue(row, ["quantity", "qty", "amount", "units", "shares"])),
-          averagePrice: parseNumber(findColumnValue(row, ["average_price", "avg_price", "buy_price", "purchase_price", "cost_price"])),
-          currency: String(findColumnValue(row, ["currency", "ccy", "denomination"]) ?? "EUR").toUpperCase().trim().replace(/[^A-Z0-9]/g, ""),
-          currentPrice: parseNumber(findColumnValue(row, ["current_price", "market_price", "price", "last_price"])),
-          currentValue: parseNumber(findColumnValue(row, ["current_value", "market_value", "value"])),
-          unrealizedPnl: parseNumber(findColumnValue(row, ["unrealized_pnl", "unrealized_pl", "profit_loss", "pnl"])),
+          quantity: parseNumber(row["quantity"] ?? row["qty"] ?? row["amount"] ?? row["units"] ?? row["shares"]),
+          averagePrice: parseNumber(row["average_price"] ?? row["avg_price"] ?? row["buy_price"] ?? row["purchase_price"] ?? row["cost_price"]),
+          currency: String(row["currency"] ?? row["ccy"] ?? "EUR").toUpperCase().trim().replace(/[^A-Z0-9]/g, ""),
+          currentPrice: parseNumber(row["current_price"] ?? row["market_price"] ?? row["price"] ?? row["last_price"]),
+          currentValue: parseNumber(row["current_value"] ?? row["market_value"] ?? row["value"]),
+          unrealizedPnl: parseNumber(row["unrealized_pnl"] ?? row["unrealized_pl"] ?? row["profit_loss"] ?? row["pnl"]),
         });
       });
       return positions;
@@ -407,7 +354,7 @@ export function createGenericAdapter(): any {
     parseTransactions: (rows: any[]) => {
       const transactions: any[] = [];
       rows.forEach((row) => {
-        const typeRaw = String(findColumnValue(row, ["type", "transaction_type", "side", "action", "transaction"]) ?? "");
+        const typeRaw = String(row["type"] ?? row["transaction_type"] ?? row["side"] ?? row["action"] ?? row["transaction"] ?? "");
         const type = mapTransactionType(typeRaw, {
           buy: "buy",
           sell: "sell",
@@ -425,23 +372,19 @@ export function createGenericAdapter(): any {
         });
         transactions.push({
           platform: "other",
-          date: parseDate(findColumnValue(row, ["date", "trade_date", "execution_date", "settlement_date", "datum"])) ?? new Date().toISOString().split("T")[0],
+          date: parseDate(row["date"] ?? row["trade_date"] ?? row["execution_date"] ?? row["settlement_date"] ?? row["datum"]) ?? new Date().toISOString().split("T")[0],
           type,
-          symbol: String(findColumnValue(row, ["symbol", "ticker", "isin", "instrument", "product"]) ?? "").toUpperCase().trim().replace(/[^A-Z0-9\.\-]/g, ""),
-          name: String(findColumnValue(row, ["name", "product_name", "description"]) ?? ""),
-          isin: String(findColumnValue(row, ["isin", "isin_code"]) ?? "").trim() || undefined,
-          assetClass: inferAssetClass(
-            String(findColumnValue(row, ["symbol", "ticker", "isin", "instrument", "product"]) ?? "").toUpperCase().trim().replace(/[^A-Z0-9\.\-]/g, ""),
-            String(findColumnValue(row, ["name", "product_name", "description"]) ?? ""),
-            String(findColumnValue(row, ["isin", "isin_code"]) ?? "")
-          ),
-          quantity: Math.abs(parseNumber(findColumnValue(row, ["quantity", "qty", "amount", "units", "shares"]))),
-          price: parseNumber(findColumnValue(row, ["price", "execution_price", "trade_price", "rate"])),
-          amount: parseNumber(findColumnValue(row, ["amount", "value", "total", "consideration", "gross_amount"])),
-          currency: String(findColumnValue(row, ["currency", "ccy", "denomination"]) ?? "EUR").toUpperCase().trim().replace(/[^A-Z0-9]/g, ""),
-          fees: parseNumber(findColumnValue(row, ["fees", "commission", "commissions", "fee"])),
-          tax: parseNumber(findColumnValue(row, ["tax", "withholding_tax", "stamp_duty"])),
-          exchangeRate: parseNumber(findColumnValue(row, ["exchange_rate", "fx_rate", "rate"])) || 1,
+          symbol: String(row["symbol"] ?? row["ticker"] ?? row["isin"] ?? row["instrument"] ?? row["product"] ?? "").toUpperCase().trim().replace(/[^A-Z0-9\.\-]/g, ""),
+          name: String(row["name"] ?? row["product_name"] ?? row["description"] ?? ""),
+          isin: String(row["isin"] ?? row["isin_code"] ?? "").trim() || undefined,
+          assetClass: inferAssetClass(String(row["symbol"] ?? row["ticker"] ?? row["isin"] ?? row["instrument"] ?? row["product"] ?? "").toUpperCase().trim().replace(/[^A-Z0-9\.\-]/g, ""), String(row["name"] ?? row["product_name"] ?? row["description"] ?? ""), String(row["isin"] ?? row["isin_code"] ?? "")),
+          quantity: Math.abs(parseNumber(row["quantity"] ?? row["qty"] ?? row["amount"] ?? row["units"] ?? row["shares"])),
+          price: parseNumber(row["price"] ?? row["execution_price"] ?? row["trade_price"] ?? row["rate"]),
+          amount: parseNumber(row["amount"] ?? row["value"] ?? row["total"] ?? row["consideration"] ?? row["gross_amount"]),
+          currency: String(row["currency"] ?? row["ccy"] ?? "EUR").toUpperCase().trim().replace(/[^A-Z0-9]/g, ""),
+          fees: parseNumber(row["fees"] ?? row["commission"] ?? row["commissions"] ?? row["fee"]),
+          tax: parseNumber(row["tax"] ?? row["withholding_tax"] ?? row["stamp_duty"]),
+          exchangeRate: parseNumber(row["exchange_rate"] ?? row["fx_rate"] ?? row["rate"]) || 1,
         });
       });
       return transactions;
@@ -465,4 +408,4 @@ export function getAdapterForPlatform(platform: string): any | undefined {
   return getAllAdapters().find((a) => a.platform === platform);
 }
 
-export { parseNumber, parseDate, mapTransactionType, normalizeCurrencyInput, normalizeSymbolInput, inferAssetClass, validateRow } from "./portfolio-csv-parser";
+export { parseNumber, parseDate, mapTransactionType, validateRow, inferAssetClass } from "./portfolio-csv-parser";

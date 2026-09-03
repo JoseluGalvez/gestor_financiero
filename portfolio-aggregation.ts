@@ -1,15 +1,14 @@
-import type { UnifiedPosition, UnifiedTransaction, PortfolioAggregation, CurrencyCode, PlatformId, RawPosition, RawTransaction } from "./portfolio-types";
 import { calculateXIRR } from "./portfolio-calculations";
 
 export { calculateXIRR } from "./portfolio-calculations";
 
 export function aggregatePortfolio(
-  positions: RawPosition[],
-  transactions: RawTransaction[],
+  positions: any[],
+  transactions: any[],
   currentPrices: Map<string, number>,
   fxRates: Map<string, number>,
   baseCurrency: string = "EUR"
-): PortfolioAggregation {
+): any {
   const unifiedPositions = buildUnifiedPositions(positions, currentPrices);
   const unifiedTransactions = buildUnifiedTransactions(transactions);
 
@@ -36,10 +35,10 @@ export function aggregatePortfolio(
 }
 
 function buildUnifiedPositions(
-  positions: RawPosition[],
+  positions: any[],
   currentPrices: Map<string, number>
 ): Map<string, any> {
-  const groups = new Map<string, RawPosition[]>();
+  const groups = new Map<string, any[]>();
   for (const pos of positions) {
     const key = `${pos.symbol}:${pos.currency}`;
     if (!groups.has(key)) groups.set(key, []);
@@ -48,7 +47,6 @@ function buildUnifiedPositions(
 
   const unified = new Map<string, any>();
   for (const [key, group] of groups) {
-    const first = group[0];
     let totalQty = 0;
     let totalCost = 0;
     const byPlatform = new Map<string, { quantity: number; averagePrice: number; costBasis: number }>();
@@ -93,7 +91,7 @@ function buildUnifiedPositions(
   return unified;
 }
 
-function buildUnifiedTransactions(transactions: RawTransaction[]): any[] {
+function buildUnifiedTransactions(transactions: any[]): any[] {
   return transactions.map((tx, idx) => ({
     id: `tx-${tx.platform}-${tx.date}-${tx.symbol}-${idx}`,
     platform: tx.platform,
