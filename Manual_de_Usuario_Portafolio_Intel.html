@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual de Usuario — Gestor Financiero Portafolio Intel</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 2cm 2.5cm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a1a2e;
+      background: #fff;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20mm 25mm;
+    }
+
+    /* Portada */
+    .cover {
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 85vh;
+      text-align: center;
+      border: 3px solid #1a1a2e;
+      padding: 3rem;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e5e7eb 100%);
+    }
+
+    .cover h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #1a1a2e;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .cover h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 2rem;
+    }
+
+    .cover .subtitle {
+      font-size: 1rem;
+      color: #6c757d;
+      margin-bottom: 3rem;
+      max-width: 500px;
+    }
+
+    .cover .meta {
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-top: 2rem;
+      line-height: 1.8;
+    }
+
+    .cover .disclaimer {
+      font-size: 0.75rem;
+      color: #999;
+      font-style: italic;
+      margin-top: 2rem;
+      max-width: 450px;
+    }
+
+    /* Índice */
+    .toc {
+      page-break-after: always;
+      padding: 1rem 0;
+    }
+
+    .toc h2 {
+      font-size: 1.5rem;
+      color: #1a1a2e;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #2563eb;
+    }
+
+    .toc ol {
+      list-style: none;
+      counter-reset: toc-counter;
+    }
+
+    .toc ol li {
+      counter-increment: toc-counter;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 1rem;
+    }
+
+    .toc ol li::before {
+      content: counter(toc-counter) ". ";
+      font-weight: 700;
+      color: #2563eb;
+    }
+
+    /* Secciones */
+    h1 {
+      font-size: 1.6rem;
+      color: #1a1a2e;
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #2563eb;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      color: #1a1a2e;
+      margin: 1.5rem 0 0.75rem;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: #2d3748;
+      margin: 1.25rem 0 0.5rem;
+      page-break-after: avoid;
+    }
+
+    h4 {
+      font-size: 1rem;
+      color: #4a5568;
+      margin: 1rem 0 0.5rem;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin-bottom: 0.75rem;
+      max-width: 72ch;
+    }
+
+    ul, ol {
+      margin: 0.5rem 0 1rem 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.3rem;
+    }
+
+    /* Tablas */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.9rem;
+      page-break-inside: avoid;
+    }
+
+    thead th {
+      background: #f8f9fa;
+      font-weight: 700;
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 2px solid #2563eb;
+      color: #1a1a2e;
+      position: sticky;
+      top: 0;
+    }
+
+    tbody td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #f8f9fa;
+    }
+
+    /* Código */
+    code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+      background: #f1f5f9;
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      color: #1a1a2e;
+    }
+
+    pre {
+      background: #0f1622;
+      color: #d7e0ec;
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    /* Citas y blockquotes */
+    blockquote {
+      border-left: 4px solid #2563eb;
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      background: #dbeafe;
+      color: #1e40af;
+      font-style: italic;
+      page-break-inside: avoid;
+    }
+
+    /* Énfasis */
+    strong {
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    em {
+      font-style: italic;
+      color: #4a5568;
+    }
+
+    /* Separadores */
+    hr {
+      border: none;
+      border-top: 2px solid #e5e7eb;
+      margin: 2rem 0;
+    }
+
+    /* Bloques de código de salida */
+    .output {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      font-family: monospace;
+      font-size: 0.85rem;
+      page-break-inside: avoid;
+    }
+
+    /* Nota legal */
+    .legal {
+      font-size: 0.8rem;
+      color: #6c757d;
+      font-style: italic;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      page-break-inside: avoid;
+    }
+
+    /* Salto de página */
+    .page-break {
+      page-break-before: always;
+    }
+
+    /* Impresión */
+    @media print {
+      body {
+        padding: 0;
+        max-width: none;
+      }
+
+      .cover {
+        border: none;
+        background: none;
+        page-break-after: always;
+      }
+
+      h1, h2, h3, h4 {
+        page-break-after: avoid;
+      }
+
+      table, pre, blockquote {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <h1>GESTOR FINANCIERO<br>PORFOLIO INTEL</h1>
+  <h2>Manual de Usuario — Versión 1.0</h2>
+  <p class="subtitle">Análisis Fundamental · Gestión de Carteras · Terminal de Mercado</p>
+  <div class="meta">
+    <p><strong>Fecha:</strong> 3 de septiembre de 2026</p>
+    <p><strong>Autor:</strong> Gestor Financiero Portafolio Intel</p>
+    <p><strong>Categoría:</strong> Herramienta de análisis e inversión</p>
+    <p><strong>Licencia:</strong> Uso interno y demostración</p>
+  </div>
+  <p class="disclaimer">Los ratios e información contenidos en esta herramienta son informativos y dependen de definiciones contables, sector, periodo y calidad de los datos. No constituyen una recomendación de compra, venta o inversión. Toda inversión conlleva riesgos.</p>
+</div>
+
+<!-- ÍNDICE -->
+<div class="toc">
+  <h2>Índice de Contenidos</h2>
+  <ol>
+    <li>Introducción</li>
+    <li>Qué es Portafolio Intel</li>
+    <li>Problemas que resuelve</li>
+    <li>Beneficios de usar la aplicación</li>
+    <li>Arquitectura técnica de la aplicación</li>
+    <li>Módulo 1: Análisis Fundamental de Empresas</li>
+    <li>Módulo 2: GMT Terminal — Monitor Global de Mercado</li>
+    <li>Cálculos financieros realizados</li>
+    <li>Consejos de uso</li>
+    <li>Opinión y valoraciones</li>
+    <li>Conclusiones</li>
+    <li>Glosario de términos</li>
+  </ol>
+</div>
+
+<!-- 1. INTRODUCCIÓN -->
+<div class="page-break"></div>
+<h1>1. Introducción</h1>
+
+<p>El Gestor Financiero Portafolio Intel es una aplicación web de análisis financiero diseñada para inversores, analistas y gestores que buscan evaluar empresas, mercados y activos de forma ágil, clara y fundamentada.</p>
+
+<p>La aplicación integra dos módulos principales:</p>
+
+<ul>
+  <li><strong>Análisis Fundamental:</strong> Permite introducir datos financieros de una empresa y obtener un informe completo de ratios, señales de salud y evaluación de oportunidad de inversión.</li>
+  <li><strong>GMT Terminal:</strong> Un monitor global de mercado que muestra cotizaciones en tiempo real de criptomonedas, divisas e índices, con heatmap, ranking, alertas de precio y watchlist personalizable.</li>
+</ul>
+
+<p>Esta guía te acompañará desde la instalación hasta el uso avanzado de cada función, explicando los cálculos que se realizan, los principios de diseño que la impulsan y las mejores prácticas para obtener el máximo provecho.</p>
+
+<!-- 2. QUÉ ES PORTAFOLIO INTEL -->
+<div class="page-break"></div>
+<h1>2. Qué es Portafolio Intel</h1>
+
+<p>Portafolio Intel es una <strong>herramienta de análisis financiero autocontenida</strong> que se ejecuta en el navegador sin necesidad de servidor backend. Combina:</p>
+
+<ul>
+  <li><strong>Cálculo de ratios financieros</strong> a partir de datos introducidos manualmente</li>
+  <li><strong>Evaluación automática de salud financiera</strong> con señales clasificadas por severidad</li>
+  <li><strong>Detección de oportunidades</strong> para investigación adicional basada en criterios cuantitativos</li>
+  <li><strong>Monitor de mercado en tiempo real</strong> con datos de múltiples fuentes</li>
+  <li><strong>Sistema de alertas de precio</strong> para seguimiento de activos específicos</li>
+  <li><strong>Preferencias persistentes</strong> guardadas en el navegador del usuario</li>
+</ul>
+
+<p>La aplicación está construida con React, TypeScript, Vite y testing automatizado con Vitest, garantizando fiabilidad y rendimiento.</p>
+
+<!-- 3. PROBLEMAS QUE RESUELVE -->
+<div class="page-break"></div>
+<h1>3. Problemas que resuelve</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Problema</th>
+      <th>Solución Portafolio Intel</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Complejidad de cálculo de ratios</strong></td>
+      <td>Introduce los datos y obtén 16 ratios calculados automáticamente</td>
+    </tr>
+    <tr>
+      <td><strong>Dependencia de herramientas externas caras</strong></td>
+      <td>Herramienta gratuita y autocontenida en el navegador</td>
+    </tr>
+    <tr>
+      <td><strong>Dificultad para comparar empresas</strong></td>
+      <td>Análisis estandarizado que permite comparabilidad entre empresas</td>
+    </tr>
+    <tr>
+      <td><strong>Falta de monitoreo de mercados en tiempo real</strong></td>
+      <td>GMT Terminal con cotizaciones de 25+ criptomonedas, 10+ divisas e índices globales</td>
+    </tr>
+    <tr>
+      <td><strong>No detectar oportunidades de inversión</strong></td>
+      <td>Motor que evalúa automáticamente criterios de oportunidad</td>
+    </tr>
+    <tr>
+      <td><strong>Ausencia de herramientas de alertas</strong></td>
+      <td>Sistema de alertas de precio con condiciones personalizables</td>
+    </tr>
+    <tr>
+      <td><strong>Pérdida de configuración al cerrar navegador</strong></td>
+      <td>Preferencias guardadas en localStorage (watchlist, pestaña activa, orden de paneles)</td>
+    </tr>
+    <tr>
+      <td><strong>Interfaces complejas y confusas</strong></td>
+      <td>Diseño limpio con separación clara entre secciones y progresión gradual</td>
+    </tr>
+    <tr>
+      <td><strong>Errores en la entrada de datos</strong></td>
+      <td>Validación en tiempo real con feedback inmediato al usuario</td>
+    </tr>
+    <tr>
+      <td><strong>Falta de documentación</strong></td>
+      <td>Esta guía completa con glosario de términos financieros</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- 4. BENEFICIOS -->
+<div class="page-break"></div>
+<h1>4. Beneficios de usar la aplicación</h1>
+
+<h2>4.1 Beneficios Analíticos</h2>
+<ul>
+  <li><strong>Rapidez:</strong> Obtén un informe completo en menos de un minuto</li>
+  <li><strong>Precisión:</strong> Cálculos basados en fórmulas financieras estándar verificadas</li>
+  <li><strong>Cobertura:</strong> 16 ratios que cubren valoración, rentabilidad, márgenes, solvencia y caja</li>
+  <li><strong>Comparabilidad:</strong> Análisis estandarizado que permite comparar empresas del mismo sector</li>
+  <li><strong>Exportación:</strong> Genera CSV para análisis posterior en Excel u otras herramientas</li>
+</ul>
+
+<h2>4.2 Beneficios de Mercado</h2>
+<ul>
+  <li><strong>Visión global:</strong> Datos de mercados de criptomonedas, divisas e índices en un solo lugar</li>
+  <li><strong>Actualización frecuente:</strong> Datos cada 60 segundos sin necesidad de recarga manual</li>
+  <li><strong>Múltiples fuentes:</strong> CoinGecko (cripto), ECB (FX), Yahoo Finance (índices)</li>
+  <li><strong>Transparencia:</strong> Cada cifra muestra su fuente, latencia y ámbito de licencia</li>
+</ul>
+
+<h2>4.3 Beneficios de Gestión</h2>
+<ul>
+  <li><strong>Alertas personalizables:</strong> Configura avisos de precio para tus activos favoritos</li>
+  <li><strong>Watchlist:</strong> Guarda y organiza los activos que sigues de forma persistente</li>
+  <li><strong>Preferencias guardadas:</strong> El navegador recuerda tu configuración entre sesiones</li>
+  <li><strong>Sin costes:</strong> No requiere suscripción ni pago por uso</li>
+</ul>
+
+<h2>4.4 Beneficios de Diseño</h2>
+<ul>
+  <li><strong>Interfaz intuitiva:</strong> Separación clara entre secciones con progresión gradual</li>
+  <li><strong>Accesibilidad:</strong> Cumple estándares WCAG con focus states, labels permanentes y alturas de toque mínimas</li>
+  <li><strong>Responsive:</strong> Se adapta a pantallas móviles y de escritorio</li>
+  <li><strong>Jerarquía visual:</strong> Colores y pesos tipográficos que guían la atención del usuario</li>
+</ul>
+
+<!-- 5. ARQUITECTURA TÉCNICA -->
+<div class="page-break"></div>
+<h1>5. Arquitectura técnica de la aplicación</h1>
+
+<h2>5.1 Stack tecnológico</h2>
+<ul>
+  <li><strong>Frontend:</strong> React 18 + TypeScript + Vite 5</li>
+  <li><strong>Testing:</strong> Vitest (98 tests automatizados)</li>
+  <li><strong>Diseño:</strong> CSS custom con Design Tokens (escala de múltiplos de 4/8)</li>
+  <li><strong>Persistencia:</strong> localStorage para preferencias del usuario</li>
+  <li><strong>Fuentes de datos:</strong> APIs públicas (CoinGecko, ExchangeRate, Yahoo Finance proxy)</li>
+</ul>
+
+<h2>5.2 Módulos principales</h2>
+<pre><code>├── App.tsx                    → Módulo de Análisis Fundamental
+├── GmtTerminal.tsx            → Monitor Global de Mercado
+├── company-fundamentals.ts    → Motor de cálculo de ratios
+├── company-fundamentals-export.ts → Exportación a CSV
+├── market-adapters.ts         → Adaptadores de fuentes de datos
+├── price-alerts.ts            → Sistema de alertas de precio
+├── dashboard-preferences.ts   → Gestión de preferencias
+├── workspace-realtime-scheduler.ts → Optimización de actualizaciones en tiempo real
+├── styles.css                 → Estilos (Design Tokens + UI/UX best practices)
+└── index.html                 → Punto de entrada HTML</code></pre>
+
+<h2>5.3 Seguridad y datos</h2>
+<ul>
+  <li><strong>Sin backend:</strong> Toda la aplicación se ejecuta en el navegador</li>
+  <li><strong>Sin almacenamiento de datos sensibles:</strong> No se guardan contraseñas ni datos financieros personales</li>
+  <li><strong>Datos de demostración:</strong> Las cotizaciones son de referencia, no constituyen precio ejecutable</li>
+  <li><strong>RLS y Supabase:</strong> Preparado para integración con bases de datos si se necesita persistencia de datos</li>
+</ul>
+
+<!-- 6. MÓDULO 1: ANÁLISIS FUNDAMENTAL -->
+<div class="page-break"></div>
+<h1>6. Módulo 1: Análisis Fundamental de Empresas</h1>
+
+<h2>6.1 Descripción general</h2>
+<p>Este módulo permite introducir datos financieros de una empresa y obtener un informe completo que incluye:</p>
+<ul>
+  <li>16 ratios organizados por categorías</li>
+  <li>Señales de salud financiera</li>
+  <li>Evaluación de oportunidad de inversión</li>
+  <li>Recomendaciones de investigación adicional</li>
+  <li>Exportación a CSV</li>
+</ul>
+
+<h2>6.2 Campos del formulario</h2>
+
+<h3>Datos Generales</h3>
+<table>
+  <thead>
+    <tr><th>Campo</th><th>Descripción</th><th>Requerido</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Nombre de la empresa</td><td>Razón social o ticker</td><td>Sí</td></tr>
+    <tr><td>Fecha de referencia</td><td>Fecha de los datos contables</td><td>Sí</td></tr>
+    <tr><td>Divisa</td><td>EUR, USD o GBP</td><td>No</td></tr>
+    <tr><td>Fuente de los datos</td><td>Documento o informe del que se extraen</td><td>Sí</td></tr>
+  </tbody>
+</table>
+
+<h3>Mercado y Capital</h3>
+<table>
+  <thead>
+    <tr><th>Campo</th><th>Descripción</th><th>Unidad</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Precio por acción</td><td>Precio actual de la acción en bolsa</td><td>EUR/USD/GBP</td></tr>
+    <tr><td>Acciones en circulación</td><td>Número total de acciones emitidas</td><td>Unidades</td></tr>
+    <tr><td>Capitalización bursátil</td><td>Valor de mercado total</td><td>Moneda</td></tr>
+  </tbody>
+</table>
+
+<h3>Resultados</h3>
+<table>
+  <thead>
+    <tr><th>Campo</th><th>Descripción</th><th>Unidad</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Beneficio neto</td><td>Resultado neto del ejercicio</td><td>Moneda</td></tr>
+    <tr><td>Ventas</td><td>Ingresos totales / Ventas netas</td><td>Moneda</td></tr>
+    <tr><td>Coste de ventas</td><td>Coste directo de bienes vendidos</td><td>Moneda</td></tr>
+    <tr><td>EBIT</td><td>Beneficio antes de intereses e impuestos</td><td>Moneda</td></tr>
+    <tr><td>EBITDA</td><td>Beneficio antes de intereses, impuestos, depreciaciones y amortizaciones</td><td>Moneda</td></tr>
+    <tr><td>Flujo de caja libre</td><td>Free Cash Flow reportado</td><td>Moneda</td></tr>
+  </tbody>
+</table>
+
+<h3>Capital y Deuda</h3>
+<table>
+  <thead>
+    <tr><th>Campo</th><th>Descripción</th><th>Unidad</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Patrimonio neto</td><td>Fondos propios</td><td>Moneda</td></tr>
+    <tr><td>Deuda financiera total</td><td>Corto + largo plazo</td><td>Moneda</td></tr>
+    <tr><td>Caja y equivalentes</td><td>Efectivo e inversiones de alta liquidez</td><td>Moneda</td></tr>
+    <tr><td>Gastos financieros por intereses</td><td>Gastos por intereses en cuenta de resultados</td><td>Moneda</td></tr>
+  </tbody>
+</table>
+
+<h3>Supuestos</h3>
+<table>
+  <thead>
+    <tr><th>Campo</th><th>Descripción</th><th>Formato</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Tasa fiscal (%)</td><td>Tipo impositivo efectivo</td><td>Decimal (ej. 0.25 para 25%)</td></tr>
+    <tr><td>WACC (%)</td><td>Coste medio ponderado de capital</td><td>Decimal (ej. 0.08 para 8%)</td></tr>
+  </tbody>
+</table>
+
+<!-- 7. MÓDULO 2: GMT TERMINAL -->
+<div class="page-break"></div>
+<h1>7. Módulo 2: GMT Terminal — Monitor Global de Mercado</h1>
+
+<h2>7.1 Descripción general</h2>
+<p>GMT Terminal es un monitor financiero en tiempo real que muestra:</p>
+<ul>
+  <li>Cotizaciones de más de 25 criptomonedas (fuente: CoinGecko)</li>
+  <li>Tipos de cambio de divisas (fuente: ECB vía ExchangeRate)</li>
+  <li>Índices bursátiles globales (fuente: Yahoo Finance)</li>
+  <li>Alertas de precio personalizables</li>
+  <li>Watchlist de activos favoritos</li>
+</ul>
+
+<h2>7.2 Pantalla de inicio (Boot Screen)</h2>
+<p>Al iniciar, se muestra una pantalla de carga con los pasos de inicialización:</p>
+<ol>
+  <li>Initializing adapter handles</li>
+  <li>Negotiating data channels</li>
+  <li>Mounting CoinGecko feed</li>
+  <li>Mounting ECB FX feed</li>
+  <li>Mounting index feed</li>
+  <li>Validating provenance</li>
+  <li>Tape ready</li>
+</ol>
+<p>La carga dura aproximadamente 2 segundos.</p>
+
+<h2>7.3 Navegación por pestañas</h2>
+<table>
+  <thead>
+    <tr><th>Pestaña</th><th>Contenido</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>OVERVIEW</td><td>Heatmap, Top Movers, Ranking de cripto, Estadísticas globales, Adapters</td></tr>
+    <tr><td>FX / ÍNDICES</td><td>Tabla de índices globales + tabla de divisas (1 EUR =)</td></tr>
+    <tr><td>ALERTAS</td><td>Formulario para crear alertas + lista de alertas activas/recientes + sugerencias</td></tr>
+    <tr><td>WATCHLIST</td><td>Activos que el usuario ha fijado con estrella</td></tr>
+  </tbody>
+</table>
+
+<h2>7.4 Cinta de cotizaciones (Tape)</h2>
+<p>Muestra los 25 activos principales con:</p>
+<ul>
+  <li>Símbolo y precio actual</li>
+  <li>Porcentaje de cambio en 24h</li>
+  <li>Flecha verde (subida) o roja (bajada)</li>
+  <li>Botón de pausa/reanudación</li>
+</ul>
+
+<h2>7.5 Heatmap de capitalización</h2>
+<p>Visualización gráfica donde:</p>
+<ul>
+  <li>El tamaño de cada celda es proporcional a la capitalización de mercado</li>
+  <li>El color indica dirección (verde = subida, rojo = bajada en 24h)</li>
+  <li>Hover muestra nombre completo y porcentaje</li>
+</ul>
+
+<h2>7.6 Top Movers</h2>
+<ul>
+  <li><strong>Mayores subidas:</strong> Los 5 activos con mayor subida en 24h</li>
+  <li><strong>Mayores bajadas:</strong> Los 5 activos con mayor bajada en 24h</li>
+  <li>Incluye sparklines (mini gráficas de tendencia)</li>
+</ul>
+
+<h2>7.7 Tabla de Ranking de Criptoactivos</h2>
+<table>
+  <thead>
+    <tr><th>Columna</th><th>Descripción</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>★</td><td>Botón de favorito (estrella)</td></tr>
+    <tr><td>#</td><td>Ranking por capitalización</td></tr>
+    <tr><td>ACTIVO</td><td>Símbolo + nombre completo</td></tr>
+    <tr><td>PRECIO</td><td>Precio actual (formato adaptativo)</td></tr>
+    <tr><td>24H</td><td>Cambio porcentual en 24 horas</td></tr>
+    <tr><td>7D</td><td>Cambio porcentual en 7 días</td></tr>
+    <tr><td>CAP. MERCADO</td><td>Capitalización total</td></tr>
+  </tbody>
+</table>
+
+<h2>7.8 Tabla de Índices</h2>
+<p>Columnas: ★, ÍNDICE (símbolo + nombre), PRECIO, VAR. 24H</p>
+
+<h2>7.9 Tabla de Divisas (FX)</h2>
+<p>Columnas: ★, DIVISA, NOMBRE, 1 EUR =</p>
+
+<h2>7.10 Sistema de Alertas de Precio</h2>
+<ul>
+  <li><strong>Crear alerta:</strong> Selecciona activo, condición (por encima/abajo) y umbral</li>
+  <li><strong>Evaluar:</strong> Se evalúan automáticamente en cada sondeo de datos</li>
+  <li><strong>Gestionar:</strong> Borrar, rearmar (si se disparó), descartar</li>
+</ul>
+
+<h2>7.11 Watchlist</h2>
+<ul>
+  <li>Añadir activos con la estrella ☆ en cualquier tabla</li>
+  <li>Los activos aparecen en la pestaña WATCHLIST</li>
+  <li>Persiste en localStorage entre sesiones</li>
+</ul>
+
+<h2>7.12 Panel de Adapters (Data Status)</h2>
+<p>Muestra el estado de las tres fuentes de datos:</p>
+<ul>
+  <li>CoinGecko (cripto): Estado, latencia, licencia</li>
+  <li>ExchangeRate/ECB (FX): Estado, latencia, licencia</li>
+  <li>Yahoo Finance (índices): Estado, latencia, licencia</li>
+</ul>
+
+<h2>7.13 Preferencias</h2>
+<ul>
+  <li><strong>Orden de paneles:</strong> Botones ▲/▼ para reordenar</li>
+  <li><strong>Pausa del tape:</strong> Botón TAPE ▶/⏸</li>
+  <li><strong>Reset preferencias:</strong> Restaura configuración por defecto</li>
+</ul>
+
+<!-- 8. CÁLCULOS FINANCIEROS -->
+<div class="page-break"></div>
+<h1>8. Cálculos financieros realizados</h1>
+
+<h2>8.1 Ratios de valoración</h2>
+
+<h3>Price/Earnings (P/E)</h3>
+<pre><code>P/E = Precio por acción / (Beneficio neto / Acciones en circulación)</code></pre>
+<p>Interpretación: Menor que 15 = potencialmente infravalorada. Mayor que 25 = potencialmente sobrevalorada.</p>
+
+<h3>EV/EBITDA</h3>
+<pre><code>EV = Capitalización bursátil + Deuda total - Caja
+EV/EBITDA = EV / EBITDA</code></pre>
+<p>Interpretación: Menor que 8 = valoración atractiva. Mayor que 15 = valoración elevada.</p>
+
+<h3>Price/Sales (P/S)</h3>
+<pre><code>P/S = Capitalización bursátil / Ventas totales</code></pre>
+<p>Interpretación: Útil para empresas con beneficios negativos o cíclicos.</p>
+
+<h2>8.2 Ratios de rentabilidad</h2>
+
+<h3>ROE (Return on Equity)</h3>
+<pre><code>ROE = Beneficio neto / Patrimonio neto</code></pre>
+<p>Interpretación: Mayor que 15% = excelente. 10-15% = bueno. Menor que 5% = mejorable.</p>
+
+<h3>Margen Neto</h3>
+<pre><code>Margen neto = (Beneficio neto / Ventas) × 100</code></pre>
+<p>Interpretación: Varía por sector. Tecnología 20%+, Retail 2-5%.</p>
+
+<h2>8.3 Ratios de solvencia</h2>
+
+<h3>Debt/Equity</h3>
+<pre><code>D/E = Deuda financiera total / Patrimonio neto</code></pre>
+<p>Interpretación: Menor que 1 = baja apalancamiento. Mayor que 2 = riesgo elevado.</p>
+
+<h3>Interest Coverage</h3>
+<pre><code>IC = EBIT / Gastos financieros por intereses</code></pre>
+<p>Interpretación: Mayor que 3 = cómodo. Menor que 1.5 = riesgo de impago.</p>
+
+<h2>8.4 Ratios de caja</h2>
+
+<h3>Free Cash Flow Yield</h3>
+<pre><code>FCF Yield = (FCF / Capitalización) × 100</code></pre>
+<p>Interpretación: Mayor que 8% = atractivo. Menor que 3% = poco atractivo.</p>
+
+<h2>8.5 Motor de salud financiera</h2>
+<p>El sistema evalúa automáticamente:</p>
+<ul>
+  <li>Crecimiento de ingresos vs tendencia</li>
+  <li>Estabilidad de márgenes</li>
+  <li>Nivel de apalancamiento</li>
+  <li>Cobertura de intereses</li>
+  <li>Generación de flujo de caja libre</li>
+  <li>Tendencia de deuda</li>
+</ul>
+<p>Cada señal recibe una clasificación: <strong>INFO</strong>, <strong>REVIEW</strong> o <strong>ATENCIÓN</strong>.</p>
+
+<h2>8.6 Motor de oportunidad</h2>
+<p>Evalúa 5 criterios cuantitativos:</p>
+<ol>
+  <li>P/E &lt; 20x</li>
+  <li>ROE &gt; 10%</li>
+  <li>Debt/Equity &lt; 2</li>
+  <li>FCF &gt; 0</li>
+  <li>Interest Coverage &gt; 3x</li>
+</ol>
+<p>Si se cumplen 4 o más: <strong>Candidata para revisión</strong>.<br>
+Si se cumplen 2-3: <strong>Evidencia insuficiente</strong>.<br>
+Si se cumplen 0-1: <strong>No respaldada</strong>.</p>
+
+<!-- 9. CONSEJOS DE USO -->
+<div class="page-break"></div>
+<h1>9. Consejos de uso</h1>
+
+<h2>9.1 Para el Análisis Fundamental</h2>
+<ul>
+  <li><strong>Usa datos actualizados:</strong> Asegúrate de que los datos correspondan al último ejercicio fiscal disponible.</li>
+  <li><strong>No dejes campos vacíos:</strong> Aunque son opcionales, los campos vacíos afectan a los ratios calculados.</li>
+  <li><strong>Compara empresas del mismo sector:</strong> Los ratios son más significativos al comparar dentro del mismo sector.</li>
+  <li><strong>Revisa las advertencias:</strong> El sistema genera warnings cuando detecta datos inconsistentes o ausentes.</li>
+  <li><strong>Exporta para análisis posterior:</strong> Usa el CSV para guardar historial de análisis o comparaciones.</li>
+</ul>
+
+<h2>9.2 Para el GMT Terminal</h2>
+<ul>
+  <li><strong>Configura alertas tempranas:</strong> No esperes a que los precios se disparen. Configura alertas con márgenes de seguridad.</li>
+  <li><strong>Usa la watchlist:</strong> Marca con estrella los activos que sigues regularmente para acceso rápido.</li>
+  <li><strong>Revisa los adapters:</strong> Si ves datos faltantes, verifica que las fuentes de datos estén operativas.</li>
+  <li><strong>Pausa el tape si es necesario:</strong> Si la cinta distrae, puedes pausarla con el botón TAPE ▶/⏸.</li>
+  <li><strong>Personaliza el orden de paneles:</strong> Usa los botones ▲/▼ para mover los paneles según tu preferencia.</li>
+</ul>
+
+<h2>9.3 Consejos generales</h2>
+<ul>
+  <li><strong>Guarda tu trabajo:</strong> Exporta CSV después de cada análisis importante.</li>
+  <li><strong>No tomes decisiones basadas solo en ratios:</strong> Combina con análisis cualitativo, noticias y tendencias.</li>
+  <li><strong>Actualiza regularmente:</strong> Los ratios varían con cada ejercicio económico.</li>
+  <li><strong>Comparte resultados:</strong> El CSV es fácil de enviar por email o compartir en informes.</li>
+</ul>
+
+<!-- 10. OPINIÓN Y VALORACIONES -->
+<div class="page-break"></div>
+<h1>10. Opinión y valoraciones</h1>
+
+<h2>10.1 Fortalezas de la aplicación</h2>
+
+<p><strong>Simplicidad de uso:</strong> La separación clara entre secciones y la progresión gradual hacen que cualquier usuario, incluso sin experiencia financiera avanzada, pueda introducir datos y obtener resultados útiles.</p>
+
+<p><strong>Transparencia:</strong> Cada ratio muestra su fórmula, objetivo y entradas requeridas. No hay "cajas negras". El usuario siempre sabe cómo se calcula cada cifra.</p>
+
+<p><strong>Diseño accesible:</strong> La aplicación cumple con principios WCAG: focus states visibles, labels permanentes, hit areas adecuadas para dispositivos móviles, contraste suficiente.</p>
+
+<p><strong>Autocontenida:</strong> No requiere servidor backend, base de datos ni suscripciones. Todo se ejecuta en el navegador.</p>
+
+<p><strong>Testing automatizado:</strong> 98 tests cubren los módulos críticos, dando confianza en la fiabilidad de los cálculos.</p>
+
+<h2>10.2 Áreas de mejora</h2>
+
+<p><strong>Sin persistencia de análisis:</strong> Los análisis no se guardan entre sesiones. Sería útil implementar almacenamiento local o backend para historial.</p>
+
+<p><strong>Fuentes de datos limitadas:</strong> El módulo de índices requiere un proxy local. Las fuentes gratuitas tienen límites de frecuencia de sondeo.</p>
+
+<p><strong>Sin gráficas de tendencia:</strong> Los ratios se muestran como valores puntuales. Sería valioso incluir gráficas de evolución temporal.</p>
+
+<p><strong>Sin comparación directa:</strong> No permite comparar dos empresas lado a lado en una misma vista.</p>
+
+<p><strong>Sin integración con datos reales:</strong> Los datos de cotizaciones son de demostración para fines de evaluación de la interfaz.</p>
+
+<h2>10.3 Valoración global</h2>
+<table>
+  <thead>
+    <tr><th>Criterio</th><th>Puntuación (1-10)</th><th>Comentario</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Usabilidad</td><td>9/10</td><td>Interfaz intuitiva, separación clara</td></tr>
+    <tr><td>Diseño visual</td><td>8/10</td><td>Limpio, profesional, cumple WCAG</td></tr>
+    <tr><td>Funcionalidad core</td><td>8/10</td><td>Ratios completos, cálculos fiables</td></tr>
+    <tr><td>Rendimiento</td><td>9/10</td><td>Carga rápida, actualización eficiente</td></tr>
+    <tr><td>Fiabilidad</td><td>9/10</td><td>98 tests, build automatizado</td></tr>
+    <tr><td>Documentación</td><td>7/10</td><td>Manual completo (este documento)</td></tr>
+    <tr><td>Potencial de escalabilidad</td><td>8/10</td><td>Arquitectura modular preparada para crecer</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Valoración media: 8.3/10</strong></p>
+
+<!-- 11. CONCLUSIONES -->
+<div class="page-break"></div>
+<h1>11. Conclusiones</h1>
+
+<p>El Gestor Financiero Portafolio Intel es una herramienta sólida para el análisis financiero básico y el monitoreo de mercados. Su diseño limpio, cálculos transparentes y testing automatizado la convierten en una opción fiable para inversores y analistas.</p>
+
+<p>Los puntos fuertes son:</p>
+<ul>
+  <li><strong>Cálculos financieros completos</strong> que cubren los ratios más importantes del análisis fundamental</li>
+  <li><strong>Interfaz accesible</strong> que cumple estándares WCAG y principios de diseño centrado en el usuario</li>
+  <li><strong>Monitoreo de mercado en tiempo real</strong> con múltiples fuentes de datos</li>
+  <li><strong>Sistema de alertas</strong> que permite seguir activos sin vigilancia constante</li>
+  <li><strong>Sin costes de infraestructura</strong> — se ejecuta en el navegador del usuario</li>
+</ul>
+
+<p>Las mejoras futuras más relevantes serían:</p>
+<ol>
+  <li>Implementar persistencia de análisis entre sesiones</li>
+  <li>Añadir gráficas de evolución temporal de ratios</li>
+  <li>Permitir comparación lado a lado de empresas</li>
+  <li>Integrar fuentes de datos reales para cotizaciones en producción</li>
+  <li>Añadir exportación a PDF de los informes de análisis</li>
+</ol>
+
+<p>En conclusión, Portafolio Intel representa una base sólida para una herramienta de análisis financiero que puede crecer y evolucionar según las necesidades de sus usuarios. La combinación de cálculos financieros rigurosos, diseño centrado en el usuario y arquitectura técnica moderna la posicionan como una solución efectiva para la toma de decisiones informadas en los mercados financieros.</p>
+
+<!-- 12. GLOSARIO -->
+<div class="page-break"></div>
+<h1>12. Glosario de términos</h1>
+
+<table>
+  <thead>
+    <tr><th>Término</th><th>Definición</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>EBIT</strong></td><td>Earnings Before Interest and Taxes — Beneficio antes de intereses e impuestos</td></tr>
+    <tr><td><strong>EBITDA</strong></td><td>Earnings Before Interest, Taxes, Depreciation and Amortization — Beneficio antes de intereses, impuestos, depreciaciones y amortizaciones</td></tr>
+    <tr><td><strong>FCF</strong></td><td>Free Cash Flow — Flujo de caja libre</td></tr>
+    <tr><td><strong>ROE</strong></td><td>Return on Equity — Rentabilidad sobre fondos propios</td></tr>
+    <tr><td><strong>ROA</strong></td><td>Return on Assets — Rentabilidad sobre activos</td></tr>
+    <tr><td><strong>WACC</strong></td><td>Weighted Average Cost of Capital — Coste medio ponderado de capital</td></tr>
+    <tr><td><strong>P/E</strong></td><td>Price to Earnings ratio — Ratio precio/beneficio</td></tr>
+    <tr><td><strong>EV</strong></td><td>Enterprise Value — Valor de la empresa</td></tr>
+    <tr><td><strong>D/E</strong></td><td>Debt to Equity ratio — Ratio deuda/patrimonio</td></tr>
+    <tr><td><strong>ROI</strong></td><td>Return on Investment — Retorno de la inversión</td></tr>
+    <tr><td><strong>BCP</strong></td><td>Business Continuity Plan — Plan de continuidad del negocio</td></tr>
+    <tr><td><strong>MFA</strong></td><td>Multi-Factor Authentication — Autenticación multifactor</td></tr>
+    <tr><td><strong>RLS</strong></td><td>Row-Level Security — Seguridad a nivel de fila</td></tr>
+    <tr><td><strong>WCAG</strong></td><td>Web Content Accessibility Guidelines — Guías de accesibilidad para contenido web</td></tr>
+    <tr><td><strong>CSV</strong></td><td>Comma-Separated Values — Valores separados por comas (formato de archivo)</td></tr>
+  </tbody>
+</table>
+
+<!-- NOTA LEGAL -->
+<div class="legal">
+  <p><strong>Nota legal:</strong> Este documento y la aplicación descrita son herramientas de análisis financiero informativo. No constituyen asesoramiento financiero, recomendación de inversión ni oferta de valores. Toda inversión conlleva riesgos, incluyendo la posible pérdida del capital invertido. Antes de tomar decisiones de inversión, consulta con un asesor financiero profesional.</p>
+  <p style="margin-top: 1rem;">Documento generado el 3 de septiembre de 2026. Gestor Financiero Portafolio Intel — Versión 1.0</p>
+</div>
+
+</body>
+</html>

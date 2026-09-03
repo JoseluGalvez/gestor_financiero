@@ -380,6 +380,11 @@ function MarketTable({ quotes, favorites, onToggleFavorite }: { quotes: Quote[];
                 aria-pressed={isFavorite(favorites, q.symbol)}
                 aria-label={isFavorite(favorites, q.symbol) ? `Quitar ${q.symbol} de favoritos` : `Añadir ${q.symbol} a favoritos`}
                 title="Fijar en watchlist"
+                style={{
+                  minWidth: '44px',
+                  minHeight: '44px',
+                  padding: 0,
+                }}
               >
                 {isFavorite(favorites, q.symbol) ? '★' : '☆'}
               </button>
@@ -433,6 +438,11 @@ function IndexTable({ quotes, favorites, onToggleFavorite }: { quotes: Quote[]; 
                 aria-pressed={isFavorite(favorites, q.symbol)}
                 aria-label={isFavorite(favorites, q.symbol) ? `Quitar ${q.symbol} de favoritos` : `Añadir ${q.symbol} a favoritos`}
                 title="Fijar en watchlist"
+                style={{
+                  minWidth: '44px',
+                  minHeight: '44px',
+                  padding: 0,
+                }}
               >
                 {isFavorite(favorites, q.symbol) ? '★' : '☆'}
               </button>
@@ -472,6 +482,11 @@ function FxTable({ quotes, favorites, onToggleFavorite }: { quotes: Quote[]; fav
                 aria-pressed={isFavorite(favorites, q.symbol)}
                 aria-label={isFavorite(favorites, q.symbol) ? `Quitar ${q.symbol} de favoritos` : `Añadir ${q.symbol} a favoritos`}
                 title="Fijar en watchlist"
+                style={{
+                  minWidth: '44px',
+                  minHeight: '44px',
+                  padding: 0,
+                }}
               >
                 {isFavorite(favorites, q.symbol) ? '★' : '☆'}
               </button>
@@ -531,6 +546,11 @@ function WatchlistView({ quotes, favorites, onToggleFavorite }: { quotes: Quote[
                 <td className="gmt-td-fav">
                   <button
                     className="gmt-fav active"
+                    style={{
+                      minWidth: '44px',
+                      minHeight: '44px',
+                      padding: 0,
+                    }}
                     onClick={() => onToggleFavorite(q.symbol)}
                     aria-label={`Quitar ${q.symbol} de favoritos`}
                     title="Quitar de watchlist"

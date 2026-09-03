@@ -19,6 +19,6 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["App.tsx", "main.tsx", "GmtTerminal.tsx", "market-adapters.ts", "price-alerts.ts", "dashboard-preferences.ts", "workspace-realtime-scheduler.ts", "company-fundamentals.ts", "company-fundamentals-export.ts", "influential-investors.ts", "company-fundamentals.test.ts", "market-adapters.test.ts", "price-alerts.test.ts", "dashboard-preferences.test.ts", "workspace-realtime-scheduler.test.ts", "company-fundamentals-export.test.ts", "influential-investors.test.ts"],
+  "include": ["App.tsx", "main.tsx", "GmtTerminal.tsx", "TrendChart.tsx", "market-adapters.ts", "price-alerts.ts", "dashboard-preferences.ts", "workspace-realtime-scheduler.ts", "company-fundamentals.ts", "company-fundamentals-export.ts", "influential-investors.ts", "analysis-history.ts", "report-pdf.ts", "comparison.ts", "company-fundamentals.test.ts", "market-adapters.test.ts", "price-alerts.test.ts", "dashboard-preferences.test.ts", "workspace-realtime-scheduler.test.ts", "company-fundamentals-export.test.ts", "influential-investors.test.ts", "analysis-history.test.ts", "report-pdf.test.ts", "comparison.test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

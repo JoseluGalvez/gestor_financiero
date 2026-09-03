@@ -1,6 +1,10 @@
 import { useState } from 'react';
-import { calculateCompanyFundamentals, type CompanyFundamentalsInput, type CompanyFundamentalsAnalysis, type CompanyFundamentalFieldKey } from './company-fundamentals';
+import { calculateCompanyFundamentals, type CompanyFundamentalsInput, type CompanyFundamentalsAnalysis, type CompanyFundamentalKey, type CompanyFundamentalFieldKey } from './company-fundamentals';
 import { buildCompanyFundamentalsCsv, companyFundamentalsFilename } from './company-fundamentals-export';
+import { loadHistory, persistHistory, makeHistoryEntry, pushEntry, distinctCompanies, metricSeriesForCompany, metricLabelFor, type HistoryEntry } from './analysis-history';
+import { buildAnalysisReportHtml } from './report-pdf';
+import { buildComparisonRows, comparisonHighlights, formatComparisonValue } from './comparison';
+import { TrendChart } from './TrendChart';
 import GmtTerminal from './GmtTerminal';
 
 type AppView = 'fundamentals' | 'gmt';
@@ -167,7 +171,7 @@ function OpportunityCard({ opportunity }: { opportunity: CompanyFundamentalsAnal
   );
 }
 
-function Results({ analysis, onExportCsv }: { analysis: CompanyFundamentalsAnalysis; onExportCsv: () => void }) {
+function Results({ analysis, onExportCsv, onExportPdf }: { analysis: CompanyFundamentalsAnalysis; onExportCsv: () => void; onExportPdf: () => void }) {
   const metricsByCategory = analysis.metrics.reduce((acc, metric) => {
     if (!acc[metric.category]) acc[metric.category] = [];
     acc[metric.category].push(metric);
@@ -184,7 +188,10 @@ function Results({ analysis, onExportCsv }: { analysis: CompanyFundamentalsAnaly
           <span>Fuente: {analysis.sourceLabel}</span>
           <span className="coverage">Cobertura: {analysis.coveragePct.toFixed(1)}%</span>
         </div>
-        <button className="btn btn-primary" onClick={onExportCsv}>Exportar CSV</button>
+        <div className="results-actions">
+          <button className="btn btn-primary" onClick={onExportCsv}>Exportar CSV</button>
+          <button className="btn btn-secondary" onClick={onExportPdf}>Exportar PDF</button>
+        </div>
       </div>
 
       <section className="section">
@@ -344,9 +351,20 @@ export default function App() {
   const [view, setView] = useState<AppView>('fundamentals');
   const [analysis, setAnalysis] = useState<CompanyFundamentalsAnalysis | null>(null);
 
+  // Historial y comparación
+  const [history, setHistory] = useState<HistoryEntry[]>(() => loadHistory(window.localStorage));
+  const [fundamentalsMode, setFundamentalsMode] = useState<'form' | 'history' | 'chart' | 'compare'>('form');
+  const [selectedChartCompany, setSelectedChartCompany] = useState<string>('');
+  const [selectedChartMetric, setSelectedChartMetric] = useState<CompanyFundamentalKey>('roe');
+  const [compareCompanies, setCompareCompanies] = useState<string[]>([]);
+
   const handleAnalyze = (input: CompanyFundamentalsInput) => {
     const result = calculateCompanyFundamentals(input);
     setAnalysis(result);
+    const entry = makeHistoryEntry(input, result);
+    const updated = pushEntry(history, entry);
+    setHistory(updated);
+    persistHistory(window.localStorage, updated);
   };
 
   const handleExportCsv = () => {
@@ -361,9 +379,49 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
+  const handleExportPdf = () => {
+    if (!analysis) return;
+    const html = buildAnalysisReportHtml(analysis);
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    if (printWindow) {
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+      };
+    }
+  };
+
+  const availableCompanies = distinctCompanies(history);
+  const availableMetrics = analysis
+    ? analysis.metrics
+        .filter((metric) => metric.unit !== 'currency' && metric.value !== null)
+        .map((metric) => metric.key)
+    : [];
+
+  const handleHistoryCompanyChange = (company: string) => {
+    setSelectedChartCompany(company);
+    const series = metricSeriesForCompany(history, company, 'roe');
+    setSelectedChartMetric(series.length > 0 ? series[0].asOf ? 'roe' : 'roe' : 'roe');
+  };
+
+  const handleCompareToggle = (company: string) => {
+    setCompareCompanies((prev) =>
+      prev.includes(company) ? prev.filter((c) => c !== company) : [...prev, company].slice(0, 3)
+    );
+  };
+
+  const getCompareAnalyses = (): CompanyFundamentalsAnalysis[] => {
+    return compareCompanies.map((name) => {
+      const entry = history.find((entry) => entry.analysis.companyName === name);
+      return entry?.analysis ?? null;
+    }).filter((analysis): analysis is CompanyFundamentalsAnalysis => analysis !== null);
+  };
+
   const moduleNav = (
     <nav className="module-nav" aria-label="Módulos de Portafolio Intel">
-      <button className={view === 'fundamentals' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('fundamentals')}>Análisis Fundamental</button>
+      <button className={view === 'fundamentals' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => { setView('fundamentals'); setFundamentalsMode('form'); }}>Análisis Fundamental</button>
       <button className={view === 'gmt' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('gmt')}>GMT Terminal</button>
     </nav>
   );
@@ -377,29 +435,163 @@ export default function App() {
     );
   }
 
+  const fundamentalsNav = (
+    <nav className="fundamentals-nav" aria-label="Secciones de Análisis Fundamental">
+      <button className={fundamentalsMode === 'form' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => setFundamentalsMode('form')}>Formulario</button>
+      <button className={fundamentalsMode === 'history' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => { setFundamentalsMode('history'); setSelectedChartCompany(availableCompanies[0] || ''); }}>Historial</button>
+      <button className={fundamentalsMode === 'chart' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => setFundamentalsMode('chart')}>Evolución</button>
+      <button className={fundamentalsMode === 'compare' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => setFundamentalsMode('compare')}>Comparar</button>
+    </nav>
+  );
+
+  const renderFundamentalsContent = () => {
+    switch (fundamentalsMode) {
+      case 'form':
+        return (
+          <main className="app-main">
+            <div className="layout">
+              <aside className="sidebar">
+                <Form onAnalyze={handleAnalyze} />
+              </aside>
+              <div className="content">
+                {analysis ? <Results analysis={analysis} onExportCsv={handleExportCsv} onExportPdf={handleExportPdf} /> : (
+                  <div className="empty-state-large">
+                    <h3>Bienvenido</h3>
+                    <p>Completa el formulario con los datos financieros de la empresa y pulsa <strong>Analizar</strong>.</p>
+                    <p>El motor calcula 16 ratios (valoración, rentabilidad, márgenes, solvencia, caja), genera señales de salud y evalúa si la empresa es candidata para investigación adicional.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </main>
+        );
+      case 'history':
+        return (
+          <main className="app-main">
+            <div className="history-view">
+              <div className="history-header">
+                <h2>Historial de Análisis</h2>
+                <span className="history-count">{history.length} análisis guardados</span>
+              </div>
+              {history.length === 0 ? (
+                <div className="empty-state-large">
+                  <h3>Sin historial</h3>
+                  <p>Realiza tu primer análisis en la pestaña <strong>Formulario</strong> para que aparezca aquí.</p>
+                </div>
+              ) : (
+                <ul className="history-list">
+                  {history.map((entry) => (
+                    <li key={entry.id} className="history-item">
+                      <div className="history-item-main">
+                        <strong>{entry.analysis.companyName}</strong>
+                        <span className="history-meta">{new Date(entry.createdAt).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })} · Fecha ref: {entry.analysis.asOf || '—'} · Cobertura: {entry.analysis.coveragePct}%</span>
+                      </div>
+                      <div className="history-actions">
+                        <button className="btn btn-secondary" onClick={() => { setSelectedChartCompany(entry.analysis.companyName); setFundamentalsMode('chart'); }}>Ver evolución</button>
+                        <button className="btn btn-secondary" onClick={() => { const selected = compareCompanies.includes(entry.analysis.companyName) ? compareCompanies.filter((c) => c !== entry.analysis.companyName) : [...compareCompanies, entry.analysis.companyName].slice(0, 3); setCompareCompanies(selected); setFundamentalsMode('compare'); }}>Comparar</button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </main>
+        );
+      case 'chart':
+        return (
+          <main className="app-main">
+            <div className="chart-view">
+              <div className="chart-controls">
+                <label className="control-group">
+                  <span>Empresa</span>
+                  <select value={selectedChartCompany} onChange={(e) => handleHistoryCompanyChange(e.target.value)}>
+                    {availableCompanies.map((name) => <option key={name} value={name}>{name}</option>)}
+                  </select>
+                </label>
+                <label className="control-group">
+                  <span>Ratio</span>
+                  <select value={selectedChartMetric} onChange={(e) => setSelectedChartMetric(e.target.value as CompanyFundamentalKey)}>
+                    {availableMetrics.map((key) => <option key={key} value={key}>{metricLabelFor(analysis!, key)}</option>)}
+                  </select>
+                </label>
+              </div>
+              {selectedChartCompany ? (
+                <div className="chart-container">
+                  <TrendChart points={metricSeriesForCompany(history, selectedChartCompany, selectedChartMetric)} unit={(analysis!.metrics.find((m) => m.key === selectedChartMetric)?.unit ?? 'ratio') as 'ratio' | 'percent' | 'per_share'} />
+                </div>
+              ) : (
+                <div className="empty-state-large"><h3>Selecciona una empresa</h3></div>
+              )}
+            </div>
+          </main>
+        );
+      case 'compare':
+        return (
+          <main className="app-main">
+            <div className="compare-view">
+              <div className="compare-header">
+                <h2>Comparación lado a lado</h2>
+                <p className="compare-hint">Selecciona hasta 3 empresas del historial</p>
+              </div>
+              <div className="compare-selector">
+                {availableCompanies.map((name) => (
+                  <label key={name} className={`compare-company ${compareCompanies.includes(name) ? 'selected' : ''}`} onClick={() => { handleCompareToggle(name); setFundamentalsMode('compare'); }}>
+                    <span className="compare-checkbox">{compareCompanies.includes(name) ? '✓' : '☐'}</span>
+                    <span>{name}</span>
+                  </label>
+                ))}
+              </div>
+              {getCompareAnalyses().length >= 2 ? (
+                <>
+                  <div className="compare-highlights">
+                    {comparisonHighlights(getCompareAnalyses()).map((highlight, i) => <p key={i}>{highlight}</p>)}
+                  </div>
+                  <div className="compare-table-container">
+                    <table className="compare-table">
+                      <thead>
+                        <tr>
+                          <th>Métrica</th>
+                          <th>Categoría</th>
+                          {getCompareAnalyses().map((analysis, idx) => <th key={idx} className="num">{analysis.companyName}</th>)}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {buildComparisonRows(getCompareAnalyses()).map((row) => (
+                          <tr key={row.key}>
+                            <td>{row.label}</td>
+                            <td className="compare-category">{row.category}</td>
+                            {row.values.map((value, idx) => (
+                              <td key={idx} className={`num ${row.bestIndex === idx ? 'best' : ''}`}>{formatComparisonValue(value, row.unit)}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : (
+                <div className="empty-state-large">
+                  <h3>Selecciona al menos 2 empresas</h3>
+                  <p>Marca las casillas de las empresas que quieres comparar.</p>
+                </div>
+              )}
+            </div>
+          </main>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="app">
       {moduleNav}
+      {view === 'fundamentals' && fundamentalsNav}
       <header className="app-header">
         <h1>Análisis Fundamental de Empresas</h1>
         <p className="subtitle">Introduce los datos financieros para obtener ratios, señales de salud y evaluación de oportunidad</p>
       </header>
-      <main className="app-main">
-        <div className="layout">
-          <aside className="sidebar">
-            <Form onAnalyze={handleAnalyze} />
-          </aside>
-          <div className="content">
-            {analysis ? <Results analysis={analysis} onExportCsv={handleExportCsv} /> : (
-              <div className="empty-state-large">
-                <h3>Bienvenido</h3>
-                <p>Completa el formulario con los datos financieros de la empresa y pulsa <strong>Analizar</strong>.</p>
-                <p>El motor calcula 16 ratios (valoración, rentabilidad, márgenes, solvencia, caja), genera señales de salud y evalúa si la empresa es candidata para investigación adicional.</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
+      {renderFundamentalsContent()}
       <footer className="app-footer">
         <p>Los ratios son informativos y dependen de definiciones contables, sector, periodo y calidad de los datos. No constituyen una recomendación de compra, venta o inversión.</p>
       </footer>
