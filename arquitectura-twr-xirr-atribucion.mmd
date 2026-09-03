@@ -1,0 +1,66 @@
+flowchart LR
+  subgraph Entrada[Entradas con procedencia]
+    T[Transacciones canónicas\nfecha, tipo, bruto, comisión, divisa]
+    V[Valoraciones\nvalor de mercado, fecha de corte, cobertura]
+    F[Tipos de cambio\npar, fecha, fuente, método]
+    Q[Metadatos de calidad\nfuente, versión, conciliación]
+  end
+
+  subgraph Normalizacion[Normalización y controles]
+    N[Libro mayor de rendimiento\nimporte base, signo y clasificación]
+    G{¿Datos completos\ny conciliados?}
+    R[Incidencia / estado parcial\nno calcular ni mezclar]
+  end
+
+  subgraph Calculo[Motores reproducibles]
+    TW[TWR\nencadenar subperiodos\ny neutralizar flujos externos]
+    XI[XIRR / MWR\nresolver VAN = 0\ncon fechas reales]
+  end
+
+  subgraph Puente[Puente de atribución neto]
+    I[Valor inicial]
+    A[Aportaciones / retiros\nflujo externo neutral]
+    M[Mercado]
+    D[Dividendos e intereses]
+    X[FX]
+    C[Comisiones]
+    H[Impuestos y retenciones\ninformados]
+    O[Otros ajustes conciliados]
+    E[Valor final]
+  end
+
+  subgraph Salida[Presentación y auditoría]
+    K[KPI TWR y XIRR\ncon período, moneda y alcance]
+    B[Puente con pie de control\nresidual dentro de tolerancia]
+    L[Libro de cálculo\ninputs, regla, versión y avisos]
+  end
+
+  T --> N
+  V --> N
+  F --> N
+  Q --> N
+  N --> G
+  G -- No --> R
+  G -- Sí --> TW
+  G -- Sí --> XI
+  N --> I
+  N --> A
+  N --> M
+  N --> D
+  N --> X
+  N --> C
+  N --> H
+  N --> O
+  I --> E
+  A --> E
+  M --> E
+  D --> E
+  X --> E
+  C --> E
+  H --> E
+  O --> E
+  TW --> K
+  XI --> K
+  E --> B
+  K --> L
+  B --> L

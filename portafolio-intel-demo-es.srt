@@ -1,0 +1,59 @@
+1
+00:00:00,000 --> 00:00:10,000
+Cuando los datos viven en plataformas, hojas y correos distintos,
+cada consolidación consume tiempo, duplica tareas y encarece la operación.
+
+2
+00:00:10,000 --> 00:00:20,000
+Portafolio Intel reúne el seguimiento de cartera en un único espacio
+para reducir búsquedas, trabajo manual y pérdida de contexto.
+
+3
+00:00:20,000 --> 00:00:30,000
+El acceso comienza con un enlace seguro.
+Cada usuario trabaja solo dentro de la organización y cartera autorizadas.
+
+4
+00:00:30,000 --> 00:00:40,000
+En el resumen, el equipo consulta posiciones, evolución,
+asignación y alertas desde una misma interfaz.
+
+5
+00:00:40,000 --> 00:00:50,000
+Dedica menos tiempo a reunir información antes de cada revisión.
+Los gráficos se alimentan de datos persistidos, no de cifras estáticas.
+
+6
+00:00:50,000 --> 00:01:00,000
+Configure la fuente indicando hoja, pestaña, rango y columnas autorizadas.
+La previsualización detecta errores antes de escribir.
+
+7
+00:01:00,000 --> 00:01:10,000
+Reduce el retrabajo. La conexión real con Google Sheets usa OAuth de servidor,
+permisos mínimos y validaciones.
+
+8
+00:01:10,000 --> 00:01:20,000
+Las alertas priorizan desviaciones, próximos eventos y cambios relevantes.
+El equipo puede concentrarse en las excepciones.
+
+9
+00:01:20,000 --> 00:01:30,000
+Cuando se actualizan los registros autorizados,
+el panel puede reflejarlos sin recargar la página.
+
+10
+00:01:30,000 --> 00:01:40,000
+El módulo de análisis aporta métricas explicables para el análisis interno,
+sin recomendaciones personalizadas ni ejecución de operaciones.
+
+11
+00:01:40,000 --> 00:01:50,000
+Con instantáneas reales, puede preparar un Portfolio Summary profesional.
+La fiscalidad queda como borrador para revisión experta.
+
+12
+00:01:50,000 --> 00:02:00,000
+Portafolio Intel transforma información dispersa en una operación más eficiente.
+Reduzca trabajo de consolidación. Proteja el acceso. Decida con mayor claridad.

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vista previa — Portafolio Intel · Criptomonedas</title>
+  <style>
+    :root { --navy:#132644; --navy-2:#1c3560; --blue:#2d6cdf; --blue-soft:#eaf1ff; --ink:#1b2d47; --muted:#708099; --canvas:#f6f8fc; --line:#e4eaf3; --green:#148765; --amber:#aa711b; --amber-soft:#fff8e9; --white:#fff; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--canvas); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    .app { display:grid; grid-template-columns:250px minmax(0,1fr); min-height:100vh; }
+    aside { position:sticky; top:0; display:flex; min-height:100vh; flex-direction:column; padding:26px 14px 18px; background:var(--navy); color:#fff; }
+    .brand { display:flex; gap:10px; align-items:center; padding:0 10px 27px; font-size:17px; font-weight:780; letter-spacing:-.03em; }
+    .brand-mark { display:grid; width:35px; height:35px; place-items:center; border-radius:10px; background:var(--blue); font-size:17px; }
+    .brand small { display:block; margin-top:3px; color:#b8c9e6; font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+    nav { display:grid; gap:5px; }
+    .nav-item { display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:10px; color:#b9c7dd; font-size:14px; font-weight:620; text-decoration:none; }
+    .nav-item:hover { background:rgba(255,255,255,.07); color:#fff; }
+    .nav-item.active { background:var(--blue); color:#fff; font-weight:750; }
+    .nav-icon { display:grid; width:19px; place-items:center; color:currentColor; font-weight:800; }
+    .realtime { display:flex; align-items:center; gap:7px; margin:auto 10px 0; color:#b9c7dd; font-size:11px; }
+    .dot { width:7px; height:7px; border-radius:50%; background:#3cd39a; box-shadow:0 0 0 4px rgba(60,211,154,.12); }
+    .safe { display:flex; align-items:flex-start; gap:8px; margin:16px 10px 0; padding-top:16px; border-top:1px solid rgba(255,255,255,.12); color:#aebed8; font-size:11px; line-height:1.45; }
+    main { min-width:0; }
+    .topbar { display:flex; min-height:74px; align-items:center; justify-content:space-between; padding:0 38px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.88); backdrop-filter:blur(12px); }
+    .crumb { margin:0 0 4px; color:#76869d; font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    .view-name { color:#192b47; font-size:15px; font-weight:760; }
+    .account { display:flex; align-items:center; gap:10px; color:#52637c; font-size:12px; font-weight:700; }
+    .avatar { display:grid; width:34px; height:34px; place-items:center; border-radius:50%; background:#dce8ff; color:#254f9d; font-size:11px; font-weight:800; }
+    .content { width:min(1410px,100%); margin:0 auto; padding:36px 38px 48px; }
+    .hero { display:flex; align-items:flex-end; justify-content:space-between; gap:28px; padding:30px 31px; overflow:hidden; position:relative; border-radius:20px; background:radial-gradient(circle at 84% 18%,rgba(91,224,183,.22),transparent 31%),linear-gradient(132deg,#132644 0%,#263b6e 58%,#315d9f 100%); color:#fff; }
+    .hero:after { position:absolute; right:-83px; bottom:-140px; width:250px; height:250px; border:1px solid rgba(255,255,255,.25); border-radius:50%; box-shadow:0 0 0 38px rgba(255,255,255,.06),0 0 0 76px rgba(255,255,255,.03); content:""; }
+    .hero > * { position:relative; z-index:1; }
+    .eyebrow { margin:0 0 8px; color:#8feace; font-size:10px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { max-width:710px; margin:0; font-size:clamp(28px,3.2vw,41px); letter-spacing:-.052em; line-height:1.07; }
+    .hero p:not(.eyebrow) { max-width:720px; margin:12px 0 0; color:#d3def1; font-size:14px; line-height:1.52; }
+    .privacy { display:flex; min-width:214px; align-items:center; gap:9px; padding:11px 13px; border:1px solid rgba(255,255,255,.22); border-radius:13px; background:rgba(255,255,255,.11); color:#deebfb; font-size:11px; line-height:1.35; }
+    .privacy b { display:block; color:#fff; font-size:12px; }
+    .privacy i { color:#92efd3; font-style:normal; font-size:18px; }
+    .notice { display:flex; align-items:flex-start; gap:11px; margin:18px 0; padding:15px 17px; border:1px solid #ecd8a9; border-radius:14px; background:var(--amber-soft); color:#76541d; font-size:13px; line-height:1.5; }
+    .notice b { display:block; color:#5f4315; margin-bottom:3px; }
+    .upload { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:26px; align-items:center; padding:22px; border:1px solid var(--line); border-radius:16px; background:var(--white); box-shadow:0 3px 12px rgba(33,52,87,.025); }
+    h2 { margin:5px 0 8px; font-size:17px; letter-spacing:-.02em; }
+    .upload p:not(.eyebrow) { max-width:720px; margin:0; color:var(--muted); font-size:13px; line-height:1.55; }
+    .actions { display:grid; gap:9px; min-width:220px; }
+    button { min-height:41px; border:1px solid transparent; border-radius:10px; font:inherit; font-size:13px; font-weight:750; cursor:pointer; }
+    .primary { background:var(--blue); color:#fff; box-shadow:0 7px 16px rgba(45,108,223,.18); }
+    .secondary { border-color:#dbe3ee; background:#fff; color:#354967; }
+    .file-note { display:flex; gap:9px; grid-column:1/-1; padding:10px 12px; border-radius:10px; background:#eef5ff; color:#567193; font-size:11px; line-height:1.45; }
+    .grid { display:grid; gap:16px; grid-template-columns:repeat(4,minmax(0,1fr)); margin:18px 0; }
+    .stat { display:grid; min-height:118px; align-content:space-between; padding:17px; border:1px solid var(--line); border-radius:14px; background:#fff; box-shadow:0 3px 12px rgba(33,52,87,.025); }
+    .stat span { color:#6c7b91; font-size:12px; }
+    .stat strong { color:#263b59; font-size:22px; letter-spacing:-.04em; }
+    .stat small { color:#8491a3; font-size:11px; }
+    .fifo-case { margin:18px 0; padding:23px; border:1px solid var(--line); background:#fff; box-shadow:0 3px 12px rgba(33,52,87,.025); }
+    .fifo-case-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; padding-bottom:16px; border-bottom:1px solid var(--line); }
+    .fifo-case-head h2 { margin:4px 0 0; color:#203450; }
+    .case-tag { padding:5px 8px; background:#e8f7f1; color:#177a5d; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; }
+    .case-note { margin:10px 0 0; color:#6f7e93; font-size:11px; line-height:1.45; }
+    .fifo-case-grid { display:grid; grid-template-columns:1.1fr .8fr; gap:22px; margin-top:20px; }
+    .case-ledger { display:grid; gap:8px; }
+    .ledger-row { display:grid; grid-template-columns:90px 1fr 110px; gap:12px; align-items:center; padding:11px 0; border-bottom:1px solid #edf0f5; color:#45556d; font-size:12px; }
+    .ledger-row strong { color:#243650; }
+    .ledger-row small { display:block; margin-top:3px; color:#8491a4; font-size:10px; }
+    .ledger-amount { color:#2b405f; font-weight:800; text-align:right; }
+    .ledger-amount.positive { color:var(--green); }
+    .fifo-math { padding:18px; background:#f2f6fd; border-top:5px solid var(--blue); }
+    .fifo-math h3 { margin:4px 0 15px; color:#203450; font-size:15px; }
+    .math-line { display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid #d9e3f0; color:#62718a; font-size:11px; }
+    .math-line b { color:#243753; text-align:right; }
+    .math-result { display:flex; justify-content:space-between; gap:12px; margin-top:13px; padding-top:13px; color:#183e34; font-size:13px; font-weight:800; }
+    .math-result strong { color:#148765; font-size:17px; }
+    .result { display:grid; gap:18px; grid-template-columns:minmax(0,1.48fr) minmax(260px,.65fr); }
+    .panel { border:1px solid var(--line); border-radius:16px; background:#fff; box-shadow:0 3px 12px rgba(33,52,87,.025); }
+    .panel-head { display:flex; align-items:flex-start; justify-content:space-between; gap:15px; padding:21px 21px 16px; }
+    .panel-head .eyebrow { color:#718198; }
+    .stamp { color:#77869a; font-size:11px; white-space:nowrap; }
+    .empty-table { display:grid; min-height:210px; place-content:center; justify-items:center; gap:7px; padding:20px; border-top:1px solid var(--line); color:#7d8b9e; text-align:center; }
+    .empty-table b { color:#3a4d69; font-size:14px; }
+    .empty-table span { max-width:440px; font-size:12px; line-height:1.5; }
+    .checklist { padding:21px; }
+    .checklist ul { display:grid; gap:10px; margin:17px 0 20px; padding:0; list-style:none; }
+    .checklist li { display:flex; gap:8px; color:#64738a; font-size:12px; line-height:1.43; }
+    .check { color:var(--green); font-weight:900; }
+    .warn { color:#c38620; font-weight:900; }
+    .year { display:flex; justify-content:space-between; align-items:center; margin:17px 0 13px; padding:10px; border-radius:9px; background:#f7f9fc; color:#53647b; font-size:12px; font-weight:700; }
+    .year b { color:#273a57; }
+    .foot { margin:18px 0 0; color:#8290a3; font-size:11px; line-height:1.45; }
+    @media (max-width:980px) { .app { grid-template-columns:214px minmax(0,1fr); } .content,.topbar { padding-left:22px; padding-right:22px; } .result,.fifo-case-grid { grid-template-columns:1fr; } .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .upload { grid-template-columns:1fr; } .actions { grid-template-columns:repeat(2,1fr); min-width:0; } }
+    @media (max-width:700px) { .app { display:block; } aside { position:static; min-height:auto; padding:16px; } nav { grid-template-columns:repeat(3,1fr); } .nav-item { flex-direction:column; gap:5px; justify-content:center; padding:9px 4px; font-size:10px; text-align:center; } .realtime,.safe { display:none; } .topbar { min-height:60px; } .content { padding:22px 16px 35px; } .hero { align-items:flex-start; flex-direction:column; padding:25px 21px; } .grid { grid-template-columns:1fr; } .actions { grid-template-columns:1fr; width:100%; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand"><span class="brand-mark">◔</span><div>Portafolio Intel<small>Espacio protegido</small></div></div>
+      <nav aria-label="Secciones de la aplicación">
+        <a class="nav-item" href="#resumen"><span class="nav-icon">▦</span>Resumen</a>
+        <a class="nav-item" href="#cartera"><span class="nav-icon">◫</span>Cartera</a>
+        <a class="nav-item" href="#plataformas"><span class="nav-icon">↔</span>Plataformas</a>
+        <a class="nav-item active" href="#criptomonedas"><span class="nav-icon">₿</span>Criptomonedas</a>
+        <a class="nav-item" href="#alertas"><span class="nav-icon">◌</span>Alertas</a>
+        <a class="nav-item" href="#informes"><span class="nav-icon">▤</span>Informes</a>
+        <a class="nav-item" href="#fuentes"><span class="nav-icon">◫</span>Fuentes</a>
+        <a class="nav-item" href="#analisis"><span class="nav-icon">✦</span>Análisis</a>
+        <a class="nav-item" href="#canvas"><span class="nav-icon">▤</span>Canvas local</a>
+      </nav>
+      <div class="realtime"><span class="dot"></span>Datos autenticados · acceso controlado</div>
+      <div class="safe"><span>◇</span><span>Los borradores fiscales no se presentan automáticamente y requieren revisión profesional.</span></div>
+    </aside>
+    <main>
+      <header class="topbar"><div><p class="crumb">Cartera autenticada</p><div class="view-name">Criptomonedas</div></div><div class="account">Vista previa de interfaz <span class="avatar">PI</span></div></header>
+      <div class="content">
+        <section class="hero"><div><p class="eyebrow">IRPF · criptoactivos</p><h1>Reconstruye ventas y permutas con trazabilidad FIFO.</h1><p>Adjunta un CSV local para obtener un detalle revisable de transmisiones. El archivo no se guarda en Supabase ni se envía a Hacienda.</p></div><div class="privacy"><i>◇</i><span><b>Revisión local</b>CSV y cálculos solo en memoria</span></div></section>
+        <section class="notice"><span>!</span><div><b>Borrador de trabajo, no declaración tributaria</b>La interfaz calcula transmisiones trazables, pero no estima una cuota de IRPF ni presenta información ante la AEAT.</div></section>
+        <section class="upload"><div><p class="eyebrow" style="color:#627493">Archivo de operaciones</p><h2>Adjunta compras, ventas y permutas</h2><p>El flujo valida fecha, activo, cantidad, valor EUR y comisiones. Las filas incompletas se mantienen visibles como incidencias de revisión.</p></div><div class="actions"><button class="primary">⇧ Adjuntar CSV local</button><button class="secondary">▤ Descargar plantilla</button></div><div class="file-note">◇ Columnas previstas: Fecha, Tipo, Activo entregado, Cantidad entregada, Activo recibido, Cantidad recibida, Valor EUR entregado, Valor EUR recibido, Comisiones EUR y Plataforma.</div></section>
+        <section class="grid"><article class="stat"><span>Ganancias confirmadas</span><strong>2.726 €</strong><small>Ejemplo didáctico · una venta</small></article><article class="stat"><span>Pérdidas confirmadas</span><strong>0 €</strong><small>Ejemplo didáctico · sin pérdidas</small></article><article class="stat"><span>Resultado neto confirmado</span><strong>2.726 €</strong><small>No equivale a cuota tributaria</small></article><article class="stat"><span>Transmisiones calculadas</span><strong>1 / 1</strong><small>Ventas y permutas del ejemplo</small></article></section>
+        <section class="fifo-case" aria-label="Caso práctico didáctico de cálculo FIFO"><div class="fifo-case-head"><div><p class="eyebrow" style="color:#627493">Simulación didáctica · BTC</p><h2>Dos compras y una venta parcial resueltas con FIFO</h2><p class="case-note">Caso práctico con cifras ilustrativas y sin datos de ningún usuario. No representa precios de mercado ni una recomendación.</p></div><span class="case-tag">Cálculo trazable</span></div><div class="fifo-case-grid"><div class="case-ledger"><div class="ledger-row"><span>10 ene. 2025</span><div><strong>Compra · 0,40 BTC</strong><small>Coste: 12.000 € + 30 € de comisión</small></div><span class="ledger-amount">Lote 1 · 12.030 €</span></div><div class="ledger-row"><span>15 abr. 2025</span><div><strong>Compra · 0,30 BTC</strong><small>Coste: 9.600 € + 24 € de comisión</small></div><span class="ledger-amount">Lote 2 · 9.624 €</span></div><div class="ledger-row"><span>20 sep. 2025</span><div><strong>Venta · 0,50 BTC</strong><small>Importe bruto: 18.000 € − 36 € de comisión</small></div><span class="ledger-amount positive">Transmisión neta · 17.964 €</span></div></div><aside class="fifo-math"><p class="eyebrow" style="color:#2d6cdf">Desglose FIFO de la venta</p><h3>Coste de adquisición consumido</h3><div class="math-line"><span>0,40 BTC del lote 1</span><b>12.030 €</b></div><div class="math-line"><span>0,10 BTC del lote 2 (1/3)</span><b>3.208 €</b></div><div class="math-line"><span>Coste FIFO transmitido</span><b>15.238 €</b></div><div class="math-result"><span>17.964 € − 15.238 €</span><strong>+ 2.726 €</strong></div></aside></div></section>
+        <section class="result"><article class="panel"><div class="panel-head"><div><p class="eyebrow">Detalle de transmisiones</p><h2>FIFO por activo y orden cronológico</h2></div><span class="stamp">Ejercicio revisado: pendiente</span></div><div class="empty-table"><span style="font-size:25px">▤</span><b>Aún no hay un CSV analizado.</b><span>Tras adjuntar el archivo local, esta tabla mostrará valor de transmisión, coste FIFO, resultado y advertencias por operación.</span></div></article><aside class="panel checklist"><p class="eyebrow" style="color:#627493">Revisión obligatoria</p><h2>Checklist antes de Renta</h2><ul><li><span class="check">✓</span>Incluye compras históricas o saldo inicial de cada activo.</li><li><span class="check">✓</span>Contrasta valores EUR y comisiones con los justificantes del exchange.</li><li><span class="warn">!</span>Revisa las permutas y su valoración en la fecha de operación.</li><li><span class="warn">!</span>Trata staking, airdrops, NFT y derivados en flujos separados.</li></ul><div class="year"><span>Ejercicio del borrador</span><b>Seleccionar tras carga</b></div><button class="primary" style="width:100%">⇩ Descargar borrador revisable</button></aside></section>
+        <p class="foot">Vista previa estática: el caso FIFO usa cifras ilustrativas, no datos financieros reales de usuario. En la aplicación integrada, los resultados solo aparecen después de cargar un CSV local y completar las validaciones necesarias.</p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

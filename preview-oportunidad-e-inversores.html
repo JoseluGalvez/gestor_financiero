@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vista previa · Oportunidad e inversores</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    :root { --navy: #10213c; --blue: #2466d1; --sky: #eaf3ff; --ink: #1b2d48; --muted: #667891; --line: #dae4f0; --green: #177547; --amber: #9a6309; --surface: #ffffff; --page: #f4f7fb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--page); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .shell { max-width: 1500px; margin: 0 auto; padding: 28px; }
+    .topbar { align-items: center; display: flex; justify-content: space-between; margin-bottom: 26px; }
+    .brand { align-items: center; display: flex; gap: 12px; font-weight: 800; font-size: 20px; color: var(--navy); }
+    .brand-mark { align-items: center; background: var(--blue); color: white; display: inline-flex; height: 38px; justify-content: center; width: 38px; }
+    .status { align-items: center; background: #e7f6ed; color: var(--green); display: inline-flex; font-size: 12px; font-weight: 750; gap: 8px; padding: 8px 11px; }
+    .status i { font-size: 11px; }
+    .hero { background: var(--navy); color: white; padding: 32px 36px; }
+    .eyebrow { color: var(--blue); font-size: 11px; font-weight: 800; letter-spacing: .1em; margin: 0 0 8px; text-transform: uppercase; }
+    .hero .eyebrow { color: #8bc5ff; }
+    h1 { font-size: 34px; line-height: 1.15; margin: 0 0 10px; }
+    .hero p { color: #c7d6eb; font-size: 15px; line-height: 1.5; margin: 0; max-width: 900px; }
+    .summary { background: var(--surface); border: 1px solid var(--line); display: grid; grid-template-columns: 2fr repeat(3, 1fr); margin-top: 20px; }
+    .summary > div { border-right: 1px solid var(--line); padding: 18px 20px; }.summary > div:last-child { border-right: 0; }
+    .summary span { color: var(--muted); display: block; font-size: 12px; margin-bottom: 7px; }.summary strong { color: var(--ink); font-size: 18px; }.summary .example { color: var(--blue); font-size: 12px; font-weight: 750; }
+    .layout { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.48fr) minmax(320px, .7fr); margin-top: 20px; }
+    .panel { background: var(--surface); border: 1px solid var(--line); padding: 26px; }.panel-head { align-items: flex-start; display: flex; justify-content: space-between; gap: 20px; margin-bottom: 18px; }.panel h2 { color: var(--ink); font-size: 23px; margin: 2px 0 0; }.stamp { border: 1px solid #b8d8ff; color: var(--blue); font-size: 11px; font-weight: 750; padding: 7px 9px; text-align: center; }.panel-lead { color: #52667f; font-size: 14px; line-height: 1.5; margin: 0 0 20px; }
+    .evidence { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); }.evidence article { background: #fbfdff; border: 1px solid #dbe7f8; min-height: 128px; padding: 14px; }.evidence h3 { color: #31527f; font-size: 12px; margin: 0 0 8px; }.evidence .value { color: var(--ink); font-size: 23px; font-weight: 800; margin-bottom: 6px; }.evidence small { color: var(--muted); display: block; font-size: 11px; line-height: 1.35; }.evidence b { color: var(--green); display: block; font-size: 11px; margin-top: 8px; }
+    .notice { align-items: flex-start; background: #f7faff; border-top: 1px solid #dbe7f8; color: #51647e; display: flex; font-size: 12px; gap: 10px; line-height: 1.5; margin-top: 16px; padding-top: 16px; }.notice i { color: var(--blue); margin-top: 2px; }
+    .metric-list { display: grid; gap: 0; }.metric { align-items: center; border-bottom: 1px solid #e7edf5; display: grid; grid-template-columns: 1fr auto; padding: 12px 0; }.metric:last-child { border-bottom: 0; }.metric span { color: var(--muted); font-size: 13px; }.metric strong { color: var(--ink); font-size: 15px; }.metric em { color: var(--green); font-size: 11px; font-style: normal; font-weight: 750; }.warning { background: #fff9ed; color: var(--amber); font-size: 12px; line-height: 1.45; margin-top: 16px; padding: 13px; }
+    .profiles { background: var(--surface); border: 1px solid var(--line); margin-top: 20px; padding: 26px; }.profiles-intro { color: #52667f; font-size: 14px; line-height: 1.5; margin: 0 0 18px; }.profile-grid { display: grid; gap: 12px; grid-template-columns: repeat(5, minmax(0, 1fr)); }.profile { background: #fbfcfe; border: 1px solid #e0e7f1; display: flex; flex-direction: column; min-height: 260px; padding: 16px; }.profile .firm { color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .08em; margin: 0 0 5px; text-transform: uppercase; }.profile h3 { color: var(--ink); font-size: 17px; margin: 0 0 12px; }.profile p { color: #52667f; font-size: 12px; line-height: 1.45; margin: 0 0 12px; }.profile .label { color: #6e819a; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }.profile a { align-items: center; color: var(--blue); display: inline-flex; font-size: 11px; font-weight: 750; gap: 6px; line-height: 1.35; margin-top: auto; text-decoration: none; }.profile a:hover { text-decoration: underline; }
+    .footer { color: #6e7e94; font-size: 11px; line-height: 1.5; margin-top: 18px; text-align: center; }.footer strong { color: #4a5f7c; }
+    @media (max-width: 1050px) { .layout { grid-template-columns: 1fr; }.profile-grid { grid-template-columns: repeat(3, 1fr); }.summary { grid-template-columns: 1fr 1fr; }.summary > div:nth-child(2) { border-right: 0; } }
+    @media (max-width: 680px) { .shell { padding: 16px; }.topbar { align-items: flex-start; flex-direction: column; gap: 10px; }.hero { padding: 25px 22px; } h1 { font-size: 28px; }.summary, .evidence, .profile-grid { grid-template-columns: 1fr; }.summary > div { border-bottom: 1px solid var(--line); border-right: 0; }.summary > div:last-child { border-bottom: 0; }.panel-head { flex-direction: column; }.profile { min-height: 0; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><div class="brand"><span class="brand-mark"><i class="fas fa-chart-line"></i></span>Portafolio Intel</div><span class="status"><i class="fas fa-shield-alt"></i>Vista estática · datos ficticios</span></header>
+    <section class="hero"><p class="eyebrow">Salud empresa · análisis explicable</p><h1>Compañía Horizonte <span style="font-size: 15px; color: #8bc5ff; font-weight: 700;">EJEMPLO FICTICIO</span></h1><p>Vista previa de la interfaz. Los valores son simulados, se procesan localmente y no constituyen una recomendación de inversión ni una predicción de beneficio.</p></section>
+    <section class="summary"><div><span>Fuente y período</span><strong>Ejemplo ficticio interno · 2026 H1</strong></div><div><span>Cobertura</span><strong>100 %</strong></div><div><span>Divisa</span><strong>EUR</strong></div><div><span>Estado</span><strong class="example">Candidata a investigación</strong></div></section>
+    <div class="layout">
+      <section class="panel"><div class="panel-head"><div><p class="eyebrow">OPORTUNIDAD</p><h2>Candidata a investigación adicional</h2></div><span class="stamp">No es una recomendación</span></div><p class="panel-lead">La cobertura y las señales contables ficticias cumplen las reglas configuradas. La siguiente etapa es contrastar valoración, competencia, riesgos, ciclo y fuentes actualizadas.</p><div class="evidence">
+        <article><h3>Cobertura</h3><div class="value">100 %</div><small>Regla: al menos 80 %</small><b><i class="fas fa-check-circle"></i> Cumple</b></article>
+        <article><h3>ROIC − WACC</h3><div class="value">6,27 %</div><small>Regla: diferencial positivo</small><b><i class="fas fa-check-circle"></i> Cumple</b></article>
+        <article><h3>Deuda neta / EBITDA</h3><div class="value">1,16×</div><small>Regla: inferior a 2,0×</small><b><i class="fas fa-check-circle"></i> Cumple</b></article>
+        <article><h3>Cobertura de intereses</h3><div class="value">8,10×</div><small>Regla: igual o superior a 3,0×</small><b><i class="fas fa-check-circle"></i> Cumple</b></article>
+        <article><h3>Conversión FCF</h3><div class="value">90,48 %</div><small>Regla: igual o superior a 80 %</small><b><i class="fas fa-check-circle"></i> Cumple</b></article>
+        <article><h3>ROE</h3><div class="value">18,00 %</div><small>Referencia: al menos 12 %</small><b><i class="fas fa-check-circle"></i> Cumple</b></article>
+      </div><div class="notice"><i class="fas fa-info-circle"></i><span>La sección nunca calcula una “alta probabilidad de beneficios”. Un estado favorable solo ordena evidencia para una revisión humana adicional.</span></div>
+      </section>
+      <aside class="panel"><div class="panel-head"><div><p class="eyebrow">Ratios clave</p><h2>Contexto de ejemplo</h2></div></div><div class="metric-list">
+        <div class="metric"><span>PER</span><div><strong>13,49×</strong><br><em>Calculable</em></div></div>
+        <div class="metric"><span>EV / EBITDA</span><div><strong>8,15×</strong><br><em>Calculable</em></div></div>
+        <div class="metric"><span>ROIC</span><div><strong>14,27 %</strong><br><em>Calculable</em></div></div>
+        <div class="metric"><span>Margen operativo</span><div><strong>19,58 %</strong><br><em>Calculable</em></div></div>
+        <div class="metric"><span>Conversión FCF</span><div><strong>90,48 %</strong><br><em>Calculable</em></div></div>
+      </div><div class="warning"><i class="fas fa-exclamation-triangle"></i> Los criterios cambian según sector, ciclo, definiciones contables y calidad de la fuente. Revise los estados financieros y la valoración antes de tomar una decisión.</div></aside>
+    </div>
+    <section class="profiles"><div class="panel-head"><div><p class="eyebrow">Referencias de estudio</p><h2>Inversores influyentes: fuentes y gráficos públicos</h2></div><span class="stamp">No son cartera modelo</span></div><p class="profiles-intro">Las tarjetas enlazan a divulgaciones, cartas o fichas oficiales. Las posiciones históricas pueden tener retraso y alcance limitado; no se muestran como señales operativas.</p><div class="profile-grid">
+      <article class="profile"><p class="firm">Berkshire Hathaway</p><h3>Warren Buffett</h3><span class="label">Estilo</span><p>Value investing y calidad a largo plazo.</p><a href="https://www.berkshirehathaway.com/letters/letters.html" target="_blank" rel="noreferrer"><i class="fas fa-external-link-alt"></i>Cartas a accionistas</a></article>
+      <article class="profile"><p class="firm">Renaissance Technologies</p><h3>Jim Simons</h3><span class="label">Estilo</span><p>Trading cuantitativo y modelos matemáticos.</p><a href="https://www.sec.gov/edgar/browse/?CIK=1037389&owner=exclude" target="_blank" rel="noreferrer"><i class="fas fa-external-link-alt"></i>Divulgaciones SEC</a></article>
+      <article class="profile"><p class="firm">Scion Asset Management</p><h3>Michael Burry</h3><span class="label">Estilo</span><p>Inversión contraria y value táctico.</p><a href="https://www.sec.gov/edgar/browse/?CIK=1649339&owner=exclude" target="_blank" rel="noreferrer"><i class="fas fa-external-link-alt"></i>Formulario 13F</a></article>
+      <article class="profile"><p class="firm">Duquesne Family Office</p><h3>Stanley Druckenmiller</h3><span class="label">Estilo</span><p>Macro global y tendencias de liquidez.</p><a href="https://www.sec.gov/edgar/browse/?CIK=1536411&owner=exclude" target="_blank" rel="noreferrer"><i class="fas fa-external-link-alt"></i>Formulario 13F</a></article>
+      <article class="profile"><p class="firm">Fundsmith</p><h3>Terry Smith</h3><span class="label">Estilo</span><p>Quality growth y retorno sobre capital a largo plazo.</p><a href="https://www.fundsmith.co.uk/factsheet/" target="_blank" rel="noreferrer"><i class="fas fa-external-link-alt"></i>Ficha y gráfico público</a></article>
+    </div></section>
+    <footer class="footer"><strong>Privacidad:</strong> esta maqueta no realiza llamadas, no guarda datos y usa exclusivamente información ficticia. Las fuentes enlazadas se consultan manualmente y no desencadenan operaciones.</footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["App.tsx", "main.tsx", "GmtTerminal.tsx", "market-adapters.ts", "price-alerts.ts", "dashboard-preferences.ts", "workspace-realtime-scheduler.ts", "company-fundamentals.ts", "company-fundamentals-export.ts", "influential-investors.ts", "company-fundamentals.test.ts", "market-adapters.test.ts", "price-alerts.test.ts", "dashboard-preferences.test.ts", "workspace-realtime-scheduler.test.ts", "company-fundamentals-export.test.ts", "influential-investors.test.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
