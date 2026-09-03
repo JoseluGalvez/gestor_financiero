@@ -15,11 +15,11 @@ export function isStorageAvailable(): boolean {
   }
 }
 
-export function savePortfolio(portfolio: PortfolioAggregation, password?: string): { success: boolean; error?: string } {
+export async function savePortfolio(portfolio: any, password?: string): Promise<{ success: boolean; error?: string }> {
   if (!isStorageAvailable()) return { success: false, error: "LocalStorage no disponible" };
 
   try {
-    const storage: PortfolioStorage = {
+    const storage: any = {
       version: 1,
       encrypted: !!password,
       data: null,
@@ -45,7 +45,7 @@ export function savePortfolio(portfolio: PortfolioAggregation, password?: string
   }
 }
 
-export function loadPortfolio(password?: string): { success: boolean; data?: PortfolioAggregation; error?: string } {
+export async function loadPortfolio(password?: string): Promise<{ success: boolean; data?: any; error?: string }> {
   if (!isStorageAvailable()) return { success: false, error: "LocalStorage no disponible" };
 
   try {
@@ -66,9 +66,9 @@ export function loadPortfolio(password?: string): { success: boolean; data?: Por
       if (!result.success || !result.data) {
         return { success: false, error: result.error ?? "Error al descifrar" };
       }
-      return { success: true, data: result.data as PortfolioAggregation };
+      return { success: true, data: result.data };
     } else {
-      return { success: true, data: storage.data as PortfolioAggregation };
+      return { success: true, data: storage.data };
     }
   } catch (error) {
     return { success: false, error: error instanceof Error ? error.message : "Error al cargar" };
@@ -93,8 +93,6 @@ export function exportPortfolioData(portfolio: { totalValue: number; totalCostBa
     lastSync: Date.now(),
   };
   if (password) {
-    // encryptPortfolioData is async, for export we'll skip encryption
-    // In a real app, this would be async
     console.warn("Export with password not fully supported in sync mode");
   }
   return JSON.stringify({ ...storage, data: portfolio }, null, 2);

@@ -1,4 +1,4 @@
-import type { UnifiedPosition, UnifiedTransaction, PortfolioAggregation, AllocationBreakdown, AllocationSlice, PerformanceMetrics, CurrencyCode, PlatformId, RawPosition, RawTransaction } from "./portfolio-types";
+import type { UnifiedPosition, UnifiedTransaction, PortfolioAggregation, CurrencyCode, PlatformId, RawPosition, RawTransaction } from "./portfolio-types";
 import { calculateXIRR } from "./portfolio-calculations";
 
 export { calculateXIRR } from "./portfolio-calculations";
@@ -8,7 +8,7 @@ export function aggregatePortfolio(
   transactions: RawTransaction[],
   currentPrices: Map<string, number>,
   fxRates: Map<string, number>,
-  baseCurrency: CurrencyCode = "EUR"
+  baseCurrency: string = "EUR"
 ): PortfolioAggregation {
   const unifiedPositions = buildUnifiedPositions(positions, currentPrices);
   const unifiedTransactions = buildUnifiedTransactions(transactions);
@@ -38,7 +38,7 @@ export function aggregatePortfolio(
 function buildUnifiedPositions(
   positions: RawPosition[],
   currentPrices: Map<string, number>
-): Map<string, UnifiedPosition> {
+): Map<string, any> {
   const groups = new Map<string, RawPosition[]>();
   for (const pos of positions) {
     const key = `${pos.symbol}:${pos.currency}`;
@@ -46,12 +46,12 @@ function buildUnifiedPositions(
     groups.get(key)!.push(pos);
   }
 
-  const unified = new Map<string, UnifiedPosition>();
+  const unified = new Map<string, any>();
   for (const [key, group] of groups) {
     const first = group[0];
     let totalQty = 0;
     let totalCost = 0;
-    const byPlatform = new Map<PlatformId, { quantity: number; averagePrice: number; costBasis: number }>();
+    const byPlatform = new Map<string, { quantity: number; averagePrice: number; costBasis: number }>();
 
     for (const pos of group) {
       totalQty += pos.quantity;
@@ -93,7 +93,7 @@ function buildUnifiedPositions(
   return unified;
 }
 
-function buildUnifiedTransactions(transactions: RawTransaction[]): UnifiedTransaction[] {
+function buildUnifiedTransactions(transactions: RawTransaction[]): any[] {
   return transactions.map((tx, idx) => ({
     id: `tx-${tx.platform}-${tx.date}-${tx.symbol}-${idx}`,
     platform: tx.platform,
@@ -118,7 +118,7 @@ function buildUnifiedTransactions(transactions: RawTransaction[]): UnifiedTransa
 }
 
 function calculateTotalValue(
-  positions: Map<string, UnifiedPosition>,
+  positions: Map<string, any>,
   baseCurrency: string,
   fxRates: Map<string, number>
 ): number {
@@ -133,7 +133,7 @@ function calculateTotalValue(
 }
 
 function calculateTotalCostBasis(
-  positions: Map<string, UnifiedPosition>,
+  positions: Map<string, any>,
   baseCurrency: string,
   fxRates: Map<string, number>
 ): number {
@@ -146,7 +146,7 @@ function calculateTotalCostBasis(
 }
 
 function calculateAllocation(
-  positions: Map<string, UnifiedPosition>,
+  positions: Map<string, any>,
   baseCurrency: string,
   fxRates: Map<string, number>
 ) {
@@ -155,17 +155,16 @@ function calculateAllocation(
   const byPlatform = new Map<string, { value: number; percentage: number; costBasis: number; unrealizedPnl: number; count: number }>();
 
   let totalValue = 0;
-  const positionValues = new Map<string, number>();
 
   for (const pos of positions.values()) {
     if (pos.currentValue === undefined) continue;
-    const rate = (() => { const r = new Map(); r.set("EUR:EUR", 1); r.set("USD:EUR", 0.92); r.set("GBP:EUR", 1.17); return r; })().get(`${pos.currency}:EUR`) ?? 1;
+    const rate = fxRates.get(`${pos.currency}:${baseCurrency}`) ?? 1;
     const valueBase = pos.currentValue * rate;
     totalValue += valueBase;
   }
 
   for (const pos of positions.values()) {
-    const rate = (() => { const r = new Map(); r.set("EUR:EUR", 1); r.set("USD:EUR", 0.92); r.set("GBP:EUR", 1.17); return r; })().get(`${pos.currency}:EUR`) ?? 1;
+    const rate = fxRates.get(`${pos.currency}:${baseCurrency}`) ?? 1;
     const value = (pos.currentValue ?? 0) * rate;
     if (value === 0) continue;
 

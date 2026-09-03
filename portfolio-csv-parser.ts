@@ -1,17 +1,4 @@
-import type {
-  PlatformAdapter,
-  RawPosition,
-  RawTransaction,
-  ImportResult,
-  ImportError,
-  PositionColumns,
-  TransactionColumns,
-  DEFAULT_POSITION_COLUMNS,
-  DEFAULT_TRANSACTION_COLUMNS,
-  PlatformId,
-  AssetClass,
-  TransactionType,
-} from "./portfolio-types";
+import type { PlatformAdapter } from "./portfolio-types";
 
 export function parseCSV(text: string): Record<string, unknown>[] {
   const lines = text.trim().split(/\r?\n/);
@@ -60,14 +47,15 @@ function parseCSVLine(line: string): string[] {
 
 export async function parseXLSX(file: File): Promise<Record<string, unknown>[]> {
   const arrayBuffer = await file.arrayBuffer();
-  const workbook = await import("xlsx").then((XLSX) => XLSX.read(arrayBuffer, { type: "array" }));
+  const XLSX = await import("xlsx");
+  const workbook = XLSX.read(arrayBuffer, { type: "array" });
   const sheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[sheetName];
   const json = XLSX.utils.sheet_to_json(worksheet, { defval: "", raw: false });
   return json as Record<string, unknown>[];
 }
 
-export function detectPlatform(headers: string[], adapters: PlatformAdapter[]): PlatformAdapter | null {
+export function detectPlatform(headers: string[], adapters: any[]): any | null {
   for (const adapter of adapters) {
     if (adapter.detectFormat(headers)) return adapter;
   }
@@ -83,7 +71,7 @@ export function findColumn(headers: string[], candidates: string[]): string | nu
   return null;
 }
 
-export function parseNumber(value: unknown, locale = "es-ES"): number {
+export function parseNumber(value: unknown): number {
   if (value === null || value === undefined || value === "") return NaN;
   if (typeof value === "number") return value;
   const str = String(value).trim();
@@ -121,19 +109,19 @@ export function parseDate(value: unknown): string | null {
   return isNaN(parsed.getTime()) ? null : parsed.toISOString().split("T")[0];
 }
 
-export function mapTransactionType(raw: string, mapping: Record<string, TransactionType>): TransactionType {
+export function mapTransactionType(raw: string, mapping: Record<string, string>): string {
   const normalized = String(raw).toLowerCase().trim();
   return mapping[normalized] ?? "other";
 }
 
 export function buildImportResult(
-  platform: PlatformId,
+  platform: string,
   accountId: string | undefined,
-  positions: RawPosition[],
-  transactions: RawTransaction[],
-  errors: ImportError[],
+  positions: any[],
+  transactions: any[],
+  errors: any[],
   warnings: string[]
-): ImportResult {
+): any {
   return {
     success: errors.filter((e) => e.severity === "error").length === 0,
     positions,
@@ -150,8 +138,8 @@ export function validateRow(
   row: Record<string, unknown>,
   rowNum: number,
   requiredFields: string[]
-): ImportError[] {
-  const errors: ImportError[] = [];
+): { row: number; field?: string; message: string; severity: "error" | "warning" }[] {
+  const errors: { row: number; field?: string; message: string; severity: "error" | "warning" }[] = [];
   for (const field of requiredFields) {
     const value = row[field];
     if (value === undefined || value === null || String(value).trim() === "") {
@@ -174,7 +162,7 @@ export function normalizeSymbolInput(value: string): string {
   return value.toUpperCase().trim().replace(/[^A-Z0-9\.\-]/g, "");
 }
 
-export function inferAssetClass(symbol: string, name?: string, isin?: string): AssetClass {
+export function inferAssetClass(symbol: string, name?: string, isin?: string): string {
   const sym = symbol.toUpperCase();
   const nm = (name ?? "").toUpperCase();
   const is = (isin ?? "").toUpperCase();
@@ -193,16 +181,16 @@ export function inferAssetClass(symbol: string, name?: string, isin?: string): A
   return "equity";
 }
 
-export function createPositionId(platform: PlatformId, accountId: string | undefined, symbol: string): string {
+export function createPositionId(platform: string, accountId: string | undefined, symbol: string): string {
   return `${platform}:${accountId ?? "default"}:${symbol}`.toLowerCase();
 }
 
-export function createTransactionId(platform: PlatformId, accountId: string | undefined, date: string, symbol: string, type: TransactionType, seq: number): string {
+export function createTransactionId(platform: string, accountId: string | undefined, date: string, symbol: string, type: string, seq: number): string {
   return `${platform}:${accountId ?? "default"}:${date}:${symbol}:${type}:${seq}`.toLowerCase();
 }
 
-export function groupPositionsBySymbol(positions: RawPosition[]): Map<string, RawPosition[]> {
-  const groups = new Map<string, RawPosition[]>();
+export function groupPositionsBySymbol(positions: any[]): Map<string, any[]> {
+  const groups = new Map<string, any[]>();
   for (const pos of positions) {
     const key = `${pos.platform}:${pos.symbol}:${pos.currency}`;
     if (!groups.has(key)) groups.set(key, []);
@@ -211,8 +199,8 @@ export function groupPositionsBySymbol(positions: RawPosition[]): Map<string, Ra
   return groups;
 }
 
-export function groupTransactionsBySymbol(transactions: RawTransaction[]): Map<string, RawTransaction[]> {
-  const groups = new Map<string, RawTransaction[]>();
+export function groupTransactionsBySymbol(transactions: any[]): Map<string, any[]> {
+  const groups = new Map<string, any[]>();
   for (const tx of transactions) {
     const key = `${tx.platform}:${tx.symbol}:${tx.currency}`;
     if (!groups.has(key)) groups.set(key, []);
@@ -221,7 +209,7 @@ export function groupTransactionsBySymbol(transactions: RawTransaction[]): Map<s
   return groups;
 }
 
-export function aggregatePositionGroup(group: RawPosition[]): RawPosition {
+export function aggregatePositionGroup(group: any[]): any {
   if (group.length === 1) return group[0];
   let totalQty = 0;
   let totalCost = 0;
@@ -264,4 +252,14 @@ export function parseCSVWithDelimiter(text: string, delimiter = ","): Record<str
     rows.push(row);
   }
   return rows;
+}
+
+export async function parseXLSX(file: File): Promise<Record<string, unknown>[]> {
+  const arrayBuffer = await file.arrayBuffer();
+  const XLSX = await import("xlsx");
+  const workbook = XLSX.read(arrayBuffer, { type: "array" });
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  const json = XLSX.utils.sheet_to_json(worksheet, { defval: "", raw: false });
+  return json as Record<string, unknown>[];
 }

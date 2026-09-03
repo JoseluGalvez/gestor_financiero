@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { savePortfolio, loadPortfolio, clearPortfolio, exportPortfolioData, importPortfolioData } from "./portfolio-storage";
 import { getAllAdapters, parseCSV, parseXLSX, detectPlatform, buildImportResult } from "./portfolio-adapters";
-import { aggregatePortfolio, type PortfolioAggregation } from "./portfolio-aggregation";
-import type { RawPosition, RawTransaction, PlatformAdapter, PlatformId, ImportResult } from "./portfolio-types";
+import { aggregatePortfolio } from "./portfolio-aggregation";
+import type { RawPosition, RawTransaction, PlatformAdapter, PlatformId } from "./portfolio-types";
 
 const SUPPORTED_PLATFORMS = ["degiro", "interactive-brokers", "trade-republic", "myinvestor", "other"] as const;
 
@@ -24,7 +24,7 @@ function formatCurrency(value: number, currency = "EUR"): string {
 
 function PortfolioImporter({ onImportComplete, onError }: { onImportComplete: (result: any) => void; onError: (message: string) => void }) {
   const [file, setFile] = useState<File | null>(null);
-  const [platform, setPlatform] = useState<PlatformId>("other");
+  const [platform, setPlatform] = useState<string>("other");
   const [accountId, setAccountId] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [preview, setPreview] = useState<{ positions: number; transactions: number } | null>(null);
@@ -42,7 +42,7 @@ function PortfolioImporter({ onImportComplete, onError }: { onImportComplete: (r
 
   const handlePreview = useCallback(async () => {
     if (!file) return;
-    const adapter = platform === "other" ? adapters.find((a) => a.platform === "other") : adapters.find((a) => a.platform === platform);
+    const adapter = platform === "other" ? adapters.find((a: any) => a.platform === "other") : adapters.find((a: any) => a.platform === platform);
     if (!adapter) { onError("Plataforma no soportada"); return; }
 
     setIsProcessing(true);
@@ -75,7 +75,7 @@ function PortfolioImporter({ onImportComplete, onError }: { onImportComplete: (r
 
   const handleImport = useCallback(async () => {
     if (!file || !preview) return;
-    const adapter = platform === "other" ? adapters.find((a) => a.platform === "other") : adapters.find((a) => a.platform === platform);
+    const adapter = platform === "other" ? adapters.find((a: any) => a.platform === "other") : adapters.find((a: any) => a.platform === platform);
     if (!adapter) { onError("Plataforma no soportada"); return; }
 
     setIsProcessing(true);
@@ -118,9 +118,9 @@ function PortfolioImporter({ onImportComplete, onError }: { onImportComplete: (r
       <div className="importer-form">
         <div className="form-group">
           <label>Plataforma</label>
-          <select value={platform} onChange={(e) => setPlatform(e.target.value as PlatformId)}>
-            {SUPPORTED_PLATFORMS.map((p) => {
-              const adapter = getAllAdapters().find((a) => a.platform === p);
+          <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
+            {["degiro", "interactive-brokers", "trade-republic", "myinvestor", "other"].map((p) => {
+              const adapter = getAllAdapters().find((a: any) => a.platform === p);
               return <option key={p} value={p}>{adapter?.name ?? p}</option>;
             })}
           </select>
@@ -196,8 +196,6 @@ function AllocationChart({ data }: { data: Map<string, { value: number; percenta
     .sort((a, b) => b[1].value - a[1].value);
 
   if (entries.length === 0) return <p className="empty">Sin datos</p>;
-
-  const total = entries.reduce((sum, [, v]) => sum + v.value, 0);
 
   return (
     <div className="allocation-chart">
@@ -388,10 +386,11 @@ function PortfolioModule() {
   const [importFile, setImportFile] = useState<File | null>(null);
 
   useEffect(() => {
-    const result = loadPortfolio();
-    if (result.success && result.data) {
-      setPortfolio(result.data);
-    }
+    loadPortfolio().then((result) => {
+      if (result.success && result.data) {
+        setPortfolio(result.data);
+      }
+    });
   }, []);
 
   const handleImportComplete = useCallback((result: any) => {

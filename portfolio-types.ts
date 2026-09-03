@@ -318,3 +318,106 @@ export interface EncryptedPortfolioData {
   keyDerivation: "PBKDF2";
   iterations: number;
 }
+
+// Supabase data contracts (from architecture docs)
+export interface DataSource {
+  id: string;
+  owner_id: string;
+  provider: string;
+  status: string;
+  last_success_at: string | null;
+  schema_version: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SyncRun {
+  id: string;
+  source_id: string;
+  trigger: string;
+  started_at: string;
+  status: string;
+  accepted_rows: number;
+  rejected_rows: number;
+  checksum: string;
+  completed_at: string | null;
+}
+
+export interface Transaction {
+  id: string;
+  external_id: string;
+  occurred_at: string;
+  kind: string;
+  quantity: number;
+  gross_amount: number;
+  fees: number;
+  currency: string;
+  source_run_id: string;
+  instrument_id: string;
+  created_at: string;
+}
+
+export interface Position {
+  id: string;
+  instrument_id: string;
+  quantity: number;
+  cost_basis: number;
+  as_of: string;
+  portfolio_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MarketQuote {
+  id: string;
+  instrument_id: string;
+  price: number;
+  currency: string;
+  provider: string;
+  provider_at: string;
+  observed_at: string;
+  delay_seconds: number;
+  license_scope: string;
+}
+
+export interface PortfolioSnapshot {
+  id: string;
+  portfolio_id: string;
+  as_of: string;
+  market_value: number;
+  gain: number;
+  return_pct: number;
+  source_version: string;
+  created_at: string;
+}
+
+export interface Alert {
+  id: string;
+  rule_id: string;
+  fingerprint: string;
+  severity: string;
+  status: string;
+  triggered_at: string;
+  payload_version: number;
+}
+
+export interface ReportRun {
+  id: string;
+  report_type: string;
+  period_start: string;
+  period_end: string;
+  input_snapshot: string;
+  status: string;
+  storage_path: string | null;
+  created_at: string;
+}
+
+export interface AuditEvent {
+  id: string;
+  actor_id: string;
+  action: string;
+  entity_type: string;
+  entity_id: string;
+  created_at: string;
+  metadata: Record<string, unknown>;
+}

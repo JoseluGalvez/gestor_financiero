@@ -14,7 +14,7 @@ export interface EncryptedData {
 
 export interface CryptoResult {
   success: boolean;
-  data?: EncryptedData | string;
+  data?: { iv: string; ciphertext: string; salt: string };
   error?: string;
 }
 
@@ -55,7 +55,7 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
   );
 }
 
-export async function encryptData(data: string, password: string): Promise<CryptoResult> {
+export async function encryptData(data: string, password: string): Promise<{ success: boolean; data?: { iv: string; ciphertext: string; salt: string }; error?: string }> {
   try {
     const salt = crypto.getRandomValues(new Uint8Array(16));
     const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -124,13 +124,12 @@ export function generateRandomPassword(length = 32): string {
   return Array.from(array, (byte) => chars[byte % chars.length]).join("");
 }
 
-export function hashPassword(password: string): Promise<string> {
+export async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
-  return crypto.subtle.digest("SHA-256", data).then((hash) => {
-    const bytes = new Uint8Array(hash);
-    return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
-  });
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  const bytes = new Uint8Array(hash);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export function verifyPasswordHash(password: string, hash: string): Promise<boolean> {
