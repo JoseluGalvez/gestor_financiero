@@ -34,8 +34,8 @@ export function calculateKelly(
 }
 
 export function calculateKellyFromScenario(scenario: KellyScenario): number {
-  if (scenario.winEdge <= 0 || scenario.lossEdge <= 0) return 0;
-  return scenario.probabilityWin - (1 - scenario.probabilityWin) * scenario.lossEdge / scenario.winEdge;
+  if (scenario.payoffWin <= 0 || scenario.payoffLoss <= 0) return 0;
+  return scenario.probabilityWin - (1 - scenario.probabilityWin) * (scenario.payoffLoss / scenario.payoffWin);
 }
 
 export function calculateConservativeKelly(fullKelly: number, reductionFactor: number = 0.5): number {
@@ -46,7 +46,6 @@ export function analyzeKelly(inputs: KellyInputs): KellyResult {
   const warnings: string[] = [];
 
   if (inputs.scenarios && inputs.scenarios.length > 0) {
-    const totalEdge = inputs.scenarios.reduce((sum, s) => sum + s.edge, 0);
     const averageWinEdge = inputs.scenarios.reduce((sum, s) => sum + s.payoffWin, 0) / inputs.scenarios.length;
     const averageLossEdge = inputs.scenarios.reduce((sum, s) => sum + s.payoffLoss, 0) / inputs.scenarios.length;
 

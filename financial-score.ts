@@ -3,7 +3,7 @@ export type ScoreFactor = {
   weight: number;
   value: number | null;
   description: string;
-  source: string;
+  source?: string;
 };
 
 export type ScoreResult = {

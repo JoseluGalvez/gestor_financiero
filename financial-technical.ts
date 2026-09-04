@@ -154,7 +154,6 @@ function determineRSIStatus(rsi: number | null): "overbought" | "oversold" | "ne
 
 export function analyzeTechnical(ohlcv: OHLCV[]): TechnicalAnalysis {
   const closes = ohlcv.map(d => d.close);
-  const volumes = ohlcv.map(d => d.volume).filter((v): v is number => v !== undefined);
 
   const sma20 = calculateSMA(closes, 20);
   const sma50 = calculateSMA(closes, 50);
@@ -166,8 +165,6 @@ export function analyzeTechnical(ohlcv: OHLCV[]): TechnicalAnalysis {
   const bb = calculateBB(ohlcv);
 
   const lastClose = closes[closes.length - 1];
-  const lastHigh = Math.max(...ohlcv.map(d => d.high));
-  const lastLow = Math.min(...ohlcv.map(d => d.low));
 
   const indicators: TechnicalIndicator[] = [
     {
@@ -225,9 +222,13 @@ export function analyzeTechnical(ohlcv: OHLCV[]): TechnicalAnalysis {
     sma20,
     sma50,
     sma200,
-    macd: macd ?? { macdLine: 0, signalLine: 0, histogram: 0, signal: "neutral" },
+    macd: macd
+      ? { ...macd, signal: macd.histogram > 0 ? ("bullish" as const) : macd.histogram < 0 ? ("bearish" as const) : ("neutral" as const) }
+      : { macdLine: 0, signalLine: 0, histogram: 0, signal: "neutral" as const },
     rsi: { value: rsi, signal: determineRSIStatus(rsi) },
-    bollinger: bb ?? { upper: 0, middle: 0, lower: 0, width: 0, position: "within" },
+    bollinger: bb && lastClose !== undefined
+      ? { ...bb, width: bb.upper - bb.lower, position: (lastClose > bb.upper ? "above" : lastClose < bb.lower ? "below" : "within") as "above" | "below" | "within" }
+      : { upper: 0, middle: 0, lower: 0, width: 0, position: "within" as const },
     atr,
     indicators,
   };

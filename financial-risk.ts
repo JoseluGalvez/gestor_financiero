@@ -22,7 +22,7 @@ export type RiskAnalysisParams = {
   riskFreeRate?: number;
 };
 
-function calculateReturnSeries(values: number[]): number[] {
+export function calculateReturnSeries(values: number[]): number[] {
   const returns: number[] = [];
   for (let i = 1; i < values.length; i++) {
     if (values[i - 1] !== 0) {
@@ -127,8 +127,6 @@ export function calculateWinRate(trades: { profit: number }[]): number | null {
 }
 
 export function analyzeRisk(params: RiskAnalysisParams): RiskMetrics {
-  const returns = calculateReturnSeries(params.returns);
-
   const volatility = calculateVolatility(params.returns, true);
   const sharpeRatio = calculateSharpeRatio(params.returns, params.riskFreeRate ?? 0, true);
   const maxDrawdown = calculateMaxDrawdown(params.returns);

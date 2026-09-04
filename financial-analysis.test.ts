@@ -73,12 +73,12 @@ describe('financial-score', () => {
   });
 });
 
-import { calculateDCF, type DCFInput } from './financial-dcf';
+import { calculateDCF, type FCFInput } from './financial-dcf';
 
 describe('financial-dcf', () => {
   describe('calculateDCF', () => {
     it('calculates DCF with valid inputs', () => {
-      const input: DCFInput = {
+      const input: FCFInput = {
         year1: 1000000,
         growthRates: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
         terminalGrowthRate: 0.03,
@@ -93,7 +93,7 @@ describe('financial-dcf', () => {
     });
 
     it('flags warning when WACC <= terminal growth', () => {
-      const input: DCFInput = {
+      const input: FCFInput = {
         year1: 1000000,
         growthRates: [0.1, 0.1, 0.1],
         terminalGrowthRate: 0.15,
