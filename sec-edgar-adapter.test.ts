@@ -4,7 +4,12 @@ import {
   fetchEdgarCompanyFacts,
   parseEdgarFacts,
   extractLatestAsOf,
+  searchEdgarTickers,
+  loadCachedEdgarTickers,
+  saveCachedEdgarTickers,
+  EDGAR_TICKERS_CACHE_KEY,
   type EdgarCompanyFacts,
+  type EdgarTickerEntry,
 } from './sec-edgar-adapter';
 
 afterEach(() => {
@@ -144,6 +149,114 @@ describe('sec-edgar-adapter', () => {
     it('returns today when no facts', () => {
       const date = extractLatestAsOf(null);
       expect(date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    });
+  });
+
+  describe('searchEdgarTickers', () => {
+    const dir: EdgarTickerEntry[] = [
+      { cik: 320193, ticker: 'AAPL', title: 'Apple Inc.' },
+      { cik: 789019, ticker: 'MSFT', title: 'Microsoft Corp.' },
+      { cik: 1318605, ticker: 'TSLA', title: 'Tesla, Inc.' },
+    ];
+
+    it('matches by ticker prefix', () => {
+      const result = searchEdgarTickers(dir, 'aa');
+      expect(result).toHaveLength(1);
+      expect(result[0].ticker).toBe('AAPL');
+    });
+
+    it('matches by company name', () => {
+      const result = searchEdgarTickers(dir, 'tesla');
+      expect(result[0].ticker).toBe('TSLA');
+    });
+
+    it('respects the limit and empty query', () => {
+      expect(searchEdgarTickers(dir, '')).toHaveLength(0);
+      expect(searchEdgarTickers(dir, 'a', 1)).toHaveLength(1);
+    });
+  });
+
+  describe('ticker directory cache', () => {
+    function fakeStorage(): { store: Record<string, string>; getItem(k: string): string | null; setItem(k: string, v: string): void } {
+      const store: Record<string, string> = {};
+      return {
+        store,
+        getItem: (k) => store[k] ?? null,
+        setItem: (k, v) => { store[k] = v; },
+      };
+    }
+
+    const entries: EdgarTickerEntry[] = [{ cik: 320193, ticker: 'AAPL', title: 'Apple Inc.' }];
+
+    it('round-trips entries within TTL', () => {
+      const storage = fakeStorage();
+      saveCachedEdgarTickers(storage, entries, 1000);
+      expect(storage.store[EDGAR_TICKERS_CACHE_KEY]).toBeDefined();
+      const loaded = loadCachedEdgarTickers(storage, 1000 + 60_000);
+      expect(loaded).toEqual(entries);
+    });
+
+    it('expires entries older than TTL', () => {
+      const storage = fakeStorage();
+      saveCachedEdgarTickers(storage, entries, 0);
+      expect(loadCachedEdgarTickers(storage, 48 * 60 * 60 * 1000)).toBeNull();
+    });
+
+    it('returns null on corrupted JSON', () => {
+      const storage = fakeStorage();
+      storage.setItem(EDGAR_TICKERS_CACHE_KEY, 'not json{');
+      expect(loadCachedEdgarTickers(storage)).toBeNull();
+    });
+  });
+
+  describe('parseEdgarFacts improvements', () => {
+    it('computes EBITDA as EBIT + D&A when no explicit EBITDA tag', () => {
+      const facts: EdgarCompanyFacts = {
+        cik: 1,
+        entityName: 'EBITDA Co',
+        facts: {
+          'us-gaap': {
+            OperatingIncomeLoss: { units: { USD: [{ start: '2024-01-01', end: '2024-12-31', val: 10_000_000, form: '10-K' }] } },
+            DepreciationDepletionAndAmortization: { units: { USD: [{ start: '2024-01-01', end: '2024-12-31', val: 4_000_000, form: '10-K' }] } },
+          },
+        },
+      };
+      const result = parseEdgarFacts(facts, 'EBITDACO', '2024-12-31');
+      expect(result.ebit).toBe(10_000_000);
+      expect(result.ebitda).toBe(14_000_000);
+    });
+
+    it('computes taxRate from income tax / pretax income', () => {
+      const facts: EdgarCompanyFacts = {
+        cik: 1,
+        entityName: 'Tax Co',
+        facts: {
+          'us-gaap': {
+            IncomeTaxExpenseBenefit: { units: { USD: [{ start: '2024-01-01', end: '2024-12-31', val: 250_000, form: '10-K' }] } },
+            IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest: {
+              units: { USD: [{ start: '2024-01-01', end: '2024-12-31', val: 1_000_000, form: '10-K' }] },
+            },
+          },
+        },
+      };
+      const result = parseEdgarFacts(facts, 'TAXCO', '2024-12-31');
+      expect(result.taxRate).toBeCloseTo(0.25, 4);
+    });
+
+    it('sums debt components when LongTermDebt is absent', () => {
+      const facts: EdgarCompanyFacts = {
+        cik: 1,
+        entityName: 'Debt Co',
+        facts: {
+          'us-gaap': {
+            LongTermDebtNoncurrent: { units: { USD: [{ end: '2024-12-31', val: 8_000_000, form: '10-K' }] } },
+            LongTermDebtCurrent: { units: { USD: [{ end: '2024-12-31', val: 1_500_000, form: '10-K' }] } },
+            ShortTermBorrowings: { units: { USD: [{ end: '2024-12-31', val: 500_000, form: '10-K' }] } },
+          },
+        },
+      };
+      const result = parseEdgarFacts(facts, 'DEBTCO', '2024-12-31');
+      expect(result.totalDebt).toBe(10_000_000);
     });
   });
 });

@@ -1929,3 +1929,41 @@ select:disabled {
     width: 100%;
   }
 }
+
+/* SEC EDGAR auto-load */
+.edgar-section {
+  border: 1px solid var(--color-primary-light, #dbeafe);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.04), transparent);
+}
+
+.edgar-search-row {
+  display: flex;
+  gap: var(--spacing-sm, 8px);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.edgar-search-row input {
+  flex: 1;
+  min-width: 220px;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #d4d8e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.edgar-search-row input:focus {
+  outline: 2px solid var(--color-primary, #2563eb);
+  outline-offset: 1px;
+}
+
+.edgar-status {
+  margin-top: var(--spacing-sm, 8px);
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.edgar-status-loading { background: #eef2ff; color: #3730a3; }
+.edgar-status-ok { background: #ecfdf5; color: #065f46; }
+.edgar-status-error { background: #fef2f2; color: #991b1b; }

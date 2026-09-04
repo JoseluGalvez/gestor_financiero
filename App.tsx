@@ -6,7 +6,27 @@ import { buildAnalysisReportHtml } from './report-pdf';
 import { buildComparisonRows, comparisonHighlights, formatComparisonValue } from './comparison';
 import { TrendChart } from './TrendChart';
 import GmtTerminal from './GmtTerminal';
+import {
+  fetchEdgarTickers,
+  fetchEdgarCompanyFacts,
+  parseEdgarFacts,
+  extractLatestAsOf,
+  searchEdgarTickers,
+  loadCachedEdgarTickers,
+  saveCachedEdgarTickers,
+  type EdgarAdapterConfig,
+  type EdgarTickerEntry,
+} from './sec-edgar-adapter';
 // PortfolioModule se carga dinámicamente para evitar errores TS en archivos portfolio-*
+
+// En desarrollo usamos el proxy de Vite (SEC exige User-Agent declarado y no admite CORS).
+// En producción estas rutas deben servirse desde el adaptador backend correspondiente.
+const EDGAR_CONFIG: EdgarAdapterConfig | undefined = import.meta.env.DEV
+  ? {
+      tickersUrl: '/api/sec-www/files/company_tickers.json',
+      factsBaseUrl: '/api/sec-data/api/xbrl',
+    }
+  : undefined;
 
 type AppView = 'fundamentals' | 'gmt' | 'portfolio';
 
@@ -241,6 +261,78 @@ function Form({ onAnalyze }: { onAnalyze: (input: CompanyFundamentalsInput) => v
   const [formData, setFormData] = useState<Partial<Record<CompanyFundamentalFieldKey, string>>>({});
   const [general, setGeneral] = useState({ companyName: '', asOf: '', currency: 'EUR', sourceLabel: '' });
   const [errors, setErrors] = useState<Partial<Record<CompanyFundamentalFieldKey, string>>>({});
+  const [tickerQuery, setTickerQuery] = useState('');
+  const [tickerDir, setTickerDir] = useState<EdgarTickerEntry[] | null>(null);
+  const [edgarStatus, setEdgarStatus] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');
+  const [edgarMsg, setEdgarMsg] = useState('');
+
+  const suggestions: EdgarTickerEntry[] =
+    tickerDir && tickerQuery.trim().length >= 1 ? searchEdgarTickers(tickerDir, tickerQuery) : [];
+
+  const ensureTickerDir = async (): Promise<EdgarTickerEntry[]> => {
+    if (tickerDir) return tickerDir;
+    const cached = loadCachedEdgarTickers(window.localStorage);
+    if (cached && cached.length > 0) {
+      setTickerDir(cached);
+      return cached;
+    }
+    const fresh = await fetchEdgarTickers(EDGAR_CONFIG);
+    saveCachedEdgarTickers(window.localStorage, fresh);
+    setTickerDir(fresh);
+    return fresh;
+  };
+
+  const loadFromEdgar = async () => {
+    const query = tickerQuery.trim().toUpperCase();
+    if (!query) {
+      setEdgarStatus('error');
+      setEdgarMsg('Escribe un ticker o nombre (ej. AAPL, Microsoft).');
+      return;
+    }
+    try {
+      setEdgarStatus('loading');
+      setEdgarMsg('Consultando SEC EDGAR…');
+      const dir = await ensureTickerDir();
+      const entry =
+        dir.find((item) => item.ticker.toUpperCase() === query) ??
+        searchEdgarTickers(dir, query, 1)[0];
+      if (!entry) {
+        setEdgarStatus('error');
+        setEdgarMsg(`No se encontró "${query}" en el directorio SEC.`);
+        return;
+      }
+      const facts = await fetchEdgarCompanyFacts(entry.cik, EDGAR_CONFIG);
+      const asOf = extractLatestAsOf(facts);
+      const input = parseEdgarFacts(facts, entry.ticker, asOf);
+      const toStr = (v: number | null | undefined) => (v === null || v === undefined || !Number.isFinite(v) ? '' : String(v));
+      setFormData({
+        sharesOutstanding: toStr(input.sharesOutstanding),
+        netIncome: toStr(input.netIncome),
+        revenue: toStr(input.revenue),
+        costOfRevenue: toStr(input.costOfRevenue),
+        ebit: toStr(input.ebit),
+        ebitda: toStr(input.ebitda),
+        freeCashFlow: toStr(input.freeCashFlow),
+        equity: toStr(input.equity),
+        totalDebt: toStr(input.totalDebt),
+        cashAndEquivalents: toStr(input.cashAndEquivalents),
+        interestExpense: toStr(input.interestExpense),
+        taxRate: toStr(input.taxRate),
+      });
+      setGeneral({
+        companyName: input.companyName,
+        asOf,
+        currency: input.currency,
+        sourceLabel: `SEC EDGAR XBRL (${entry.ticker})`,
+      });
+      setErrors({});
+      setEdgarStatus('ok');
+      setEdgarMsg(`Datos cargados: ${entry.title} (CIK ${entry.cik}, corte ${asOf}). Revisa y añade el precio actual antes de analizar.`);
+    } catch (err) {
+      setEdgarStatus('error');
+      setEdgarMsg(`No se pudo cargar desde SEC EDGAR: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  };
 
   const validateField = (key: CompanyFundamentalFieldKey, value: string): string | undefined => {
     if (!value) return undefined;
@@ -298,6 +390,43 @@ function Form({ onAnalyze }: { onAnalyze: (input: CompanyFundamentalsInput) => v
 
   return (
     <form className="analysis-form" onSubmit={handleSubmit}>
+      <section className="form-section edgar-section">
+        <h3>Carga automática · SEC EDGAR (empresas US)</h3>
+        <p className="field-help">
+          Introduce un ticker o nombre de empresa cotizada en EE. UU. Los datos provienen de los filings XBRL oficiales de la SEC.
+          El precio de mercado no está en EDGAR; introdúcelo manualmente tras la carga.
+        </p>
+        <div className="edgar-search-row">
+          <input
+            type="text"
+            value={tickerQuery}
+            onChange={(e) => setTickerQuery(e.target.value)}
+            onFocus={() => { void ensureTickerDir(); }}
+            placeholder="Ej. AAPL, MSFT, Tesla…"
+            list="edgar-ticker-suggestions"
+            aria-label="Ticker o nombre de empresa en SEC EDGAR"
+          />
+          <datalist id="edgar-ticker-suggestions">
+            {suggestions.map((entry) => (
+              <option key={entry.cik} value={entry.ticker}>{entry.title}</option>
+            ))}
+          </datalist>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => void loadFromEdgar()}
+            disabled={edgarStatus === 'loading'}
+          >
+            {edgarStatus === 'loading' ? 'Cargando…' : 'Cargar desde SEC'}
+          </button>
+        </div>
+        {edgarMsg && (
+          <p className={`edgar-status edgar-status-${edgarStatus}`} role="status">
+            {edgarMsg}
+          </p>
+        )}
+      </section>
+
       <section className="form-section">
         <h3>Datos Generales</h3>
         <div className="general-fields">
