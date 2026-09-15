@@ -19,6 +19,7 @@ import {
   type AlertCondition,
   type PriceAlert,
 } from './price-alerts';
+import MarketsView from './MarketsView';
 import {
   isFavorite,
   loadPreferences,
@@ -925,7 +926,7 @@ export default function GmtTerminal() {
       </header>
 
       <nav className="gmt-tabs" role="tablist" aria-label="Secciones del terminal">
-        {(['overview', 'fx', 'alerts', 'watchlist'] as TabId[]).map((v) => (
+        {(['overview', 'markets', 'fx', 'alerts', 'watchlist'] as TabId[]).map((v) => (
           <button
             key={v}
             role="tab"
@@ -933,7 +934,7 @@ export default function GmtTerminal() {
             className={prefs.activeTab === v ? 'gmt-tab active' : 'gmt-tab'}
             onClick={() => setActiveTab(v)}
           >
-            {v === 'overview' ? 'OVERVIEW' : v === 'fx' ? 'FX / ÍNDICES' : v === 'alerts' ? `ALERTAS${alerts.filter((a) => a.status === 'triggered').length > 0 ? ' ●' : ''}` : `WATCHLIST${prefs.watchlist.length > 0 ? ` (${prefs.watchlist.length})` : ''}`}
+            {v === 'overview' ? 'OVERVIEW' : v === 'markets' ? 'MERCADOS' : v === 'fx' ? 'FX / ÍNDICES' : v === 'alerts' ? `ALERTAS${alerts.filter((a) => a.status === 'triggered').length > 0 ? ' ●' : ''}` : `WATCHLIST${prefs.watchlist.length > 0 ? ` (${prefs.watchlist.length})` : ''}`}
           </button>
         ))}
       </nav>
@@ -961,6 +962,8 @@ export default function GmtTerminal() {
           })}
 
         {prefs.activeTab === 'fx' && <FxAndIndicesView quotes={quotes} favorites={prefs.watchlist} onToggleFavorite={toggleFav} />}
+
+        {prefs.activeTab === 'markets' && <MarketsView quotes={quotes} />}
 
         {prefs.activeTab === 'alerts' && (
           <AlertsPanel

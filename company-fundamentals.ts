@@ -36,6 +36,17 @@ export type CompanyFundamentalsInput = {
   freeCashFlow?: number | null;
   taxRate?: number | null;
   wacc?: number | null;
+  riskFreeRate?: number;
+  beta?: number;
+  marketRiskPremium?: number;
+  revenueSource?: string;
+  revenueForm?: string;
+  revenueFp?: string;
+  revenueFiled?: string;
+  netIncomeSource?: string;
+  netIncomeForm?: string;
+  netIncomeFp?: string;
+  netIncomeFiled?: string;
 };
 
 export type MetricStatus = "available" | "missing" | "not_meaningful";
@@ -53,6 +64,7 @@ export type CompanyFundamentalMetric = {
   requiredInputs: string[];
   source: string;
   warning: string | null;
+  provenance: string; // "XBRL tag · FY2024 · Form 10-K · filed 2024-11-01"
 };
 
 export type FinancialHealthSignal = {
@@ -110,6 +122,7 @@ function metric(
   requiredInputs: string[],
   value: number | null,
   warning: string | null = null,
+  provenance: string = ''
 ): CompanyFundamentalMetric {
   return {
     key,
@@ -123,6 +136,7 @@ function metric(
     requiredInputs,
     source: FORMULA_SOURCE,
     warning,
+    provenance,
   };
 }
 
@@ -172,6 +186,11 @@ function buildOpportunity(metrics: CompanyFundamentalMetric[], coveragePct: numb
 
 export function calculateCompanyFundamentals(input: CompanyFundamentalsInput): CompanyFundamentalsAnalysis {
   const warnings: string[] = [];
+  
+  const calculatedWacc = input.riskFreeRate !== undefined && input.beta !== undefined && input.marketRiskPremium !== undefined
+    ? input.riskFreeRate + input.beta * input.marketRiskPremium
+    : input.wacc;
+  
   const marketCapitalization = positive(input.marketCapitalization)
     ? input.marketCapitalization
     : positive(input.pricePerShare) && positive(input.sharesOutstanding)
@@ -275,6 +294,7 @@ export function calculateCompanyFundamentals(input: CompanyFundamentalsInput): C
       ["Beneficio neto", "Patrimonio neto positivo"],
       finite(input.netIncome) && positive(input.equity) ? (input.netIncome / input.equity) * 100 : null,
       positive(input.equity) ? (finite(input.netIncome) ? null : "Se requiere beneficio neto.") : "El ROE no es significativo con patrimonio neto nulo o negativo.",
+      `XBRL ${input.netIncomeSource ?? ''}`
     ),
     metric(
       "roic",
@@ -295,8 +315,8 @@ export function calculateCompanyFundamentals(input: CompanyFundamentalsInput): C
       "Diferencial = ROIC − WACC",
       "Compara el retorno sobre capital invertido con el coste de capital introducido. Es un indicador de creación o destrucción de valor bajo esos supuestos.",
       ["ROIC", "WACC"],
-      nopat !== null && positive(investedCapital) && finite(input.wacc) && input.wacc >= 0 && input.wacc <= 1 ? ((nopat / investedCapital) - input.wacc) * 100 : null,
-      finite(input.wacc) && (input.wacc < 0 || input.wacc > 1) ? "El WACC debe introducirse entre 0 % y 100 %." : "Se requieren ROIC calculable y WACC opcional para calcular el diferencial.",
+      nopat !== null && positive(investedCapital) && finite(calculatedWacc) && calculatedWacc >= 0 && calculatedWacc <= 1 ? ((nopat / investedCapital) - calculatedWacc) * 100 : null,
+      finite(calculatedWacc) && (calculatedWacc < 0 || calculatedWacc > 1) ? "El WACC debe introducirse entre 0 % y 100 %." : "Se requieren ROIC calculable y WACC opcional para calcular el diferencial.",
     ),
     metric(
       "grossMargin",
@@ -308,6 +328,7 @@ export function calculateCompanyFundamentals(input: CompanyFundamentalsInput): C
       ["Ventas positivas", "Coste de ventas"],
       positive(input.revenue) && finite(input.costOfRevenue) ? ((input.revenue - input.costOfRevenue) / input.revenue) * 100 : null,
       positive(input.revenue) ? (finite(input.costOfRevenue) ? null : "Se requiere coste de ventas.") : "Se requieren ventas positivas.",
+      `XBRL ${input.revenueSource ?? ''} · FY${input.revenueFp ?? ''} · Form ${input.revenueForm ?? ''} · filed ${input.revenueFiled ?? ''}`
     ),
     metric(
       "operatingMargin",
@@ -419,6 +440,9 @@ export const COMPANY_FUNDAMENTAL_FIELDS = [
   { key: "interestExpense", label: "Gastos financieros por intereses", group: "Capital y deuda", requiredFor: "Cobertura de intereses" },
   { key: "taxRate", label: "Tasa fiscal (%)", group: "Supuestos", requiredFor: "ROIC" },
   { key: "wacc", label: "WACC (%)", group: "Supuestos", requiredFor: "Diferencial ROIC − WACC" },
+  { key: "riskFreeRate", label: "Tasa libre de riesgo (%)", group: "CAPM", requiredFor: "Cálculo automático WACC" },
+  { key: "beta", label: "Beta", group: "CAPM", requiredFor: "Cálculo automático WACC" },
+  { key: "marketRiskPremium", label: "Prima de riesgo de mercado (%)", group: "CAPM", requiredFor: "Cálculo automático WACC" },
 ] as const;
 
 export type CompanyFundamentalFieldKey = (typeof COMPANY_FUNDAMENTAL_FIELDS)[number]["key"];

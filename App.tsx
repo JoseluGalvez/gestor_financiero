@@ -6,17 +6,25 @@ import { buildAnalysisReportHtml } from './report-pdf';
 import { buildComparisonRows, comparisonHighlights, formatComparisonValue } from './comparison';
 import { TrendChart } from './TrendChart';
 import GmtTerminal from './GmtTerminal';
+import ComparativaFuncionalidades from './ComparativaFuncionalidades';
+import InformeSection from './InformeSection';
 import {
-  fetchEdgarTickers,
-  fetchEdgarCompanyFacts,
   parseEdgarFacts,
   extractLatestAsOf,
-  searchEdgarTickers,
-  loadCachedEdgarTickers,
-  saveCachedEdgarTickers,
+  fetchEdgarCompanyFacts,
   type EdgarAdapterConfig,
+  type EdgarCompanyFacts,
   type EdgarTickerEntry,
 } from './sec-edgar-adapter';
+import { useEdgarTickers, useEdgarSearch } from './src/hooks/useEdgar';
+import {
+  buildAnnualSeries,
+  annualSeriesToMetricPoints,
+  HISTORY_METRIC_LABELS,
+  type HistoryMetricKey,
+} from './financial-history';
+import { buildAccountingQualityReport, type QualityCheck } from './financial-quality';
+import { calculateDCF, buildSensitivityMatrix } from './financial-dcf';
 // PortfolioModule se carga dinámicamente para evitar errores TS en archivos portfolio-*
 
 // En desarrollo usamos el proxy de Vite (SEC exige User-Agent declarado y no admite CORS).
@@ -28,13 +36,14 @@ const EDGAR_CONFIG: EdgarAdapterConfig | undefined = import.meta.env.DEV
     }
   : undefined;
 
-type AppView = 'fundamentals' | 'gmt' | 'portfolio';
+type AppView = 'fundamentals' | 'gmt' | 'portfolio' | 'comparativa' | 'informe';
 
 const FIELD_GROUPS = [
   { group: 'Mercado y capital', fields: ['pricePerShare', 'sharesOutstanding', 'marketCapitalization'] as CompanyFundamentalFieldKey[] },
   { group: 'Resultados', fields: ['netIncome', 'revenue', 'costOfRevenue', 'ebit', 'ebitda', 'freeCashFlow'] as CompanyFundamentalFieldKey[] },
   { group: 'Capital y deuda', fields: ['equity', 'totalDebt', 'cashAndEquivalents', 'interestExpense'] as CompanyFundamentalFieldKey[] },
   { group: 'Supuestos', fields: ['taxRate', 'wacc'] as CompanyFundamentalFieldKey[] },
+  { group: 'CAPM', fields: ['riskFreeRate', 'beta', 'marketRiskPremium'] as CompanyFundamentalFieldKey[] },
 ];
 
 const FIELD_LABELS: Record<CompanyFundamentalFieldKey, string> = {
@@ -53,6 +62,9 @@ const FIELD_LABELS: Record<CompanyFundamentalFieldKey, string> = {
   interestExpense: 'Gastos financieros por intereses',
   taxRate: 'Tasa fiscal (%)',
   wacc: 'WACC (%)',
+  riskFreeRate: 'Tasa libre de riesgo (%)',
+  beta: 'Beta',
+  marketRiskPremium: 'Prima de riesgo de mercado (%)',
 };
 
 const FIELD_HELP: Record<CompanyFundamentalFieldKey, string> = {
@@ -71,6 +83,9 @@ const FIELD_HELP: Record<CompanyFundamentalFieldKey, string> = {
   interestExpense: 'Gastos por intereses en la cuenta de resultados',
   taxRate: 'Tipo impositivo efectivo (ej. 0.25 para 25%)',
   wacc: 'Coste medio ponderado de capital (ej. 0.08 para 8%)',
+  riskFreeRate: 'Tasa libre de riesgo (ej. 0.035 para 3.5%)',
+  beta: 'Beta de la acción (volatilidad relativa)',
+  marketRiskPremium: 'Prima de riesgo de mercado (ej. 0.055 para 5.5%)',
 };
 
 const FIELD_STEP: Record<CompanyFundamentalFieldKey, number> = {
@@ -89,6 +104,9 @@ const FIELD_STEP: Record<CompanyFundamentalFieldKey, number> = {
   interestExpense: 1000,
   taxRate: 0.01,
   wacc: 0.01,
+  riskFreeRate: 0.001,
+  beta: 0.1,
+  marketRiskPremium: 0.01,
 };
 
 function InputField({ key, value, onChange, error }: { key: CompanyFundamentalFieldKey; value: string; onChange: (key: CompanyFundamentalFieldKey, value: string) => void; error?: string }) {
@@ -132,7 +150,7 @@ function MetricCard({ metric }: { metric: CompanyFundamentalsAnalysis['metrics']
         <span className="metric-label">{metric.label}</span>
         <span className={`metric-status ${statusClass}`}>{metric.status === 'available' ? 'Disponible' : metric.status === 'missing' ? 'Falta dato' : 'No significativo'}</span>
       </div>
-      <div className="metric-value">{formatValue(metric.value, metric.unit)}</div>
+      <div className="metric-value">{formatValue(metric.value, metric.unit)}{metric.provenance && <div className="metric-provenance">• {metric.provenance}</div>}</div>
       <details className="metric-details">
         <summary>Detalles</summary>
         <div className="detail-row"><strong>Fórmula:</strong> {metric.formula}</div>
@@ -188,6 +206,185 @@ function OpportunityCard({ opportunity }: { opportunity: CompanyFundamentalsAnal
         </tbody>
       </table>
       <p className="disclaimer">{opportunity.disclaimer}</p>
+    </div>
+  );
+}
+
+function QualityCheckCard({ check }: { check: QualityCheck }) {
+  const icons = { ok: '✓', review: '◐', warning: '⚠', unknown: '—' };
+  const colors = { ok: 'q-ok', review: 'q-review', warning: 'q-warning', unknown: 'q-unknown' };
+  return (
+    <div className={`quality-check ${colors[check.severity]}`}>
+      <div className="quality-header">
+        <span className="quality-icon">{icons[check.severity]}</span>
+        <strong>{check.title}</strong>
+        {check.value !== null && <span className="quality-value">{check.value.toFixed(2)}</span>}
+        <span className="quality-threshold">{check.threshold}</span>
+      </div>
+      <p className="quality-detail">{check.detail}</p>
+    </div>
+  );
+}
+
+function DcfSensitivityTable({ series, baseInput }: { series: ReturnType<typeof buildAnnualSeries>; baseInput: { sharesOutstanding: number | null; netDebt: number | null; wacc: number; terminalGrowth: number } }) {
+  const latest = series.length > 0 ? series[series.length - 1] : null;
+  if (!latest || latest.freeCashFlow === null || latest.freeCashFlow <= 0) {
+    return (
+      <div className="empty-state-large">
+        <h3>DCF no disponible</h3>
+        <p>Se requiere un flujo de caja libre positivo en el último año fiscal para sensibilizar el DCF.</p>
+      </div>
+    );
+  }
+
+  const growthRates = Array.from({ length: 9 }, (_, i) => {
+    if (i < 3) return 0.10;
+    if (i < 6) return 0.07;
+    return 0.05;
+  });
+
+  const matrix = buildSensitivityMatrix(
+    {
+      year1: latest.freeCashFlow,
+      growthRates,
+      terminalGrowthRate: baseInput.terminalGrowth,
+      wacc: baseInput.wacc,
+      sharesOutstanding: baseInput.sharesOutstanding,
+      netDebt: baseInput.netDebt,
+    },
+    2,
+    2,
+    0.01,
+    0.005,
+  );
+
+  const baseDcf = calculateDCF({
+    year1: latest.freeCashFlow,
+    growthRates,
+    terminalGrowthRate: baseInput.terminalGrowth,
+    wacc: baseInput.wacc,
+    sharesOutstanding: baseInput.sharesOutstanding,
+    netDebt: baseInput.netDebt,
+  });
+
+  return (
+    <div className="dcf-sensitivity">
+      <div className="dcf-summary">
+        <div className="dcf-summary-item">
+          <span>FCF año 1</span>
+          <strong>{formatCompactCurrency(latest.freeCashFlow)}</strong>
+        </div>
+        <div className="dcf-summary-item">
+          <span>Valor por acción (base)</span>
+          <strong>{baseDcf.fairValuePerShare !== null ? `$${baseDcf.fairValuePerShare.toFixed(2)}` : '—'}</strong>
+        </div>
+      </div>
+      <div className="dcf-table-wrap">
+        <table className="dcf-table">
+          <thead>
+            <tr>
+              <th>WACC \ g</th>
+              {matrix.growthValues.map((g) => (
+                <th key={g} className="num">{(g * 100).toFixed(1)}%</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {matrix.cells.map((row, wi) => (
+              <tr key={matrix.waccValues[wi]}>
+                <td className="dcf-row-header">{(matrix.waccValues[wi] * 100).toFixed(1)}%</td>
+                {row.map((cell, gi) => {
+                  const isBase = Math.abs(cell.wacc - matrix.baseWacc) < 1e-9 && Math.abs(cell.terminalGrowth - matrix.baseGrowth) < 1e-9;
+                  return (
+                    <td key={gi} className={`num ${isBase ? 'dcf-base-cell' : ''}`}>
+                      {cell.fairValuePerShare !== null ? `$${cell.fairValuePerShare.toFixed(2)}` : '—'}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function formatCompactCurrency(value: number): string {
+  const abs = Math.abs(value);
+  if (abs >= 1e9) return `$${(value / 1e9).toFixed(2)}B`;
+  if (abs >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
+  if (abs >= 1e3) return `$${(value / 1e3).toFixed(0)}K`;
+  return `$${value.toFixed(0)}`;
+}
+
+function EdgarInsights({ facts }: { facts: EdgarCompanyFacts }) {
+  const [metric, setMetric] = useState<HistoryMetricKey>('revenue');
+  const series = buildAnnualSeries(facts);
+  const qualityReport = buildAccountingQualityReport(series);
+  const points = annualSeriesToMetricPoints(series, metric);
+  const latest = series.length > 0 ? series[series.length - 1] : null;
+
+  const baseWacc = 0.10;
+  const baseGrowth = 0.025;
+  const netDebt = latest && latest.liabilities !== null && latest.equity !== null
+    ? Math.max(0, latest.liabilities - latest.equity * 0.3)
+    : null;
+
+  if (series.length === 0) {
+    return (
+      <div className="edgar-insights-empty">
+        <p>Sin datos históricos discretos de EDGAR para esta empresa.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="edgar-insights">
+      <section className="section">
+        <h3>Evolución financiera {series.length} años (SEC EDGAR)</h3>
+        <div className="metric-selector">
+          <label htmlFor="history-metric">Métrica:</label>
+          <select id="history-metric" value={metric} onChange={(e) => setMetric(e.target.value as HistoryMetricKey)}>
+            {Object.entries(HISTORY_METRIC_LABELS).map(([key, label]) => (
+              <option key={key} value={key}>{label}</option>
+            ))}
+          </select>
+        </div>
+        <TrendChart points={points} unit={points[0]?.unit ?? 'currency'} />
+      </section>
+
+      <section className="section">
+        <h3>Calidad contable</h3>
+        <div className="quality-list">
+          {qualityReport.checks.map((check) => (
+            <QualityCheckCard key={check.id} check={check} />
+          ))}
+        </div>
+      </section>
+
+      {latest && latest.freeCashFlow !== null && latest.freeCashFlow > 0 && (
+        <section className="section">
+          <h3>DCF · Sensibilidad (WACC × g)</h3>
+          <p className="section-hint">Matriz de valorización por acción con el modelo base (FCF del último año = {formatCompactCurrency(latest.freeCashFlow)}).</p>
+          <DcfSensitivityTable series={series} baseInput={{ sharesOutstanding: null, netDebt, wacc: baseWacc, terminalGrowth: baseGrowth }} />
+        </section>
+      )}
+
+      {qualityReport.beneish && qualityReport.beneish.score !== null && (
+        <section className="section beneish-section">
+          <h3>Beneish M-Score · detalle</h3>
+          <p className="beneish-score">M = {qualityReport.beneish.score.toFixed(3)} <small>(umbral típico: −1.78)</small></p>
+          <div className="beneish-components">
+            {Object.entries(qualityReport.beneish.components).map(([key, val]) => (
+              <div key={key} className="beneish-row">
+                <span className="beneish-key">{key.toUpperCase()}</span>
+                <span className="beneish-value">{val !== null ? val.toFixed(3) : 'n/d'}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }
@@ -257,30 +454,16 @@ function Results({ analysis, onExportCsv, onExportPdf }: { analysis: CompanyFund
   );
 }
 
-function Form({ onAnalyze }: { onAnalyze: (input: CompanyFundamentalsInput) => void }) {
+function Form({ onAnalyze, onEdgarFacts }: { onAnalyze: (input: CompanyFundamentalsInput) => void; onEdgarFacts?: (facts: EdgarCompanyFacts) => void }) {
   const [formData, setFormData] = useState<Partial<Record<CompanyFundamentalFieldKey, string>>>({});
   const [general, setGeneral] = useState({ companyName: '', asOf: '', currency: 'EUR', sourceLabel: '' });
   const [errors, setErrors] = useState<Partial<Record<CompanyFundamentalFieldKey, string>>>({});
   const [tickerQuery, setTickerQuery] = useState('');
-  const [tickerDir, setTickerDir] = useState<EdgarTickerEntry[] | null>(null);
   const [edgarStatus, setEdgarStatus] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');
   const [edgarMsg, setEdgarMsg] = useState('');
 
-  const suggestions: EdgarTickerEntry[] =
-    tickerDir && tickerQuery.trim().length >= 1 ? searchEdgarTickers(tickerDir, tickerQuery) : [];
-
-  const ensureTickerDir = async (): Promise<EdgarTickerEntry[]> => {
-    if (tickerDir) return tickerDir;
-    const cached = loadCachedEdgarTickers(window.localStorage);
-    if (cached && cached.length > 0) {
-      setTickerDir(cached);
-      return cached;
-    }
-    const fresh = await fetchEdgarTickers(EDGAR_CONFIG);
-    saveCachedEdgarTickers(window.localStorage, fresh);
-    setTickerDir(fresh);
-    return fresh;
-  };
+  const { tickers, mutate: mutateTickers } = useEdgarTickers();
+  const suggestions = useEdgarSearch(tickerQuery, tickers ?? undefined);
 
   const loadFromEdgar = async () => {
     const query = tickerQuery.trim().toUpperCase();
@@ -289,22 +472,31 @@ function Form({ onAnalyze }: { onAnalyze: (input: CompanyFundamentalsInput) => v
       setEdgarMsg('Escribe un ticker o nombre (ej. AAPL, Microsoft).');
       return;
     }
+    if (!tickers || tickers.length === 0) {
+      setEdgarStatus('error');
+      setEdgarMsg('Directorio de tickers no disponible. Reintenta en unos segundos.');
+      return;
+    }
+
+    const entry =
+      tickers.find((item: EdgarTickerEntry) => item.ticker.toUpperCase() === query) ??
+      tickers.find((item: EdgarTickerEntry) => item.title.toLowerCase().includes(query.toLowerCase()));
+    if (!entry) {
+      setEdgarStatus('error');
+      setEdgarMsg(`No se encontró "${query}" en el directorio SEC.`);
+      return;
+    }
+
     try {
       setEdgarStatus('loading');
       setEdgarMsg('Consultando SEC EDGAR…');
-      const dir = await ensureTickerDir();
-      const entry =
-        dir.find((item) => item.ticker.toUpperCase() === query) ??
-        searchEdgarTickers(dir, query, 1)[0];
-      if (!entry) {
-        setEdgarStatus('error');
-        setEdgarMsg(`No se encontró "${query}" en el directorio SEC.`);
-        return;
-      }
+
       const facts = await fetchEdgarCompanyFacts(entry.cik, EDGAR_CONFIG);
+
       const asOf = extractLatestAsOf(facts);
       const input = parseEdgarFacts(facts, entry.ticker, asOf);
       const toStr = (v: number | null | undefined) => (v === null || v === undefined || !Number.isFinite(v) ? '' : String(v));
+
       setFormData({
         sharesOutstanding: toStr(input.sharesOutstanding),
         netIncome: toStr(input.netIncome),
@@ -328,6 +520,7 @@ function Form({ onAnalyze }: { onAnalyze: (input: CompanyFundamentalsInput) => v
       setErrors({});
       setEdgarStatus('ok');
       setEdgarMsg(`Datos cargados: ${entry.title} (CIK ${entry.cik}, corte ${asOf}). Revisa y añade el precio actual antes de analizar.`);
+      onEdgarFacts?.(facts);
     } catch (err) {
       setEdgarStatus('error');
       setEdgarMsg(`No se pudo cargar desde SEC EDGAR: ${err instanceof Error ? err.message : String(err)}`);
@@ -401,7 +594,7 @@ function Form({ onAnalyze }: { onAnalyze: (input: CompanyFundamentalsInput) => v
             type="text"
             value={tickerQuery}
             onChange={(e) => setTickerQuery(e.target.value)}
-            onFocus={() => { void ensureTickerDir(); }}
+            onFocus={() => { void mutateTickers(); }}
             placeholder="Ej. AAPL, MSFT, Tesla…"
             list="edgar-ticker-suggestions"
             aria-label="Ticker o nombre de empresa en SEC EDGAR"
@@ -480,10 +673,11 @@ function Form({ onAnalyze }: { onAnalyze: (input: CompanyFundamentalsInput) => v
 export default function App() {
   const [view, setView] = useState<AppView>('fundamentals');
   const [analysis, setAnalysis] = useState<CompanyFundamentalsAnalysis | null>(null);
+  const [edgarFacts, setEdgarFacts] = useState<EdgarCompanyFacts | null>(null);
+  const [fundamentalsMode, setFundamentalsMode] = useState<'form' | 'history' | 'chart' | 'compare' | 'insights'>('form');
 
   // Historial y comparación
   const [history, setHistory] = useState<HistoryEntry[]>(() => loadHistory(window.localStorage));
-  const [fundamentalsMode, setFundamentalsMode] = useState<'form' | 'history' | 'chart' | 'compare'>('form');
   const [selectedChartCompany, setSelectedChartCompany] = useState<string>('');
   const [selectedChartMetric, setSelectedChartMetric] = useState<CompanyFundamentalKey>('roe');
   const [compareCompanies, setCompareCompanies] = useState<string[]>([]);
@@ -554,6 +748,8 @@ const moduleNav = (
       <button className={view === 'fundamentals' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => { setView('fundamentals'); setFundamentalsMode('form'); }}>Análisis Fundamental</button>
       <button className={view === 'gmt' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('gmt')}>GMT Terminal</button>
       <button className={view === 'portfolio' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('portfolio')}>Cartera</button>
+      <button className={view === 'comparativa' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('comparativa')}>Comparativa</button>
+      <button className={view === 'informe' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('informe')}>Informe</button>
     </nav>
   );
 
@@ -566,12 +762,13 @@ const moduleNav = (
     );
   }
 
-  const fundamentalsNav = (
+const fundamentalsNav = (
     <nav className="fundamentals-nav" aria-label="Secciones de Análisis Fundamental">
       <button className={fundamentalsMode === 'form' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => setFundamentalsMode('form')}>Formulario</button>
-      <button className={fundamentalsMode === 'history' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => { setFundamentalsMode('history'); setSelectedChartCompany(availableCompanies[0] || ''); }}>Historial</button>
+      <button className={fundamentalsMode === 'history' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => setFundamentalsMode('history')}>Historial</button>
       <button className={fundamentalsMode === 'chart' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => setFundamentalsMode('chart')}>Evolución</button>
       <button className={fundamentalsMode === 'compare' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => setFundamentalsMode('compare')}>Comparar</button>
+      <button className={fundamentalsMode === 'insights' ? 'fundamentals-nav-item active' : 'fundamentals-nav-item'} onClick={() => setFundamentalsMode('insights')}>Insights EDGAR</button>
     </nav>
   );
 
@@ -582,10 +779,12 @@ const moduleNav = (
           <main className="app-main">
             <div className="layout">
               <aside className="sidebar">
-                <Form onAnalyze={handleAnalyze} />
+                <Form onAnalyze={handleAnalyze} onEdgarFacts={setEdgarFacts} />
               </aside>
               <div className="content">
-                {analysis ? <Results analysis={analysis} onExportCsv={handleExportCsv} onExportPdf={handleExportPdf} /> : (
+                {analysis ? (
+                  <Results analysis={analysis} onExportCsv={handleExportCsv} onExportPdf={handleExportPdf} />
+                ) : (
                   <div className="empty-state-large">
                     <h3>Bienvenido</h3>
                     <p>Completa el formulario con los datos financieros de la empresa y pulsa <strong>Analizar</strong>.</p>
@@ -709,6 +908,21 @@ const moduleNav = (
             </div>
           </main>
         );
+      case 'insights':
+        return (
+          <main className="app-main">
+            <div className="layout">
+              {edgarFacts ? (
+                <EdgarInsights facts={edgarFacts} />
+              ) : (
+                <div className="empty-state-large">
+                  <h3>Sin datos EDGAR</h3>
+                  <p>Carga datos desde SEC EDGAR en el formulario para ver análisis insight.</p>
+                </div>
+              )}
+            </div>
+          </main>
+        );
       default:
         return null;
     }
@@ -718,7 +932,7 @@ const moduleNav = (
     <div className="app">
       {moduleNav}
       {view === 'fundamentals' && fundamentalsNav}
-      {view === 'portfolio' && (
+{view === 'portfolio' && (
         <div className="portfolio-placeholder">
           <h2>Módulo de Cartera Multi-Plataforma</h2>
           <p>Este módulo está en desarrollo. Incluye:</p>
@@ -732,6 +946,21 @@ const moduleNav = (
           <p>El código completo está en <code>PortfolioModule.tsx</code> y archivos <code>portfolio-*.ts</code>.</p>
           <p>Para activar: añadir archivos <code>portfolio-*.ts</code> al <code>tsconfig.json</code> y corregir tipos TS.</p>
         </div>
+      )}
+      {view === 'comparativa' && (
+        <div className="comparativa-view">
+          <h2>Comparativa de Funcionalidades por Plataforma</h2>
+          <p>Análisis de funcionalidades faltantes y rendimiento por plataforma</p>
+          <ComparativaFuncionalidades />
+        </div>
+      )}
+      {view === 'informe' && (
+        <InformeSection
+          analysis={analysis}
+          edgarFacts={edgarFacts}
+          history={history}
+          compareAnalyses={getCompareAnalyses()}
+        />
       )}
       <header className="app-header">
         <h1>Análisis Fundamental de Empresas</h1>

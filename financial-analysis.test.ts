@@ -73,7 +73,7 @@ describe('financial-score', () => {
   });
 });
 
-import { calculateDCF, type FCFInput } from './financial-dcf';
+import { calculateDCF, buildSensitivityMatrix, type FCFInput } from './financial-dcf';
 
 describe('financial-dcf', () => {
   describe('calculateDCF', () => {
@@ -104,6 +104,36 @@ describe('financial-dcf', () => {
 
       const result = calculateDCF(input);
       expect(result.warnings.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('buildSensitivityMatrix', () => {
+    const base: FCFInput = {
+      year1: 1000000,
+      growthRates: [0.05, 0.05, 0.05, 0.05, 0.05, 0.04, 0.04, 0.04, 0.04],
+      terminalGrowthRate: 0.03,
+      wacc: 0.10,
+      sharesOutstanding: 1000000,
+      netDebt: 500000,
+    };
+
+    it('creates 5x5 matrix around base case', () => {
+      const matrix = buildSensitivityMatrix(base);
+      expect(matrix.cells).toHaveLength(5);
+      expect(matrix.cells[0]).toHaveLength(5);
+      expect(matrix.baseWacc).toBe(0.10);
+      expect(matrix.baseGrowth).toBe(0.03);
+      const center = matrix.cells[2][2];
+      expect(center.wacc).toBeCloseTo(0.10, 10);
+      expect(center.terminalGrowth).toBeCloseTo(0.03, 10);
+      expect(center.fairValuePerShare).not.toBeNull();
+    });
+
+    it('marks invalid cells when WACC <= g', () => {
+      const strict: FCFInput = { ...base, wacc: 0.05, terminalGrowthRate: 0.049 };
+      const matrix = buildSensitivityMatrix(strict);
+      const corner = matrix.cells[0][0]; // lowest wacc, lowest growth
+      expect(corner.wacc - corner.terminalGrowth).toBeLessThan(0.001);
     });
   });
 });

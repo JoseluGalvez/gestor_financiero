@@ -1,6 +1,6 @@
-export type TabId = 'overview' | 'fx' | 'alerts' | 'watchlist';
+export type TabId = 'overview' | 'fx' | 'alerts' | 'watchlist' | 'markets';
 
-export const VALID_TABS: readonly TabId[] = ['overview', 'fx', 'alerts', 'watchlist'];
+export const VALID_TABS: readonly TabId[] = ['overview', 'fx', 'alerts', 'watchlist', 'markets'];
 
 export const OVERVIEW_PANELS = ['stats', 'heatmap', 'movers', 'table'] as const;
 

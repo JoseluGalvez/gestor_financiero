@@ -1,4 +1,17 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
+
+// Mock Date.now before importing the module
+const mockDateNow = vi.hoisted(() => {
+  let currentTime = new Date('2024-01-01T00:00:00Z').getTime();
+  return {
+    get now() { return currentTime; },
+    setTime: (ms: number) => { currentTime = ms; },
+    advance: (ms: number) => { currentTime += ms; },
+  };
+});
+
+vi.spyOn(global.Date, 'now').mockImplementation(() => mockDateNow.now);
+
 import {
   fetchEdgarTickers,
   fetchEdgarCompanyFacts,
@@ -8,6 +21,12 @@ import {
   loadCachedEdgarTickers,
   saveCachedEdgarTickers,
   EDGAR_TICKERS_CACHE_KEY,
+  putInCacheIndexedDb,
+  getFromCacheIndexedDb,
+  clearCacheIndexedDb,
+  cacheTickers,
+  getCachedTickers,
+  resetIndexedDbCache,
   type EdgarCompanyFacts,
   type EdgarTickerEntry,
 } from './sec-edgar-adapter';
@@ -258,5 +277,186 @@ describe('sec-edgar-adapter', () => {
       const result = parseEdgarFacts(facts, 'DEBTCO', '2024-12-31');
       expect(result.totalDebt).toBe(10_000_000);
     });
+  });
+});
+
+/* ---------- IndexedDB cache tests ---------- */
+
+function createMockIndexedDB() {
+  const stores: Record<string, Record<string, unknown>> = {
+    facts: {},
+    tickers: {},
+  };
+
+  const mockDb = {
+    objectStoreNames: {
+      contains: (name: string) => ['facts', 'tickers'].includes(name),
+    },
+    createObjectStore: (name: string) => {
+      stores[name] = {};
+      return { name };
+    },
+    transaction: (_storeNames: string | string[], _mode: string) => {
+      return {
+        objectStore: (name: string) => ({
+          put: (value: { cik: number; data: EdgarCompanyFacts; timestamp: number } | { key: string; entries: EdgarTickerEntry[]; timestamp: number; cik: number }) => {
+            if ('cik' in value && typeof value.cik === 'number' && !Number.isNaN(value.cik)) {
+              stores.facts[value.cik] = value;
+            } else if ('key' in value) {
+              stores.tickers[value.key] = value;
+            }
+            const req = { onsuccess: null as ((e: Event) => void) | null, onerror: null as ((e: Event) => void) | null };
+            queueMicrotask(() => req.onsuccess?.({} as Event));
+            return req;
+          },
+          get: (key: number | string) => {
+            const storeData = name === 'facts' ? stores.facts : stores.tickers;
+            const result = storeData[key];
+            const req = {
+              onsuccess: null as ((e: Event) => void) | null,
+              onerror: null as ((e: Event) => void) | null,
+              get result() { return result; },
+            };
+            queueMicrotask(() => req.onsuccess?.({} as Event));
+            return req;
+          },
+          delete: (key: number) => {
+            delete stores.facts[key];
+            const req = { onsuccess: null as ((e: Event) => void) | null, onerror: null };
+            queueMicrotask(() => req.onsuccess?.({} as Event));
+            return req;
+          },
+          clear: () => {
+            stores.facts = {};
+            stores.tickers = {};
+            const req = { onsuccess: null as ((e: Event) => void) | null, onerror: null };
+            queueMicrotask(() => req.onsuccess?.({} as Event));
+            return req;
+          },
+        }),
+      };
+    },
+    close: () => {},
+  };
+
+  const mockOpenDB = vi.fn().mockImplementation(() => {
+    const request = {
+      onsuccess: null as ((e: Event) => void) | null,
+      onerror: null as ((e: Event) => void) | null,
+      onupgradeneeded: null as ((e: Event) => void) | null,
+      result: mockDb,
+      error: null,
+    };
+    queueMicrotask(() => {
+      if (request.onupgradeneeded) request.onupgradeneeded({ target: request } as any);
+      if (request.onsuccess) request.onsuccess({ target: request } as any);
+    });
+    return request;
+  });
+
+  vi.stubGlobal('indexedDB', { open: mockOpenDB });
+
+  return { stores, mockDb, mockOpenDB };
+}
+
+describe('IndexedDB cache', () => {
+  let mockIndexedDB: ReturnType<typeof createMockIndexedDB>;
+
+  beforeEach(() => {
+    mockDateNow.setTime(new Date('2024-01-01T00:00:00Z').getTime());
+    mockIndexedDB = createMockIndexedDB();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+    resetIndexedDbCache();
+  });
+
+  const mockFacts: EdgarCompanyFacts = {
+    cik: 320193,
+    entityName: 'Apple Inc.',
+    facts: {
+      'us-gaap': {
+        Revenues: { units: { USD: [{ end: '2024-09-30', val: 391035000000 }] } },
+      },
+    },
+  };
+
+  it('putInCacheIndexedDb stores facts with timestamp', async () => {
+    const now = mockDateNow.now;
+    await putInCacheIndexedDb(320193, mockFacts, now);
+    const stored = mockIndexedDB.stores.facts[320193] as { cik: number; data: EdgarCompanyFacts; timestamp: number };
+    expect(stored).toBeDefined();
+    expect(stored.cik).toBe(320193);
+    expect(stored.data).toEqual(mockFacts);
+    expect(stored.timestamp).toBe(now);
+  });
+
+  it('getFromCacheIndexedDb returns cached facts within TTL', async () => {
+    const now = mockDateNow.now;
+    await putInCacheIndexedDb(320193, mockFacts, now);
+    mockDateNow.advance(1000);
+    const result = await getFromCacheIndexedDb(320193, mockDateNow.now);
+    expect(result).toEqual(mockFacts);
+  });
+
+  it('getFromCacheIndexedDb returns null for expired cache', async () => {
+    const now = mockDateNow.now;
+    await putInCacheIndexedDb(320193, mockFacts, now);
+    mockDateNow.advance(31 * 24 * 60 * 60 * 1000); // 31 days > 30 day TTL
+    const result = await getFromCacheIndexedDb(320193, mockDateNow.now);
+    expect(result).toBeNull();
+    // Should also delete expired entry
+    expect(mockIndexedDB.stores.facts[320193]).toBeUndefined();
+  });
+
+  it('getFromCacheIndexedDb returns null for missing key', async () => {
+    const result = await getFromCacheIndexedDb(999999);
+    expect(result).toBeNull();
+  });
+
+  it('clearCacheIndexedDb clears all facts', async () => {
+    const now = mockDateNow.now;
+    await putInCacheIndexedDb(320193, mockFacts, now);
+    await putInCacheIndexedDb(789019, { ...mockFacts, cik: 789019, entityName: 'Microsoft' }, now);
+    await clearCacheIndexedDb();
+    expect(Object.keys(mockIndexedDB.stores.facts)).toHaveLength(0);
+  });
+
+  it('cacheTickers stores ticker directory', async () => {
+    const entries: EdgarTickerEntry[] = [
+      { cik: 320193, ticker: 'AAPL', title: 'Apple Inc.' },
+      { cik: 789019, ticker: 'MSFT', title: 'Microsoft Corp.' },
+    ];
+    const now = mockDateNow.now;
+    await cacheTickers(entries, now);
+    const stored = mockIndexedDB.stores.tickers['portafolio-intel-edgar-tickers-v1'] as { cik: number; key: string; entries: EdgarTickerEntry[]; timestamp: number };
+    expect(stored).toBeDefined();
+    expect(stored.entries).toEqual(entries);
+    expect(stored.timestamp).toBe(now);
+  });
+
+  it('getCachedTickers returns entries within TTL', async () => {
+    const entries: EdgarTickerEntry[] = [{ cik: 320193, ticker: 'AAPL', title: 'Apple Inc.' }];
+    const now = mockDateNow.now;
+    await cacheTickers(entries, now);
+    mockDateNow.advance(1000);
+    const result = await getCachedTickers(mockDateNow.now);
+    expect(result).toEqual(entries);
+  });
+
+  it('getCachedTickers returns null for expired ticker cache', async () => {
+    const entries: EdgarTickerEntry[] = [{ cik: 320193, ticker: 'AAPL', title: 'Apple Inc.' }];
+    const now = mockDateNow.now;
+    await cacheTickers(entries, now);
+    mockDateNow.advance(25 * 60 * 60 * 1000); // 25 hours > 24 hour TTL
+    const result = await getCachedTickers(mockDateNow.now);
+    expect(result).toBeNull();
+  });
+
+  it('getCachedTickers returns null when no cache exists', async () => {
+    const result = await getCachedTickers();
+    expect(result).toBeNull();
   });
 });

@@ -1,6 +1,6 @@
 export type AssetClass = 'crypto' | 'fx' | 'equity';
 
-export type DataSourceId = 'coingecko' | 'ecb' | 'yahoo' | 'sec-edgar';
+export type DataSourceId = 'coingecko' | 'ecb' | 'yahoo' | 'sec-edgar' | 'marketstack';
 
 export type AdapterStatus = 'boot' | 'ok' | 'degraded' | 'error' | 'stale';
 
@@ -116,6 +116,12 @@ export const ADAPTER_REGISTRY: Omit<DataSourceStatus, 'status' | 'lastUpdatedAt'
     label: 'SEC EDGAR',
     provenance: 'Fundamentales y presentaciones XBRL de empresas US cotizadas.',
     licenseScope: 'Fuente pública oficial; no proporciona cotizaciones intradía.',
+  },
+  {
+    id: 'marketstack',
+    label: 'Marketstack',
+    provenance: 'Datos intradía y EOD de acciones globales. API con key gratuita (limitada a 100 req/mes en plan free).',
+    licenseScope: 'Plan gratuito limitado; plan pago para uso en producción.',
   },
 ];
 
@@ -314,6 +320,7 @@ export function buildAdapterStatuses(
   coingecko: { ok: boolean; latencyMs: number | null; error?: string; at?: number },
   ecb: { ok: boolean; latencyMs: number | null; error?: string; at?: number },
   yahoo?: { ok: boolean; latencyMs: number | null; error?: string; at?: number },
+  marketstack?: { ok: boolean; latencyMs: number | null; error?: string; at?: number },
 ): DataSourceStatus[] {
   return ADAPTER_REGISTRY.map((entry) => {
     let runtime: { status: AdapterStatus; lastUpdatedAt: number | null; latencyMs: number | null; error?: string };
@@ -340,6 +347,17 @@ export function buildAdapterStatuses(
           lastUpdatedAt: yahoo.at ?? null,
           latencyMs: yahoo.latencyMs,
           error: yahoo.error,
+        };
+      }
+    } else if (entry.id === 'marketstack') {
+      if (!marketstack) {
+        runtime = { status: 'degraded', lastUpdatedAt: null, latencyMs: null, error: 'Proveedor no configurado: requiere MARKETSTACK_API_KEY.' };
+      } else {
+        runtime = {
+          status: marketstack.ok ? 'ok' : 'error',
+          lastUpdatedAt: marketstack.at ?? null,
+          latencyMs: marketstack.latencyMs,
+          error: marketstack.error,
         };
       }
     } else {

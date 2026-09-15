@@ -107,6 +107,19 @@ describe('buildAdapterStatuses', () => {
     expect(byId.ecb.error).toBe('network');
     expect(byId.yahoo.status).toBe('degraded');
     expect(byId['sec-edgar'].status).toBe('degraded');
+    expect(byId.marketstack.status).toBe('degraded');
+  });
+
+  it('marca marketstack ok cuando se provee', () => {
+    const statuses = buildAdapterStatuses(
+      { ok: true, latencyMs: 100, at: 1000 },
+      { ok: true, latencyMs: 200, at: 1000 },
+      undefined,
+      { ok: true, latencyMs: 500, at: 1000 },
+    );
+    const byId = Object.fromEntries(statuses.map((s) => [s.id, s]));
+    expect(byId.marketstack.status).toBe('ok');
+    expect(byId.marketstack.latencyMs).toBe(500);
   });
 });
 

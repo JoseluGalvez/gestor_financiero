@@ -40,7 +40,11 @@
     "financial-technical.ts",
     "financial-risk.ts",
     "financial-kelly.ts",
+    "financial-history.ts",
+    "financial-quality.ts",
     "financial-analysis.test.ts",
+    "financial-history.test.ts",
+    "financial-quality.test.ts",
     "sec-edgar-adapter.ts",
     "ecb-fx-adapter.ts",
     "stooq-ohlc-adapter.ts",
@@ -56,7 +60,8 @@
     "comparison.test.ts",
     "sec-edgar-adapter.test.ts",
     "ecb-fx-adapter.test.ts",
-    "stooq-ohlc-adapter.test.ts"
+    "stooq-ohlc-adapter.test.ts",
+    "src/**/*"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

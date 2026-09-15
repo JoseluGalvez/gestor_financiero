@@ -82,6 +82,11 @@ export async function fetchEdgarCompanyFacts(
   cik: number,
   config: EdgarAdapterConfig = {},
 ): Promise<EdgarCompanyFacts> {
+  const cached = getFromCache(cik);
+  if (cached) return cached;
+
+  await rateLimiter.wait();
+
   const base = config.factsBaseUrl ?? SEC_DATA_BASE_URL;
   const ua = config.userAgent ?? SEC_USER_AGENT_DEFAULT;
   const url = `${base}/companyfacts/CIK${String(cik).padStart(10, '0')}.json`;
@@ -90,10 +95,11 @@ export async function fetchEdgarCompanyFacts(
     throw new Error(`SEC companyfacts: ${res.status} ${res.statusText}`);
   }
   const raw = (await res.json()) as EdgarCompanyFacts;
+  putInCache(cik, raw);
   return raw;
 }
 
-/* ---------- Caché del directorio de tickers (localStorage) ---------- */
+/* ---------- Cach├® del directorio de tickers (localStorage) ---------- */
 
 export const EDGAR_TICKERS_CACHE_KEY = 'portafolio-intel-edgar-tickers-v1';
 export const EDGAR_TICKERS_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
@@ -146,7 +152,7 @@ export function searchEdgarTickers(
   return results;
 }
 
-/* ---------- Extracción de fundamentales ---------- */
+/* ---------- Extracci├│n de fundamentales ---------- */
 
 function toNumber(value: unknown): number | null {
   if (typeof value === 'number' && Number.isFinite(value)) return value;
@@ -287,4 +293,135 @@ export function extractLatestAsOf(entry: EdgarCompanyFacts | null | undefined): 
   }
   dates.sort();
   return dates[dates.length - 1] ?? new Date().toISOString().slice(0, 10);
+}
+
+class RateLimiter {
+  private lastCall = 0;
+  constructor(private readonly minInterval = 120) {}
+  async wait() {
+    const now = Date.now();
+    const since = now - this.lastCall;
+    if (since < this.minInterval) await new Promise((r) => setTimeout(r, this.minInterval - since));
+    this.lastCall = Date.now();
+  }
+}
+
+const rateLimiter = new RateLimiter(120);
+
+export function putInCache(cik: number, data: EdgarCompanyFacts): void {
+  try {
+    localStorage.setItem(`edgar_facts_${cik}`, JSON.stringify({ data, timestamp: Date.now() }));
+  } catch {}
+}
+
+export function getFromCache(cik: number): EdgarCompanyFacts | null {
+  try {
+    const item = localStorage.getItem(`edgar_facts_${cik}`);
+    if (!item) return null;
+    return (JSON.parse(item) as { data: EdgarCompanyFacts }).data;
+  } catch {
+    return null;
+  }
+}
+
+export function clearCache(cik: number): void {
+  localStorage.removeItem(`edgar_facts_${cik}`);
+}
+
+const CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+type CacheEntry = {
+  cik: number;
+  data: EdgarCompanyFacts;
+  timestamp: number;
+};
+
+let indexedDb: IDBDatabase | null = null;
+
+async function openIndexedDb(): Promise<IDBDatabase> {
+  if (indexedDb) return indexedDb;
+  
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('edgar-cache-v1', 1);
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      indexedDb = request.result;
+      resolve(indexedDb);
+    };
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains('facts')) {
+        db.createObjectStore('facts', { keyPath: 'cik' });
+      }
+      if (!db.objectStoreNames.contains('tickers')) {
+        db.createObjectStore('tickers', { keyPath: 'key' });
+      }
+    };
+  });
+}
+
+export async function putInCacheIndexedDb(cik: number, data: EdgarCompanyFacts, now: number = Date.now()): Promise<void> {
+  const db = await openIndexedDb();
+  const transaction = db.transaction(['facts'], 'readwrite');
+  const store = transaction.objectStore('facts');
+  store.put({ cik, data, timestamp: now });
+}
+
+export async function getFromCacheIndexedDb(cik: number, now: number = Date.now()): Promise<EdgarCompanyFacts | null> {
+  const db = await openIndexedDb();
+  const transaction = db.transaction(['facts'], 'readonly');
+  const store = transaction.objectStore('facts');
+  
+  return new Promise((resolve) => {
+    const request = store.get(cik);
+    request.onsuccess = () => {
+      const entry: CacheEntry | undefined = request.result;
+      if (!entry) return resolve(null);
+      if (now - entry.timestamp > CACHE_TTL_MS) {
+        const delTx = db.transaction(['facts'], 'readwrite');
+        delTx.objectStore('facts').delete(cik);
+        return resolve(null);
+      }
+      resolve(entry.data);
+    };
+    request.onerror = () => resolve(null);
+  });
+}
+
+export async function clearCacheIndexedDb(): Promise<void> {
+  if (!indexedDb) return;
+  indexedDb.transaction(['facts'], 'readwrite').objectStore('facts').clear();
+}
+
+export async function cacheTickers(entries: EdgarTickerEntry[], now: number = Date.now()): Promise<void> {
+  const db = await openIndexedDb();
+  const tx = db.transaction(['tickers'], 'readwrite');
+  const store = tx.objectStore('tickers');
+  
+  return new Promise((resolve, reject) => {
+    const request = store.put({ cik: NaN, key: EDGAR_TICKERS_CACHE_KEY, entries, timestamp: now });
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}
+
+export async function getCachedTickers(now: number = Date.now()): Promise<EdgarTickerEntry[] | null> {
+  const db = await openIndexedDb();
+  const tx = db.transaction(['tickers'], 'readonly');
+  const store = tx.objectStore('tickers');
+  
+  return new Promise((resolve) => {
+    const request = store.get(EDGAR_TICKERS_CACHE_KEY);
+    request.onsuccess = () => {
+      const entry = request.result as { entries: EdgarTickerEntry[]; timestamp: number } | undefined;
+      if (!entry) return resolve(null);
+      if (now - entry.timestamp > EDGAR_TICKERS_CACHE_TTL_MS) return resolve(null);
+      resolve(entry.entries);
+    };
+    request.onerror = () => resolve(null);
+  });
+}
+
+export function resetIndexedDbCache(): void {
+  indexedDb = null;
 }

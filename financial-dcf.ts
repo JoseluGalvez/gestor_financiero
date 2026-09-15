@@ -127,3 +127,54 @@ export function formatDCFReport(result: DCFResult): string {
 
   return report;
 }
+
+/* ---------- Matriz de sensibilidad WACC × g ---------- */
+
+export type DcfSensitivityCell = {
+  wacc: number;
+  terminalGrowth: number;
+  fairValuePerShare: number | null;
+};
+
+export type DcfSensitivityMatrix = {
+  waccValues: number[];
+  growthValues: number[];
+  cells: DcfSensitivityCell[][];
+  baseWacc: number;
+  baseGrowth: number;
+};
+
+export function buildSensitivityMatrix(
+  baseInput: FCFInput,
+  waccSteps = 2,
+  growthSteps = 2,
+  waccStep = 0.01,
+  growthStep = 0.005,
+): DcfSensitivityMatrix {
+  const waccValues: number[] = [];
+  for (let i = -waccSteps; i <= waccSteps; i++) {
+    waccValues.push(baseInput.wacc + i * waccStep);
+  }
+  const growthValues: number[] = [];
+  for (let i = -growthSteps; i <= growthSteps; i++) {
+    growthValues.push(baseInput.terminalGrowthRate + i * growthStep);
+  }
+
+  const cells: DcfSensitivityCell[][] = waccValues.map((w) =>
+    growthValues.map((g) => {
+      if (w <= g) {
+        return { wacc: w, terminalGrowth: g, fairValuePerShare: null };
+      }
+      const result = calculateDCF({ ...baseInput, wacc: w, terminalGrowthRate: g });
+      return { wacc: w, terminalGrowth: g, fairValuePerShare: result.fairValuePerShare };
+    }),
+  );
+
+  return {
+    waccValues,
+    growthValues,
+    cells,
+    baseWacc: baseInput.wacc,
+    baseGrowth: baseInput.terminalGrowthRate,
+  };
+}

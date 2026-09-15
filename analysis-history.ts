@@ -46,7 +46,7 @@ export function metricLabelFor(analysis: CompanyFundamentalsAnalysis, key: Compa
 export type MetricPoint = {
   asOf: string;
   value: number;
-  unit: "percent" | "ratio" | "per_share";
+  unit: "percent" | "ratio" | "per_share" | "currency";
 };
 
 export function metricSeriesForCompany(
@@ -69,6 +69,14 @@ export function metricSeriesForCompany(
 export function formatMetricPointValue(value: number, unit: MetricPoint["unit"]): string {
   if (unit === "percent") return `${value.toFixed(2)}%`;
   if (unit === "ratio") return `${value.toFixed(2)}x`;
+  if (unit === "currency") {
+    const abs = Math.abs(value);
+    if (abs >= 1e12) return `${(value / 1e12).toFixed(2)}T`;
+    if (abs >= 1e9) return `${(value / 1e9).toFixed(2)}B`;
+    if (abs >= 1e6) return `${(value / 1e6).toFixed(2)}M`;
+    if (abs >= 1e3) return `${(value / 1e3).toFixed(1)}K`;
+    return value.toFixed(0);
+  }
   return `${value.toFixed(2)}`;
 }
 
