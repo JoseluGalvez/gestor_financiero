@@ -8,6 +8,7 @@ import { TrendChart } from './TrendChart';
 import GmtTerminal from './GmtTerminal';
 import ComparativaFuncionalidades from './ComparativaFuncionalidades';
 import InformeSection from './InformeSection';
+import ProtocoloDiario from './ProtocoloDiario';
 import {
   parseEdgarFacts,
   extractLatestAsOf,
@@ -36,7 +37,7 @@ const EDGAR_CONFIG: EdgarAdapterConfig | undefined = import.meta.env.DEV
     }
   : undefined;
 
-type AppView = 'fundamentals' | 'gmt' | 'portfolio' | 'comparativa' | 'informe';
+type AppView = 'fundamentals' | 'gmt' | 'portfolio' | 'comparativa' | 'informe' | 'protocolo';
 
 const FIELD_GROUPS = [
   { group: 'Mercado y capital', fields: ['pricePerShare', 'sharesOutstanding', 'marketCapitalization'] as CompanyFundamentalFieldKey[] },
@@ -750,6 +751,7 @@ const moduleNav = (
       <button className={view === 'portfolio' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('portfolio')}>Cartera</button>
       <button className={view === 'comparativa' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('comparativa')}>Comparativa</button>
       <button className={view === 'informe' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('informe')}>Informe</button>
+      <button className={view === 'protocolo' ? 'module-nav-item active' : 'module-nav-item'} onClick={() => setView('protocolo')}>Protocolo Diario</button>
     </nav>
   );
 
@@ -962,6 +964,7 @@ const fundamentalsNav = (
           compareAnalyses={getCompareAnalyses()}
         />
       )}
+      {view === 'protocolo' && <ProtocoloDiario />}
       <header className="app-header">
         <h1>Análisis Fundamental de Empresas</h1>
         <p className="subtitle">Introduce los datos financieros para obtener ratios, señales de salud y evaluación de oportunidad</p>
