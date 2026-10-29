@@ -2700,3 +2700,66 @@ select:focus-visible {
   display: grid;
   gap: 8px;
 }
+
+
+/* Presupuesto personal local */
+.budget-workspace { display: grid; gap: 20px; }
+.budget-hero { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 26px 28px; border: 1px solid #dfe8f5; border-radius: 16px; background: linear-gradient(135deg, #f7faff 0%, #eef7f5 100%); }
+.budget-hero h1 { max-width: 650px; margin: 0; color: var(--ink); font-size: clamp(26px, 3vw, 36px); letter-spacing: -.04em; line-height: 1.1; }
+.budget-hero p:not(.eyebrow) { max-width: 720px; margin: 10px 0 0; color: var(--ink-soft); line-height: 1.55; }
+.budget-privacy { display: grid; min-width: 180px; gap: 4px; padding: 14px; border: 1px solid #cce8da; border-radius: 12px; background: #f5fcf8; color: #2e6f57; }
+.budget-privacy svg { color: #148765; }
+.budget-privacy strong { font-size: 12px; }
+.budget-privacy span { color: #5c8875; font-size: 11px; }
+.budget-notice { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1px solid #cbdcf9; border-radius: 10px; background: #f5f8ff; color: #355a9c; font-size: 13px; }
+.budget-notice button { margin-left: auto; border: 0; background: transparent; color: inherit; font-size: 20px; }
+.budget-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 11px 13px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.budget-toolbar > label { display: flex; align-items: center; gap: 8px; color: var(--ink-soft); font-size: 12px; font-weight: 700; }
+.budget-toolbar select { min-height: 34px; padding: 0 28px 0 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-muted); color: var(--ink); font-weight: 650; }
+.budget-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.budget-file-button { position: relative; overflow: hidden; }
+.budget-file-button input { position: absolute; inset: 0; cursor: pointer; opacity: 0; }
+.danger-button { color: #a34b53 !important; }
+.budget-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; }
+.budget-kpis article { display: grid; min-height: 112px; gap: 7px; padding: 17px; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: var(--shadow); }
+.budget-kpis span, .budget-kpis small { color: var(--ink-soft); font-size: 11px; }
+.budget-kpis strong { color: var(--ink); font-size: 25px; letter-spacing: -.04em; }
+.budget-grid, .budget-lower-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.budget-chart-panel { min-height: 350px; }
+.budget-chart-panel .recharts-responsive-container { min-height: 280px; }
+.budget-chart-panel .recharts-default-tooltip { border: 1px solid var(--line) !important; border-radius: 8px; box-shadow: var(--shadow); }
+.budget-insights, .budget-entry-panel, .budget-recent { min-width: 0; padding: 20px; }
+.budget-insight { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 9px; padding: 11px 12px; border-radius: 9px; font-size: 13px; line-height: 1.4; }
+.budget-insight.warning { background: #fff7eb; color: #8a5a19; }
+.budget-insight.positive { background: #edf9f3; color: #27694f; }
+.budget-insight.neutral { background: #f3f6fb; color: #4e6281; }
+.budget-category-list { display: grid; gap: 13px; margin-top: 17px; }
+.budget-category-row { display: grid; grid-template-columns: minmax(100px, 1fr) auto auto; align-items: center; gap: 9px; color: #3b4d6a; font-size: 12px; }
+.budget-category-row b { color: var(--ink); }
+.budget-category-row small { color: var(--ink-soft); }
+.budget-category-row i { grid-column: 1 / -1; display: block; height: 5px; overflow: hidden; border-radius: 999px; background: #edf1f7; }
+.budget-category-row em { display: block; height: 100%; border-radius: inherit; background: var(--brand); }
+.budget-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
+.budget-form label { display: grid; gap: 5px; }
+.budget-form label span { color: var(--ink-soft); font-size: 11px; font-weight: 700; }
+.budget-form input, .budget-form select { min-width: 0; min-height: 37px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfe; color: var(--ink); font-size: 12px; }
+.budget-form button { align-self: end; min-height: 37px; }
+.budget-form label:nth-child(4), .budget-form button { grid-column: span 2; }
+.compact-form { grid-template-columns: 1fr 1fr auto; }
+.compact-form label:nth-child(4) { grid-column: auto; }
+.budget-divider { height: 1px; margin: 22px 0; background: var(--line); }
+.budget-recent { overflow: hidden; }
+.budget-table-wrap { overflow-x: auto; }
+.budget-table-wrap table { width: 100%; min-width: 620px; border-collapse: collapse; }
+.budget-table-wrap th, .budget-table-wrap td { padding: 11px 10px; border-bottom: 1px solid var(--line); text-align: left; font-size: 12px; }
+.budget-table-wrap th { color: var(--ink-soft); font-size: 10px; letter-spacing: .05em; text-transform: uppercase; }
+.budget-kind { display: inline-flex; padding: 4px 7px; border-radius: 999px; font-size: 10px; font-weight: 750; }
+.budget-kind.income { background: #e8f7ef; color: #287253; }
+.budget-kind.expense { background: #fff0f0; color: #a9474f; }
+.budget-empty { display: grid; min-height: 250px; place-content: center; justify-items: center; gap: 8px; color: var(--ink-soft); text-align: center; }
+.budget-empty strong { color: var(--ink); }
+.budget-empty.compact { min-height: 70px; }
+.budget-footnote { display: flex; align-items: center; gap: 7px; margin: 0; color: #6e7e97; font-size: 11px; line-height: 1.45; }
+.budget-footnote svg { flex: 0 0 auto; color: #148765; }
+@media (max-width: 980px) { .budget-kpis { grid-template-columns: repeat(2, 1fr); } .budget-grid, .budget-lower-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .budget-hero, .budget-toolbar { align-items: stretch; flex-direction: column; } .budget-actions { justify-content: flex-start; } .budget-kpis { grid-template-columns: 1fr; } .budget-form, .compact-form { grid-template-columns: 1fr; } .budget-form label:nth-child(4), .budget-form button, .compact-form label:nth-child(4) { grid-column: auto; } }
