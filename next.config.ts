@@ -16,6 +16,7 @@ function configuredSupabaseOrigins(): string[] {
 }
 
 const supabaseOrigins = configuredSupabaseOrigins();
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const contentSecurityPolicyReportOnly = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -32,6 +33,9 @@ const contentSecurityPolicyReportOnly = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  output: "export",
+  trailingSlash: true,
+  basePath,
   async headers() {
     return [
       {
